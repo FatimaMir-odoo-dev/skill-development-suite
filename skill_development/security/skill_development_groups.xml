@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="skill_development_access" model="ir.module.category">
+        <field name="name">Skill Development</field>
+    </record>
+
+    <record id="skill_development_group_general_admin" model="res.groups">
+        <field name="name">General Admin</field>
+        <field name="category_id" ref="skill_development_access"/>
+<!--        <field name="implied_ids" eval="[(4, ref('base.group_users'))]"/>-->
+    </record>
+
+    <record id="skill_development_group_learner" model="res.groups">
+        <field name="name">Learner</field>
+        <field name="category_id" ref="skill_development_access"/>
+<!--        <field name="implied_ids" eval="[(4, ref('base.group_users'))]"/>-->
+    </record>
+    </data>
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_skill_development"
+                  name="Skills"/>
+<!--                  web_icon="skill_development,static/description/icon1.png"/>-->
+
+        <record id="skill_development.skill_record_action" model="ir.actions.act_window">
+            <field name="name">Skills</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">skill_development.skill_record</field>
+            <field name="view_mode">kanban,form</field>
+<!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
+        </record>
+        <menuitem id="menu_skill_record"
+                  name="Skills"
+                  action="skill_development.skill_record_action"
+                  sequence="10"
+                  web_icon="skill_development,static/description/icon1.png"/>
+    </data>
+</odoo>

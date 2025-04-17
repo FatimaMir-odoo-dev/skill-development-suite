@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="goals_form_inherit" model="ir.ui.view">
+            <field name="name">smart_goals.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.project_project_view_form_simplified_footer"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@class, 'oe_title')]" position="replace">
+
+                    <!-- Skill Selection -->
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
+                        <label for="learner_plan_record_ids" string="Choose the skill you want to develop with this goal."
+                               style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                        <field name="learner_plan_record_ids"
+                               style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"
+                               options="{'no_create': True}"/>
+                    </div>
+                    <!-- SMART Goals Section -->
+                    <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+
+                            <!-- Specific Goal -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">Specific:</span>
+                                    <span style="color: #888888;">[What exactly do you want to achieve?]</span>
+                                </div>
+                                <field name="specific_goal" placeholder="e.g. learning to program with python"
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Measurable Goal -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">Measurable:</span>
+                                    <span style="color: #888888;">[How do you know if you're progress is good?]
+                                    </span>
+                                </div>
+                                <field name="measurable_goal"
+                                       placeholder="e.g. If I can add at least tow features to the application per week."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Achievable Goal -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">Achievable:</span>
+                                    <span style="color: #888888;">[what makes you sure you can do it?]</span>
+                                </div>
+                                <field name="achievable_goal"
+                                       placeholder="e.g. I have enough time and a study group to motivate me."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Relevant Goal -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">Relevant:</span>
+                                    <span style="color: #888888;">[Why is it important to you? (think of your
+                                        motivation)]
+                                    </span>
+                                </div>
+                                <field name="relevant_goal"
+                                       placeholder="e.g. I want to work in the field of programming, this is a good addition to my portfolio."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Timed Goal -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">Time-Bound:</span>
+                                    <span style="color: #888888;">[What is your timeline?]</span>
+                                </div>
+                                <field name="timed_goal"
+                                       placeholder="e.g. I will start studying by July, 2nd. and finish the application by October, 2nd. "
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <div style="height: 1px; background-color: #dddddd; margin: 25px 0;"></div>
+
+                    <!-- Complete Goal Statement Header -->
+                    <h1 style="font-size: 18px; color: #444444; font-weight: 600; text-align: center; margin-bottom: 25px;">
+                        Complete Goal Statement
+                    </h1>
+
+                    <!-- Complete Goal Field -->
+                    <field name="name"
+                           placeholder="e.g. Learn to code in Python and build a simple web application within the next three months."
+                           style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px;"
+                           required="True"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="smart_goal_view_form" model="ir.ui.view">
+            <field name="name">smart_goal.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+
+                <!--Hide these fields-->
+                <!--                                <xpath expr="//button[@name='254']" position="replace">-->
+                <!--                                </xpath>-->
+
+                <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="partner_id" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='user_id']" position="replace">
+                    <field name="user_id" invisible="1"/>
+                </xpath>
+
+                <!--Add SMART Criteria to the goal Information page-->
+                <xpath expr="//notebook/page[1]" position="before">
+                    <page string="SMART">
+                        <div class="o_form_sheet border p-3">
+                            <h3 class=" text-center mb-3" style="color: color: #71639c;">SMART Criteria</h3>
+
+                            <!-- Specific Goal -->
+                            <div class="mb-3">
+                                <label class="fw-bold" for="specific_goal">Specific: [What exactly do you want to
+                                    achieve?]
+                                </label>
+                                <div class="input-group">
+                                    <field name="specific_goal" class="o_field_char form-control"
+                                           id="specific_goal" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- Measurable Goal -->
+                            <div class="mb-3">
+                                <label class="fw-bold" for="measurable_goal" style="text-weight: bold">Measurable:
+                                </label>
+                                <!--                                <div class="input-group">-->
+                                <field name="measurable_goal" class="o_field_char form-control"
+                                       id="measurable_goal" readonly="1"/>
+                                <!--                                </div>-->
+                            </div>
+
+                            <!-- Achievable Goal -->
+                            <div class="mb-3">
+                                <label class="fw-bold" for="achievable_goal">Achievable: [what makes you sure you can do
+                                    it?]
+                                </label>
+                                <div class="input-group">
+                                    <field name="achievable_goal" class="o_field_char form-control"
+                                           id="achievable_goal" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- Relevant Goal -->
+                            <div class="mb-3">
+                                <label class="fw-bold" for="relevant_goal">Relevant: [Why is it important to you? (think
+                                    of your motivation)]
+                                </label>
+                                <div class="input-group">
+                                    <field name="relevant_goal" class="o_field_char form-control"
+                                           id="relevant_goal" readonly="1"/>
+                                </div>
+                            </div>
+
+                            <!-- Time-Bound Goal -->
+                            <div class="mb-3">
+                                <label class="fw-bold" for="timed_goal">Time-Bound: [What is your timeline?]</label>
+                                <div class="input-group">
+                                    <field name="timed_goal" class="o_field_char form-control"
+                                           id="timed_goal" readonly="1"/>
+                                </div>
+                            </div>
+                        </div>
+                    </page>
+                </xpath>
+
+                <xpath expr="//notebook/page[2]" position="replace">
+                    <page string="Expected Results">
+                        <group>
+                            <field name="expected_result_ids">
+                                <tree editable="bottom">
+                                    <field name="result"/>
+                                    <field name="is_done"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="smart_goal_record_view_kanban" model="ir.ui.view">
+            <field name="name">smart_goal_record.kanban</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@class='o_kanban_card_content mw-100']//div[@class='o_primary']" position="inside">
+                    <!--  Ensure that the learner_skills_id field is available in the kanban record  -->
+                    Skill:
+                    <field name="learner_plan_record_ids" style="color: #ac00e6"/>
+
+                    <!--  Show the skill name in Goals Cards -->
+                    <div t-if="record.learner_plan_record_ids" class="o_text_overflow text-muted">
+                        <t t-esc="record.learner_plan_record_ids.display_name"/>
+
+                    </div>
+                </xpath>
+                <!--Hide this field:-->
+                <xpath expr="//field[@name='user_id']" position="replace">
+                    <field name="user_id" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
