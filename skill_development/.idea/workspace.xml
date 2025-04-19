@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c597f29c-7daa-4cb4-b181-9aa1ce3ed8a7" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/skill_initial_plan_record.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/skill_initial_plan_record.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/skill_record.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/skill_record.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/smart_goal_plan.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/smart_goal_plan.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/security/skill_development_groups.xml" beforeDir="false" afterPath="$PROJECT_DIR$/security/skill_development_groups.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/skill_development_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/skill_development_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/skill_initial_plan_record_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/skill_initial_plan_record_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/skill_record_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/skill_record_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/smart_goal_plan_record_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/views/smart_goal_plan_record_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/skill_initial_plan_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/skill_initial_plan_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/skill_initial_plan_wizard_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/skill_initial_plan_wizard_views.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/smart_goal_form_wizard.py" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/smart_goal_form_wizard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wizard/smart_goal_form_wizard_views.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wizard/smart_goal_form_wizard_views.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/security/skill_development_groups.xml" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2vw6vkg9EERhfpJrQ8wMaCRW9oM" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-98f27166c754-ba05f1cad1b1-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.21829.153" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c597f29c-7daa-4cb4-b181-9aa1ce3ed8a7" name="Changes" comment="" />
+      <created>1745044022370</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1745044022370</updated>
+    </task>
+    <servers />
+  </component>
+</project>
