@@ -1,0 +1,59 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Odoo related files
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# Odoo database and other temporary files
+*.sqlite
+*.db
+*.db-wal
+*.db-shm
+
+# Odoo build and environment files
+.eggs/
+.eggs-info/
+*.egg-info/
+*.egg
+
+# Odoo backup files
+*.bak
+*.swp
+*.swo
+
+# Odoo environment
+*.env
+*.env.*
+venv/
+.venv/
+
+# IDE/editor specific files
+.vscode/
+.idea/
+
+# Odoo dependencies and virtual environments
+node_modules/
+*.log
+*.json
+
+# Odoo config files
+*.ini
+*.conf
+*.xml
+
+# Distribution folders and artifacts
+build/
+dist/
+*.tar.gz
+*.deb
+*.rpm
+*.zip
+
+# OS specific files
+.DS_Store
+Thumbs.db
