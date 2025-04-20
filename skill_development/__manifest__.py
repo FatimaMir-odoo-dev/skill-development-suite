@@ -4,11 +4,16 @@
 {
     'name': 'Skill Development',
     'version': '16.0.2.0',
-   'summary': 'Personalized learning plans, course enrollment, and event participation to enhance skills',
-    'description': 'Description',
-    'category': 'Skill Development',
-    'author': 'FATIMA',
-    # 'license': 'License',
+    'summary': 'Personalized learning plans for skill development.',
+    'description': """
+        It's the core of the Skill Development Suite. 
+        It enables learners to create personalized skill growth plans using SMART goals, tasks and resources.
+        Originally developed for the IEEE Student Branch at Al-Neelain University,
+        it is fully adaptable for any learning-focused organization.
+        """,
+    'category': 'Human Resources',
+    'author': 'FatimaMir-odoo-dev',
+    'license': 'LGPL-3',
     'depends': ['base', 'hr' ,'web_responsive', 'project'],
     'data': [
         'security/skill_development_groups.xml',
@@ -20,7 +25,8 @@
         'views/smart_goal_plan_record_views.xml',
         # 'wizard/smart_goal_form_wizard_views.xml',
              ],
-    # 'demo': ['Demo'],
+    # 'demo': ['demo/demo.xml'],
     'installable': True,
-    'auto_install': True
+    'auto_install': False,
+    'application': True
 }
