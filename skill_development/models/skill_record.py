@@ -39,7 +39,7 @@ class SkillRecord(models.Model):
             'name': 'My Skill Plan',
             'target': 'new',
             'context': {
-                'default_learner_id': learner_id},  # Pass the learner ID to the wizard form
+                'default_learner_id': learner_id,},  # Pass the learner ID to the wizard form
             'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
         }
 

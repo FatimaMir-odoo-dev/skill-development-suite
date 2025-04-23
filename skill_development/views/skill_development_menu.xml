@@ -20,5 +20,19 @@
                   action="skill_development.skill_record_action"
                   sequence="10"
                   web_icon="skill_development,static/description/icon1.png"/>
+
+        <record id="skill_development.initial_plan_record_action" model="ir.actions.act_window">
+            <field name="name">My Skill Growth</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">skill_development.initial_plan_record</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="skill_growth_view_form"/>
+<!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
+        </record>
+        <menuitem id="menu_skill_growth_record"
+                  name="Skill Growth"
+                  action="skill_development.initial_plan_record_action"
+                  sequence="10"/>
+<!--                  web_icon="skill_development,static/description/icon1.png"/>-->
     </data>
 </odoo>

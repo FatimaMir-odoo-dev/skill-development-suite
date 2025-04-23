@@ -13,7 +13,8 @@ class SmartGoal(models.Model):
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
 # Connect to the learner's initial plan records to get all their skills
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string ="Skill", required =True,
-                                        domain="[('plan_owner_id', '=', uid)]")
+                                        # domain="[('plan_owner_id', '=', uid)]"
+                                              )
 # # To extract only the Skill Names off the learner's records
 #     skill_name = fields.Char(string='Skill Name', related='learner_plan_record_ids.skill_name', store=True, readonly=True)
 

@@ -11,10 +11,13 @@ class SkillPlan(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
+
     skill_name = fields.Char(string="Skill", readonly=True)
     motivation = fields.Text(string="Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
+    progress = fields.Float('Skill Progression')
+    scribble_note = fields.Text('Scribbles')
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
     @api.constrains('skill_name')
@@ -57,7 +60,7 @@ class LearnerProfile(models.Model):
     plan_skill_ids = fields.One2many('skill_development.initial_plan_record', 'plan_owner_id', string='Skill Plans')
 
 # Here the data from skill_plan_record are displayed in the Learner Profile
-    record_skill_name = fields.Char(related="plan_skill_ids.skill_name", string="Skill")
-    record_skill_motive = fields.Text(related="plan_skill_ids.motivation" ,string="Motivation to Learn")
-    record_learning_endpoint = fields.Date(related="plan_skill_ids.endpoint" ,string="Learning Endpoint")
-    record_msg_2self = fields.Text(related="plan_skill_ids.msg_2self" ,string="Message to Myself")
+    #record_skill_name = fields.Char(related="plan_skill_ids.skill_name", string="Skill")
+    #record_skill_motive = fields.Text(related="plan_skill_ids.motivation" ,string="Motivation to Learn")
+    #record_learning_endpoint = fields.Date(related="plan_skill_ids.endpoint" ,string="Learning Endpoint")
+    #record_msg_2self = fields.Text(related="plan_skill_ids.msg_2self" ,string="Message to Myself")

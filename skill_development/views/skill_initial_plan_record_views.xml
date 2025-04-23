@@ -24,8 +24,11 @@
                         </div>
                     </page>
                 </xpath>
-
-<!--                <xpath expr="//field[@name='coach_id']" position="replace">-->
+            </field>
+        </record>
+    </data>
+</odoo>
+        <!--                <xpath expr="//field[@name='coach_id']" position="replace">-->
 <!--                </xpath>-->
 
 <!--                <xpath expr="//page[@name='public']//field[@name='address_id']" position="attributes">-->
@@ -34,7 +37,4 @@
 <!--                <xpath expr="//page[@name='public']//field[@name='address_id']" position="after">-->
 <!--                    <field name="position"/>-->
 <!--                </xpath>-->
-            </field>
-        </record>
-    </data>
-</odoo>
+
