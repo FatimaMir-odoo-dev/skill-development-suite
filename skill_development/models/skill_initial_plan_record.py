@@ -17,7 +17,9 @@ class SkillPlan(models.Model):
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
     progress = fields.Float('Skill Progression')
-    scribble_note = fields.Html('Scribbles')
+    scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
+
+
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
     @api.constrains('skill_name')
