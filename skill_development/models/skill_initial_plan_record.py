@@ -19,7 +19,35 @@ class SkillPlan(models.Model):
     progress = fields.Float('Skill Progression')
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
 
+    def goals_button(self):
 
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'My Goals',
+            'res_model': 'skill_development.goal_project',
+            'view_mode': 'kanban,form',
+            'target': 'self',
+            'domain': [('event_id', '=', self.id)],
+        }
+
+    # @api.model
+    # def open_wizard_form(self, context=None):
+    #
+    #     # get the Learner ID to pass it tp the wizard form in context
+    #     employee = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
+    #     learner_id = employee.id if employee else False
+    #
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         # this refers to the wizard form
+    #         'res_model': 'skill_plan.form',
+    #         'view_mode': 'form',
+    #         'name': 'My Skill Plan',
+    #         'target': 'new',
+    #         'context': {
+    #             'default_learner_id': learner_id},  # Pass the learner ID to the wizard form
+    #         'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
+    #     }
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
     @api.constrains('skill_name')
