@@ -15,38 +15,37 @@ class Goal(models.Model):
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,
                                               # domain="[('plan_owner_id', '=', uid)]"
                                               )
-    goal_name = fields.Char('Goal')
-    # learner_id
-    # related_task_id
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
     # result
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
-    # # Contents of SMART Goal record
-    # specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
-    # measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
-    # achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
-    # relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
-    # timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
-    # name = fields.Text('Complete Goal Statement')
-    #
-    # @api.constrains('name')
-    # def _check_SMART_fields(self):
-    #     for record in self:
-    #         if record.name:
-    #             # Check if all the other fields are filled before allowing `name` field
-    #             if not (
-    #                     record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
-    #                 raise ValidationError(
-    #                     "To make your goal really effective, please make sure all SMART fields are filled out accurately."
-    #                     " before entering the final goal statement.\n"
-    #                     "Take your time and think about each guideline carefully for the best results.")
-    #
-    # @api.model
-    # def create(self, vals):
-    #     if 'learner_id' not in vals:
-    #         vals['learner_id'] = self.env.user.id
-    #     return super(Goal, self).create(vals)
+
+    # Contents of SMART Goal record
+    specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
+    measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
+    achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
+    relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
+    timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
+    goal_name = fields.Text('Complete Goal Statement')
+
+    @api.constrains('name')
+    def _check_SMART_fields(self):
+        for record in self:
+            if record.name:
+                # Check if all the other fields are filled before allowing `name` field
+                if not (
+                        record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
+                    raise ValidationError(
+                        "To make your goal really effective, please make sure all SMART fields are filled out accurately."
+                        " before entering the final goal statement.\n"
+                        "Take your time and think about each guideline carefully for the best results.")
+
+    @api.model
+    def create(self, vals):
+        if 'learner_id' not in vals:
+            vals['learner_id'] = self.env.user.id
+        return super(Goal, self).create(vals)
+
     def action_view_tasks(self):
         return {
             'type': 'ir.actions.act_window',
@@ -56,6 +55,15 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
+
+    # def action_open_goal_popup(self):
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'New Goal',
+    #         'res_model': 'skill_development.goal_project',
+    #         'view_mode': 'form',
+    #         'target': 'new',
+    #     }
 
 
 class GoalTask(models.Model):
