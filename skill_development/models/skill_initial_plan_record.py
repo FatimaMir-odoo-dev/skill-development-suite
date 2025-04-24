@@ -27,7 +27,6 @@ class SkillPlan(models.Model):
             'res_model': 'skill_development.goal_project',
             'view_mode': 'kanban,form',
             'target': 'self',
-            'domain': [('event_id', '=', self.id)],
         }
 
     # @api.model

@@ -24,6 +24,7 @@
         'views/skill_initial_plan_record_views.xml',
         'views/smart_goal_plan_record_views.xml',
         'views/skill_growth_record_views.xml',
+        'views/goal_views.xml',
         # 'wizard/smart_goal_form_wizard_views.xml',
              ],
     # 'demo': ['demo/demo.xml'],
