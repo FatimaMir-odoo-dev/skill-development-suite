@@ -44,7 +44,7 @@ node_modules/
 # Odoo config files
 *.ini
 *.conf
-*.xml
+
 
 # Distribution folders and artifacts
 build/
