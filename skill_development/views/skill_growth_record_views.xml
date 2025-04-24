@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (C) 2024 FatimaMir-odoo-dev-->
+<!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
+
+<odoo>
+    <data>
+        <record id="skill_growth_view_tree" model="ir.ui.view">
+            <field name="name">My Skill Growth</field>
+            <field name="model">skill_development.initial_plan_record</field>
+            <field name="arch" type="xml">
+                <tree string="My Skill Growth">
+                    <field name="skill_name"/>
+                    <field name="motivation"/>
+                    <field name="endpoint"/>
+                    <field name="msg_2self"/>
+                    <button name="goals_button" type="object" string="My Goals" icon="fa-bullseye"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="skill_growth_view_form" model="ir.ui.view">
+            <field name="name">My Skill Growth</field>
+            <field name="model">skill_development.initial_plan_record</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" colspan="2" style="text-align: right;">
+                            <!--in the Event Information Screen-->
+                            <!--Add the Volunteers button, to display volunteers requests in it-->
+                            <button name="goals_button"
+                                    type="object" class="oe_stat_button"
+                                    t-att-style="'background-color: #71639c; color:white; font-weight:bold;
+                             text-align: left; font-size: 16px;'">
+                                My Goals
+                            </button>
+                        </div>
+                        <group>
+                            <field name="skill_name"/>
+                            <fild name="motivation"/>
+                            <field name="endpoint"/>
+                            <field name="msg_2self"/>
+                            <field name="progress" widget="percentpie"/>
+
+                        </group>
+                        <notebook>
+                            <page>
+                                <group>
+                                    <field name="scribble_note" type="html"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
