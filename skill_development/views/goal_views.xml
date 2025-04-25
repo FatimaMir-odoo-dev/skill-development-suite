@@ -33,6 +33,14 @@
             <field name="model">skill_development.goal_project</field>
             <field name="arch" type="xml">
                 <form>
+                    <field name="goal_status"/>
+
+                    <button name="action_finalize_goal"
+                            string="Finalize"
+                            type="object"
+                            class="btn-primary"
+                            attrs="{'invisible': [('goal_status', '=', 'finalized')]}"/>
+
                     <div style="display: flex; flex-direction: column; align-items: center; padding: 20px; background-color: #f8f9fa;">
                         <!-- Skill Selection -->
                         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
@@ -41,7 +49,8 @@
                                    style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
                             <field name="learner_plan_record_ids"
                                    style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"
-                                   options="{'no_create': True}"/>
+                                   options="{'no_create': True}"
+                                   attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                         </div>
                         <!-- SMART Goals Section -->
                         <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
@@ -55,7 +64,8 @@
                                         <span style="color: #888888;">[What exactly do you want to achieve?]</span>
                                     </div>
                                     <field name="specific_goal" placeholder="e.g. learning to program with python"
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"
+                                           attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                                 </div>
 
                                 <!-- Measurable Goal -->
@@ -68,7 +78,8 @@
                                     </div>
                                     <field name="measurable_goal"
                                            placeholder="e.g. If I can add at least tow features to the application per week."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"
+                                           attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                                 </div>
 
                                 <!-- Achievable Goal -->
@@ -80,7 +91,8 @@
                                     </div>
                                     <field name="achievable_goal"
                                            placeholder="e.g. I have enough time and a study group to motivate me."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"
+                                           attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                                 </div>
 
                                 <!-- Relevant Goal -->
@@ -94,7 +106,8 @@
                                     </div>
                                     <field name="relevant_goal"
                                            placeholder="e.g. I want to work in the field of programming, this is a good addition to my portfolio."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"
+                                           attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                                 </div>
 
                                 <!-- Timed Goal -->
@@ -106,7 +119,8 @@
                                     </div>
                                     <field name="timed_goal"
                                            placeholder="e.g. I will start studying by July, 2nd. and finish the application by October, 2nd. "
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"
+                                           attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                                 </div>
 
                             </div>
@@ -124,7 +138,8 @@
                         <field name="goal_name"
                                placeholder="e.g. Learn to code in Python and build a simple web application within the next three months."
                                style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px;"
-                               required="True"/>
+                               required="True"
+                               attrs="{'readonly': [('goal_status', '=', 'finalized')]}"/>
                     </div>
                 </form>
             </field>

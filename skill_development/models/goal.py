@@ -2,7 +2,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import models, fields, api
-# from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 
 
 class Goal(models.Model):
@@ -22,31 +22,42 @@ class Goal(models.Model):
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
     # result
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
-    # # Contents of SMART Goal record
-    # specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
-    # measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
-    # achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
-    # relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
-    # timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
-    # name = fields.Text('Complete Goal Statement')
-    #
-    # @api.constrains('name')
-    # def _check_SMART_fields(self):
-    #     for record in self:
-    #         if record.name:
-    #             # Check if all the other fields are filled before allowing `name` field
-    #             if not (
-    #                     record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
-    #                 raise ValidationError(
-    #                     "To make your goal really effective, please make sure all SMART fields are filled out accurately."
-    #                     " before entering the final goal statement.\n"
-    #                     "Take your time and think about each guideline carefully for the best results.")
-    #
-    # @api.model
-    # def create(self, vals):
-    #     if 'learner_id' not in vals:
-    #         vals['learner_id'] = self.env.user.id
-    #     return super(Goal, self).create(vals)
+    goal_status = fields.Selection(
+        [
+            ('draft', 'Draft'),
+            ('finalized', 'Finalized'),
+        ], default='draft', string='Status', readonly=True)
+    
+    # Contents of SMART Goal record
+    specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
+    measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
+    achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
+    relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
+    timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
+    name = fields.Text('Complete Goal Statement')
+
+    @api.constrains('name')
+    def _check_SMART_fields(self):
+        for record in self:
+            if record.name:
+                # Check if all the other fields are filled before allowing `name` field
+                if not (
+                        record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
+                    raise ValidationError(
+                        "To make your goal really effective, please make sure all SMART fields are filled out accurately."
+                        " before entering the final goal statement.\n"
+                        "Take your time and think about each guideline carefully for the best results.")
+
+    @api.model
+    def create(self, vals):
+        if 'learner_id' not in vals:
+            vals['learner_id'] = self.env.user.id
+        return super(Goal, self).create(vals)
+
+    def action_finalize_goal(self):
+        for rec in self:
+            rec.goal_status = 'finalized'
+
     def action_view_tasks(self):
         return {
             'type': 'ir.actions.act_window',
