@@ -75,6 +75,11 @@
                                                    style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"
                                                    options="{'no_create': True}"
                                                    attrs="{'readonly': [('goal_status', '=', 'finalized')], 'invisible': [('goal_status', '=', 'finalized')]}"/>
+                                            <label for="category"
+                                                   string="Which category?"
+                                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                                            <field name="category" widget="selection"
+                                                   style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"/>
                                         </div>
 
                                         <!-- SMART Goals Section -->

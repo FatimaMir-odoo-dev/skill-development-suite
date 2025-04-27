@@ -20,6 +20,35 @@ class SkillPlan(models.Model):
     progress_practice = fields.Float('Practice Progression')
     progress_contribute = fields.Float('Creation & Contribution Progression')
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
+    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True)
+
+    title = fields.Selection([
+        ('seeker', 'Seeker'),
+        ('learner', 'Learner'),
+        ('skilled', 'Skilled'),
+        ('proficient', 'Proficient'),
+        ('master', 'Master')
+    ], default='seeker', string='Title', compute='_compute_title', store=True)
+
+    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
+    def _compute_overall_progress(self):
+        for rec in self:
+            rec.overall_progress = (rec.progress_knowledge * 0.15) + (rec.progress_practice * 0.35) + (
+                        rec.progress_contribute * 0.5)
+
+    @api.depends('overall_progress')
+    def _compute_title(self):
+        for rec in self:
+            if rec.overall_progress >= 100:
+                rec.title = 'master'
+            elif rec.overall_progress >= 75:
+                rec.title = 'proficient'
+            elif rec.overall_progress >= 50:
+                rec.title = 'skilled'
+            elif rec.overall_progress >= 5:
+                rec.title = 'learner'
+            else:
+                rec.title = 'seeker'
 
     def goals_button(self):
 

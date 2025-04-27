@@ -30,7 +30,14 @@ class Goal(models.Model):
             ('complete', 'Complete')
         ], default='draft', string='Status', readonly=True)
     # is_complete = fields.Boolean(string="Goal Complete", default="False")
-
+    category = fields.Selection([
+        ('knowledge', 'Knowledge'),
+        ('practice', 'Practice'),
+        ('creation', 'Creation & Contribution')
+    ], required=True)
+    # is_smart = fields.Boolean(string='SMART Compliant')
+    # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
+    
     # Contents of SMART Goal record
     specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
     measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
