@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from xlsxwriter.contenttypes import defaults
 
 
 class Goal(models.Model):
@@ -26,8 +27,10 @@ class Goal(models.Model):
         [
             ('draft', 'Draft'),
             ('finalized', 'Finalized'),
+            ('complete', 'Complete')
         ], default='draft', string='Status', readonly=True)
-    
+    # is_complete = fields.Boolean(string="Goal Complete", default="False")
+
     # Contents of SMART Goal record
     specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
     measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
@@ -58,6 +61,10 @@ class Goal(models.Model):
         for rec in self:
             rec.goal_status = 'finalized'
 
+    def action_complete_goal(self):
+        for rec in self:
+            rec.goal_status = 'complete'
+
     def action_view_tasks(self):
         return {
             'type': 'ir.actions.act_window',
@@ -75,7 +82,7 @@ class GoalTask(models.Model):
 
     name = fields.Char('Task')
     # learner_id
-    goal_id = fields.Many2one('skill_development.goal_project', string = 'Goal')
+    goal_id = fields.Many2one('skill_development.goal_project', string='Goal')
     # stage_id
     # tag_id
     description = fields.Html(string='Description', anitize_attributes=False)
@@ -88,6 +95,7 @@ class GoalTask(models.Model):
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
     resources_url = fields.Char('URL for Resources')
 
+
 class GoalResult(models.Model):
     _name = 'skill_development.goal_result'
     _description = 'Goal Results'
@@ -96,7 +104,3 @@ class GoalResult(models.Model):
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
     result = fields.Char(string="Expected Results")
     is_done = fields.Boolean('Achieved')
-
-
-
-
