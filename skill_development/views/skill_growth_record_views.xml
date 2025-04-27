@@ -34,16 +34,21 @@
                                 My Goals
                             </button>
                         </div>
-                        <group>
-                            <field name="skill_name"/>
-                            <fild name="motivation"/>
-                            <field name="endpoint"/>
-                            <field name="msg_2self"/>
-                            <field name="progress" widget="percentpie"/>
+                        <group string="Skill Plan Overview" col="2">
+        <field name="skill_name" required="1"/>
+        <field name="motivation"/>
+        <field name="endpoint"/>
+        <field name="msg_2self"/>
+    </group>
+                        <group string="Progress">
+
+                            <field name="progress_knowledge" widget="percentpie"/>
+                            <field name="progress_practice" widget="percentpie"/>
+                            <field name="progress_contribute" widget="percentpie"/>
 
                         </group>
                         <notebook>
-                            <page>
+                            <page string="Scribbles">
                                 <group>
                                     <field name="scribble_note" type="html"/>
                                 </group>

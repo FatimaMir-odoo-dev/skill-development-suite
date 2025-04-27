@@ -16,7 +16,9 @@ class SkillPlan(models.Model):
     motivation = fields.Text(string="Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
-    progress = fields.Float('Skill Progression')
+    progress_knowledge = fields.Float('Knowledge Progression')
+    progress_practice = fields.Float('Practice Progression')
+    progress_contribute = fields.Float('Creation & Contribution Progression')
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
 
     def goals_button(self):
