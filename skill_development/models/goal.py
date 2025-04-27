@@ -72,6 +72,21 @@ class Goal(models.Model):
         for rec in self:
             rec.goal_status = 'complete'
 
+        learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
+        learner_id = learner.id if learner else False
+
+        return {
+            'type': 'ir.actions.act_window',
+            # this refers to the wizard form
+            'res_model': 'skill_development.goal_lesson_bank_wizard',
+            'view_mode': 'form',
+            'name': 'My Reflection',
+            'target': 'new',
+            # 'context': {
+            #     'default_learner_id': learner_id, },  # Pass the learner ID to the wizard form
+            # 'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
+        }
+
     def action_view_tasks(self):
         return {
             'type': 'ir.actions.act_window',
@@ -111,3 +126,11 @@ class GoalResult(models.Model):
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
     result = fields.Char(string="Expected Results")
     is_done = fields.Boolean('Achieved')
+
+class LessonBank(models.Model):
+    _name = 'skill_development.goal_lesson_bank'
+    _description = 'Lesson Bank'
+
+    goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
+    lesson_title = fields.Char('Lesson')
+    lesson = fields.Html(String='Scribbles', anitize_attributes=False)

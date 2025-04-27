@@ -294,5 +294,25 @@
                 </form>
             </field>
         </record>
+
+<!--        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">-->
+<!--            <field name="name">Lesson Bank</field>-->
+<!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                    <form>-->
+<!--                        -->
+<!--                    </form>-->
+<!--            </field>-->
+<!--        </record>-->
+<!--        -->
+<!--        <record id="goal_lesson_bank_view_form" model="ir.ui.view">-->
+<!--            <field name="name">Lesson Bank</field>-->
+<!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                    <form>-->
+<!--                        -->
+<!--                    </form>-->
+<!--            </field>-->
+<!--        </record>-->
     </data>
 </odoo>
