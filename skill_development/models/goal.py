@@ -20,7 +20,7 @@ class Goal(models.Model):
     # related_task_id
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
-    # result
+    result_ids = fields.One2many('skill_development.goal_result', 'goal_id')
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
     goal_status = fields.Selection(
         [
@@ -88,7 +88,14 @@ class GoalTask(models.Model):
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
     resources_url = fields.Char('URL for Resources')
 
+class GoalResult(models.Model):
+    _name = 'skill_development.goal_result'
+    _description = 'Goal Results'
+    _auto = True
 
+    goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
+    result = fields.Char(string="Expected Results")
+    is_done = fields.Boolean('Achieved')
 
 
 
