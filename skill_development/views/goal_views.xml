@@ -34,8 +34,15 @@
                                          style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; text-align: right;">
                                         <span style="color: #333; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
+                                            <field name="task_count" widget="statinfo" nolabel="1"/>
                                             Tasks
                                         </span>
+
+
+<!--                                        <div>-->
+<!--                                                    <span class="o_value"><t t-esc="task_count"/></span>-->
+
+<!--                                                </div>-->
                                     </div>
                                 </a>
                             </div>
@@ -176,26 +183,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--</sheet>-->
-                            <!--                        </div>-->
 
-                            <!--                        &lt;!&ndash; Right side: Expected Results &ndash;&gt;-->
-                            <!--                        <div style="flex: 1; background-color: #ffffff; padding: 20px; box-sizing: border-box;">-->
-                            <!--                            <h2 style="font-size: 18px; font-weight: 600; text-align: center; margin-bottom: 20px;">-->
-                            <!--                                Expected Results-->
-                            <!--                            </h2>-->
-                            <!--                            <field name="result_ids">-->
-                            <!--                                <tree editable="bottom">-->
-                            <!--                                    <field name="result"/>-->
-                            <!--                                    <field name="is_done"/>-->
-                            <!--                                </tree>-->
-                            <!--                            </field>-->
-                            <!--                        </div>-->
-
-                            <!--                    </div>-->
-
-                            <!--                    <sheet>-->
                             <div attrs="{'invisible': [('goal_status', '!=', 'finalized')]}">
+                                <div name="button_box">
+                                    <button class="oe_stat_button" type="object" name="action_view_tasks"
+                                            icon="fa-tasks"
+                                        string="Tasks">
+                                       <field name="task_count" widget="statinfo"/>
+
+                                    </button>
+                                </div>
                                 <h4 style="text-align: left; margin-bottom: 8px;">
                                     <field name="goal_name" readonly="1"/>
                                 </h4>
