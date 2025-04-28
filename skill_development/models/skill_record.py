@@ -25,7 +25,6 @@ class SkillRecord(models.Model):
     # Activated upon clicking the Button: Start Learning
     @api.model
     def action_open_initial_plan_wizard(self, context=None):
-        # self.ensure_one()
 
         # get the Learner ID to pass it tp the wizard form in context
         learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)

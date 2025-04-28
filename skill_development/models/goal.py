@@ -105,7 +105,12 @@ class GoalTask(models.Model):
     name = fields.Char('Task')
     # learner_id
     goal_id = fields.Many2one('skill_development.goal_project', string='Goal')
-    # stage_id
+    stage_id = fields.Many2one(
+        'skill_development.goal_task_stage',
+        string='Stage',
+        domain="[('learner_id', '=', uid)]",
+        ondelete='set null'
+    )
     # tag_id
     description = fields.Html(string='Description', anitize_attributes=False)
     priority = fields.Selection([
@@ -116,6 +121,34 @@ class GoalTask(models.Model):
     # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
     resources_url = fields.Char('URL for Resources')
+
+    # def compute_count(self):
+    #     for record in self:
+    #         record.vehicle_count = self.env['fleet.vehicle'].search_count(
+    #             [('driver_id', '=', self.id)])
+
+
+
+class GoalStage(models.Model):
+    _name = 'skill_development.goal_task_stage'
+    _description = 'Task Stage'
+    _order = 'sequence, id'
+
+    name = fields.Char(string='Stage Name', required=True)
+    learner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user,
+                              index=True)
+    sequence = fields.Integer(string='Sequence', default=1)
+    fold = fields.Boolean(string='Folded in Kanban',
+                           help='If enabled, this stage will be shown as folded in the Kanban view.')
+    active = fields.Boolean(string='Active', default=True)
+
+    legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
+    legend_done = fields.Char('Done Label', default='Ready', required=True)
+    legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
+
+    # task_id
+    # goal_id
+
 
 
 class GoalResult(models.Model):
