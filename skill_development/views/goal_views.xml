@@ -77,6 +77,7 @@
                                                    attrs="{'readonly': [('goal_status', '=', 'finalized')], 'invisible': [('goal_status', '=', 'finalized')]}"/>
                                             <label for="category"
                                                    string="Which category?"
+                                                   widget="radio"
                                                    style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
                                             <field name="category" widget="selection"
                                                    style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"/>
@@ -173,7 +174,7 @@
                                                placeholder="e.g. Learn Python and build an app."
                                                style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; margin-bottom: 25px;"
                                                required="True"
-                                               />
+                                        />
 
                                         <button name="action_finalize_goal" string="Finalize" type="object"
                                                 class="btn btn-success w-100"
@@ -201,17 +202,18 @@
 
                             <!--                    <sheet>-->
                             <div attrs="{'invisible': [('goal_status', '=', 'draft')]}">
-<!--                                <h4 style="text-align: left; margin-bottom: 8px;">-->
-                                    <field name="goal_name" readonly="1" widget="Char"/>
-<!--                                </h4>-->
+                                <!--                                <h4 style="text-align: left; margin-bottom: 8px;">-->
+                                <field name="goal_name" readonly="1" widget="Char"/>
+                                <!--                                </h4>-->
                                 <button name="action_complete_goal" string="Goal Complete" type="object"
-                                                class="btn btn-success w-100"
+                                        class="btn btn-success w-100"
                                         icon="fa-check-square-o"
-                                                attrs="{'invisible': [('goal_status', '=', 'complete')]}"/>
+                                        attrs="{'invisible': [('goal_status', '=', 'complete')]}"/>
                                 <notebook>
                                     <page string="Expected Results">
                                         <group>
-                                            <field name="result_ids" attrs="{'readonly': [('goal_status', '=', 'complete')]}">
+                                            <field name="result_ids"
+                                                   attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                                 <tree editable="bottom">
                                                     <field name="result"/>
                                                     <field name="is_done"/>
@@ -295,24 +297,81 @@
             </field>
         </record>
 
-<!--        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">-->
-<!--            <field name="name">Lesson Bank</field>-->
-<!--            <field name="model">skill_development.goal_lesson_bank</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                    <form>-->
-<!--                        -->
-<!--                    </form>-->
-<!--            </field>-->
-<!--        </record>-->
-<!--        -->
-<!--        <record id="goal_lesson_bank_view_form" model="ir.ui.view">-->
-<!--            <field name="name">Lesson Bank</field>-->
-<!--            <field name="model">skill_development.goal_lesson_bank</field>-->
-<!--            <field name="arch" type="xml">-->
-<!--                    <form>-->
-<!--                        -->
-<!--                    </form>-->
-<!--            </field>-->
-<!--        </record>-->
+        <!--        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">-->
+        <!--            <field name="name">Lesson Bank</field>-->
+        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                    <form>-->
+        <!--                        -->
+        <!--                    </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <!--        -->
+        <!--        <record id="goal_lesson_bank_view_form" model="ir.ui.view">-->
+        <!--            <field name="name">Lesson Bank</field>-->
+        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                    <form>-->
+        <!--                        -->
+        <!--                    </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <record id="goal_task_view_kanban" model="ir.ui.view">
+        <field name="name">My Tasks</field>
+        <field name="model">skill_development.goal_task</field>
+        <field name="arch" type="xml">
+        <kanban default_group_by="stage_id">
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click"
+                         style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
+                        <!-- Title -->
+                        <header>
+                            <div class="oe_title" style="overflow: visible; white-space: nowrap;">
+                                <h4 style="text-align: left; margin-bottom: 8px;">
+                                    <field name="name"/>
+                                </h4>
+                            </div>
+                        </header>
+                        <field name="priority" widget="priority"/>
+                        <field name="date_end" widget="remaining_days"/>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+        </field>
+        </record>
+
+        <record id="goal_task_view_form" model="ir.ui.view">
+            <field name="name">My Tasks</field>
+            <field name="model">skill_development.goal_task</field>
+            <field name="arch" type="xml">
+                <form>
+                <div class="oe_title pe-0">
+                    <h1 class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex w-100">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                   placeholder="Task Title..."/>
+                        </div>
+                        <field name="kanban_state" widget="state_selection"/>
+                    </h1>
+                </div>
+                    <group>
+                        <field name="goal_id"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group>
+                        <field name="resource_url"/>
+                    </group>
+                    <notebook>
+                        <page string="Task Description">
+                            <field name="description" widget="html"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
     </data>
 </odoo>

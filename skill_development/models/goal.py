@@ -109,18 +109,24 @@ class GoalTask(models.Model):
         'skill_development.goal_task_stage',
         string='Stage',
         domain="[('learner_id', '=', uid)]",
-        ondelete='set null'
+        ondelete='restrict',
+        required='True'
     )
     # tag_id
     description = fields.Html(string='Description', anitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
-        ('1', 'High'),
-    ], default='0', index=True, string="Priority", tracking=True)
+        ('1', 'High')],
+        default='0', index=True, string="Priority", tracking=True)
     # create_date = fields.Datetime("Created On", readonly=True)
     # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
-    resources_url = fields.Char('URL for Resources')
+    resource_url = fields.Char('URL for Resources')
+    kanban_state = fields.Selection([
+        ('normal', 'In Progress'),
+        ('done', 'Ready'),
+        ('blocked', 'Blocked')],
+        string='Status',default='normal')
 
     # def compute_count(self):
     #     for record in self:
