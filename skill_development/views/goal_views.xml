@@ -179,6 +179,7 @@
                     </header>
                     <!--<sheet>-->
                     <notebook>
+                        <field name="goal_name" readonly="1" widget="Char"/>
                         <page string="Expected Results">
                             <group>
                                 <field name="result_ids"
@@ -189,18 +190,15 @@
                                     </tree>
                                 </field>
                             </group>
+                            <button name="action_complete_goal" string="Goal Complete" type="object"
+                                class="btn btn-success w-100"
+                                icon="fa-check-square-o"/>
                         </page>
 
                         <button name="action_finalize_goal" string="Finalize" type="object"
                                 class="btn btn-success w-100"
                                 attrs="{'invisible': [('goal_status', '=', 'finalized')]}"/>
 
-                        <!--                                <h4 style="text-align: left; margin-bottom: 8px;">-->
-                        <field name="goal_name" readonly="1" widget="Char"/>
-                        <!--                                </h4>-->
-                        <button name="action_complete_goal" string="Goal Complete" type="object"
-                                class="btn btn-success w-100"
-                                icon="fa-check-square-o"/>
 
                         <page string="SMART">
                             <div class="o_form_sheet border p-3">
