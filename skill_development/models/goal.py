@@ -82,9 +82,10 @@ class Goal(models.Model):
             'view_mode': 'form',
             'name': 'My Reflection',
             'target': 'new',
-            # 'context': {
-            #     'default_learner_id': learner_id, },  # Pass the learner ID to the wizard form
-            # 'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
+            'context': {
+                'default_learner_plan_record_ids': self.learner_plan_record_ids.id,  # Pass the learner ID to the wizard form
+                'default_goal_id': self.id,
+                },  # Pass the skill name to the wizard form
         }
 
     def action_view_tasks(self):
@@ -96,6 +97,14 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
+
+    def name_get(self):
+        result = []
+        for record in self:
+            # Return the skill_name as the display name in the learner_skill_id dropdown
+            name = record.goal_name or "Unnamed Goal"
+            result.append((record.id, name))
+        return result
 
 
 class GoalTask(models.Model):
@@ -170,6 +179,7 @@ class LessonBank(models.Model):
     _name = 'skill_development.goal_lesson_bank'
     _description = 'Lesson Bank'
 
+    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
     lesson_title = fields.Char('Lesson')
     lesson = fields.Html(String='Scribbles', anitize_attributes=False)
