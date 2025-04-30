@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from xlsxwriter.contenttypes import defaults
 
 
 class Goal(models.Model):
@@ -26,7 +27,16 @@ class Goal(models.Model):
         [
             ('draft', 'Draft'),
             ('finalized', 'Finalized'),
+            ('complete', 'Complete')
         ], default='draft', string='Status', readonly=True)
+    # is_complete = fields.Boolean(string="Goal Complete", default="False")
+    category = fields.Selection([
+        ('knowledge', 'Knowledge'),
+        ('practice', 'Practice'),
+        ('creation', 'Creation & Contribution')
+    ], required=True)
+    # is_smart = fields.Boolean(string='SMART Compliant')
+    # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
     
     # Contents of SMART Goal record
     specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
@@ -59,6 +69,25 @@ class Goal(models.Model):
         for rec in self:
             rec.goal_status = 'finalized'
 
+    def action_complete_goal(self):
+        for rec in self:
+            rec.goal_status = 'complete'
+
+        learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
+        learner_id = learner.id if learner else False
+
+        return {
+            'type': 'ir.actions.act_window',
+            # this refers to the wizard form
+            'res_model': 'skill_development.goal_lesson_bank_wizard',
+            'view_mode': 'form',
+            'name': 'My Reflection',
+            'target': 'new',
+            # 'context': {
+            #     'default_learner_id': learner_id, },  # Pass the learner ID to the wizard form
+            # 'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
+        }
+
     def action_view_tasks(self):
         return {
             'type': 'ir.actions.act_window',
@@ -81,18 +110,58 @@ class GoalTask(models.Model):
 
     name = fields.Char('Task')
     # learner_id
-    goal_id = fields.Many2one('skill_development.goal_project', string = 'Goal')
-    # stage_id
+    goal_id = fields.Many2one('skill_development.goal_project', string='Goal')
+    stage_id = fields.Many2one(
+        'skill_development.goal_task_stage',
+        string='Stage',
+        domain="[('learner_id', '=', uid)]",
+        ondelete='restrict',
+        required='True'
+    )
     # tag_id
     description = fields.Html(string='Description', anitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
-        ('1', 'High'),
-    ], default='0', index=True, string="Priority", tracking=True)
+        ('1', 'High')],
+        default='0', index=True, string="Priority", tracking=True)
     # create_date = fields.Datetime("Created On", readonly=True)
     # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
-    resources_url = fields.Char('URL for Resources')
+    resource_url = fields.Char('URL for Resources')
+    kanban_state = fields.Selection([
+        ('normal', 'In Progress'),
+        ('done', 'Ready'),
+        ('blocked', 'Blocked')],
+        string='Status',default='normal')
+
+    # def compute_count(self):
+    #     for record in self:
+    #         record.vehicle_count = self.env['fleet.vehicle'].search_count(
+    #             [('driver_id', '=', self.id)])
+
+
+
+class GoalStage(models.Model):
+    _name = 'skill_development.goal_task_stage'
+    _description = 'Task Stage'
+    _order = 'sequence, id'
+
+    name = fields.Char(string='Stage Name', required=True)
+    learner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user,
+                              index=True)
+    sequence = fields.Integer(string='Sequence', default=1)
+    fold = fields.Boolean(string='Folded in Kanban',
+                           help='If enabled, this stage will be shown as folded in the Kanban view.')
+    active = fields.Boolean(string='Active', default=True)
+
+    legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
+    legend_done = fields.Char('Done Label', default='Ready', required=True)
+    legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
+
+    # task_id
+    # goal_id
+
+
 
 
 class GoalResult(models.Model):
@@ -104,6 +173,10 @@ class GoalResult(models.Model):
     result = fields.Char(string="Expected Results")
     is_done = fields.Boolean('Achieved')
 
+class LessonBank(models.Model):
+    _name = 'skill_development.goal_lesson_bank'
+    _description = 'Lesson Bank'
 
-
-
+    goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
+    lesson_title = fields.Char('Lesson')
+    lesson = fields.Html(String='Scribbles', anitize_attributes=False)

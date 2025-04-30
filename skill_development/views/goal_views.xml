@@ -34,15 +34,8 @@
                                          style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; text-align: right;">
                                         <span style="color: #333; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
-                                            <field name="task_count" widget="statinfo" nolabel="1"/>
                                             Tasks
                                         </span>
-
-
-<!--                                        <div>-->
-<!--                                                    <span class="o_value"><t t-esc="task_count"/></span>-->
-
-<!--                                                </div>-->
                                     </div>
                                 </a>
                             </div>
@@ -58,12 +51,12 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized"/>
+                        <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
                     </header>
                     <!--<sheet>-->
                     <div class="o_form_sheet_centered">
                         <div class="o_form_sheet border p-3" style="max-width: 500px; margin: 0 auto;">
-                            <div attrs="{'invisible': [('goal_status', '=', 'finalized')]}">
+                            <div attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}">
                                 <!--                    <div style="display: flex; flex-direction: row; width: 100%;">-->
 
                                 <!--                        &lt;!&ndash; Left side: SMART Goals &ndash;&gt;-->
@@ -82,6 +75,12 @@
                                                    style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"
                                                    options="{'no_create': True}"
                                                    attrs="{'readonly': [('goal_status', '=', 'finalized')], 'invisible': [('goal_status', '=', 'finalized')]}"/>
+                                            <label for="category"
+                                                   string="Which category?"
+                                                   widget="radio"
+                                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                                            <field name="category" widget="selection"
+                                                   style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"/>
                                         </div>
 
                                         <!-- SMART Goals Section -->
@@ -183,23 +182,38 @@
                                     </div>
                                 </div>
                             </div>
+                            <!--</sheet>-->
+                            <!--                        </div>-->
 
-                            <div attrs="{'invisible': [('goal_status', '!=', 'finalized')]}">
-                                <div name="button_box">
-                                    <button class="oe_stat_button" type="object" name="action_view_tasks"
-                                            icon="fa-tasks"
-                                        string="Tasks">
-                                       <field name="task_count" widget="statinfo"/>
+                            <!--                        &lt;!&ndash; Right side: Expected Results &ndash;&gt;-->
+                            <!--                        <div style="flex: 1; background-color: #ffffff; padding: 20px; box-sizing: border-box;">-->
+                            <!--                            <h2 style="font-size: 18px; font-weight: 600; text-align: center; margin-bottom: 20px;">-->
+                            <!--                                Expected Results-->
+                            <!--                            </h2>-->
+                            <!--                            <field name="result_ids">-->
+                            <!--                                <tree editable="bottom">-->
+                            <!--                                    <field name="result"/>-->
+                            <!--                                    <field name="is_done"/>-->
+                            <!--                                </tree>-->
+                            <!--                            </field>-->
+                            <!--                        </div>-->
 
-                                    </button>
-                                </div>
-                                <h4 style="text-align: left; margin-bottom: 8px;">
-                                    <field name="goal_name" readonly="1"/>
-                                </h4>
+                            <!--                    </div>-->
+
+                            <!--                    <sheet>-->
+                            <div attrs="{'invisible': [('goal_status', '=', 'draft')]}">
+                                <!--                                <h4 style="text-align: left; margin-bottom: 8px;">-->
+                                <field name="goal_name" readonly="1" widget="Char"/>
+                                <!--                                </h4>-->
+                                <button name="action_complete_goal" string="Goal Complete" type="object"
+                                        class="btn btn-success w-100"
+                                        icon="fa-check-square-o"
+                                        attrs="{'invisible': [('goal_status', '=', 'complete')]}"/>
                                 <notebook>
                                     <page string="Expected Results">
                                         <group>
-                                            <field name="result_ids">
+                                            <field name="result_ids"
+                                                   attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                                 <tree editable="bottom">
                                                     <field name="result"/>
                                                     <field name="is_done"/>
@@ -282,5 +296,82 @@
                 </form>
             </field>
         </record>
+
+        <!--        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">-->
+        <!--            <field name="name">Lesson Bank</field>-->
+        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                    <form>-->
+        <!--                        -->
+        <!--                    </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <!--        -->
+        <!--        <record id="goal_lesson_bank_view_form" model="ir.ui.view">-->
+        <!--            <field name="name">Lesson Bank</field>-->
+        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                    <form>-->
+        <!--                        -->
+        <!--                    </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <record id="goal_task_view_kanban" model="ir.ui.view">
+        <field name="name">My Tasks</field>
+        <field name="model">skill_development.goal_task</field>
+        <field name="arch" type="xml">
+        <kanban default_group_by="stage_id">
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click"
+                         style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
+                        <!-- Title -->
+                        <header>
+                            <div class="oe_title" style="overflow: visible; white-space: nowrap;">
+                                <h4 style="text-align: left; margin-bottom: 8px;">
+                                    <field name="name"/>
+                                </h4>
+                            </div>
+                        </header>
+                        <field name="priority" widget="priority"/>
+                        <field name="date_end" widget="remaining_days"/>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+        </field>
+        </record>
+
+        <record id="goal_task_view_form" model="ir.ui.view">
+            <field name="name">My Tasks</field>
+            <field name="model">skill_development.goal_task</field>
+            <field name="arch" type="xml">
+                <form>
+                <div class="oe_title pe-0">
+                    <h1 class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex w-100">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                   placeholder="Task Title..."/>
+                        </div>
+                        <field name="kanban_state" widget="state_selection"/>
+                    </h1>
+                </div>
+                    <group>
+                        <field name="goal_id"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group>
+                        <field name="resource_url"/>
+                    </group>
+                    <notebook>
+                        <page string="Task Description">
+                            <field name="description" widget="html"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
     </data>
 </odoo>

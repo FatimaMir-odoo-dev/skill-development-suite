@@ -34,5 +34,18 @@
                   action="skill_development.initial_plan_record_action"
                   sequence="10"/>
 <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
+        <record id="skill_development.goal_lesson_bank_action" model="ir.actions.act_window">
+            <field name="name">Lesson Bank</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">skill_development.goal_lesson_bank</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="view_id" ref="skill_growth_view_tree"/>-->
+<!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
+        </record>
+        <menuitem id="menu_goal_lesson_bank"
+                  name="Lesson Bank"
+                  action="skill_development.goal_lesson_bank_action"
+                  parent="menu_skill_growth_record"
+                  sequence="10"/>
     </data>
 </odoo>
