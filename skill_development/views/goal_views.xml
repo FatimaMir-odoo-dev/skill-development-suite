@@ -33,7 +33,7 @@
                                    style="text-decoration: none;">
                                     <div class="o_kanban_record_bottom"
                                          style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; text-align: right;"
-                                        attrs="{'invisible':[('goal_status', '=', 'draft')]}">
+                                         attrs="{'invisible':[('goal_status', '=', 'draft')]}">
                                         <span style="color: #333; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
                                             Tasks
@@ -188,10 +188,10 @@
                     <header>
                         <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
                     </header>
-                     <button name="action_finalize_goal" string="Finalize" type="object"
-                                class="btn btn-primary"
-                        attrs="{'invisible':['|', ('goal_status', '=', 'finalized'), ('goal_status','=','complete')]}"/>
-                        <field name="goal_name" attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                    <button name="action_finalize_goal" string="Finalize" type="object"
+                            class="btn btn-primary"
+                            attrs="{'invisible':['|', ('goal_status', '=', 'finalized'), ('goal_status','=','complete')]}"/>
+                    <field name="goal_name" attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
                     <!--<sheet>-->
                     <notebook>
 
@@ -350,20 +350,59 @@
                         </h1>
                     </div>
                     <group>
-                        <field name="goal_id"/>
+                        <field name="goal_id" readonly="1"/>
                         <field name="date_end"/>
                     </group>
-                    <group>
-                        <field name="resource_url"/>
+                    <group width="30%">
+                        <field name="resource_url" widget="url"/>
+                        <!--                        <button name="action_open_resource_form" type="object" string="Add Resource"/>-->
                     </group>
                     <notebook>
                         <page string="Task Description">
                             <field name="description" widget="html"/>
+                        </page>
+                        <page string="Additional Resources">
+                            <field name="resource_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="resource_type" widget="badge"
+                                           decoration-success="resource_type == 'image'"
+                                           decoration-primary="resource_type == 'tool'"
+                                           decoration-info="resource_type == 'link'"
+                                           decoration-danger="resource_type == 'video'"
+                                           decoration-warning="resource_type == 'document'"/>
+                                    <field name="description"/>
+                                    <field name="url" widget="url" string="External URLs"/>
+                                    <!--                                    <field name="person_id"/>-->
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
                 </form>
             </field>
         </record>
 
+        <record id="goal_task_resource_view_form" model="ir.ui.view">
+            <field name="name">My Tasks</field>
+            <field name="model">skill_development.goal_task_resource</field>
+            <field name="arch" type="xml">
+                <form string="Resource">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="resource_type"/>
+                            <field name="video" filename="video_filename" widget="binary"
+                                   attrs="{'invisible': [('resource_type', '!=', 'video')]}"/>
+                            <field name="image" widget="image"
+                                   attrs="{'invisible': [('resource_type', '!=', 'image')]}"/>
+                            <field name="url" widget="url" attrs="{'invisible': [('resource_type', '!=', 'link')]}"/>
+                            <field name="file" widget="pdf_viewer"
+                                   attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
     </data>
 </odoo>

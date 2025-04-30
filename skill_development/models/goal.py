@@ -3,7 +3,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-from xlsxwriter.contenttypes import defaults
+# from odoo.tools import video as video_utils
 
 
 class Goal(models.Model):
@@ -123,6 +123,27 @@ class Goal(models.Model):
     #     }
 
 
+class GoalStage(models.Model):
+    _name = 'skill_development.goal_task_stage'
+    _description = 'Task Stage'
+    _order = 'sequence, id'
+
+    name = fields.Char(string='Stage Name', required=True)
+    learner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user,
+                              index=True)
+    sequence = fields.Integer(string='Sequence', default=1)
+    fold = fields.Boolean(string='Folded in Kanban',
+                           help='If enabled, this stage will be shown as folded in the Kanban view.')
+    active = fields.Boolean(string='Active', default=True)
+
+    legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
+    legend_done = fields.Char('Done Label', default='Ready', required=True)
+    legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
+
+    # task_id
+    # goal_id
+
+
 class GoalTask(models.Model):
     _name = "skill_development.goal_task"
     _description = 'Skill'
@@ -146,40 +167,67 @@ class GoalTask(models.Model):
     # create_date = fields.Datetime("Created On", readonly=True)
     # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
-    resource_url = fields.Char('URL for Resources')
+    resource_url = fields.Char('Quick Access URL')
     kanban_state = fields.Selection([
         ('normal', 'In Progress'),
         ('done', 'Ready'),
         ('blocked', 'Blocked')],
         string='Status',default='normal')
+    resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
+
+    # def action_open_resource_form(self):
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'Add Resource',
+    #         'res_model': 'skill_development.goal_task_resource',
+    #         'view_mode': 'form',
+    #         'target': 'new',  # or 'current' for full-page
+    #         'context': {
+    #             'default_name': 'Default Resource Name',
+    #             'default_resource_type': 'document',
+    #             # you can pass more defaults here
+    #         }
+    #     }
+
 
     # def compute_count(self):
     #     for record in self:
     #         record.vehicle_count = self.env['fleet.vehicle'].search_count(
     #             [('driver_id', '=', self.id)])
 
+class GoalResource(models.Model):
+    _name = 'skill_development.goal_task_resource'
+    _description = 'Resource for Tasks'
 
+    name = fields.Char('Name', required=True)
+    resource_type = fields.Selection([
+        ('document', 'Document'),
+        ('link', 'External Link'),
+        ('tool', 'Tool/App'),
+        ('video', 'Video'),
+        ('image', 'Image'),
+    ], string='Type', required=True)
 
-class GoalStage(models.Model):
-    _name = 'skill_development.goal_task_stage'
-    _description = 'Task Stage'
-    _order = 'sequence, id'
+    file = fields.Binary('Upload File')
+    url = fields.Char('External URL')
+    task_id = fields.Many2one('skill_development.goal_task', string='Related Task')  # Replace with your task model
+    description = fields.Text('Description')
+    video = fields.Binary(string='Video', attachment=True)
+    image = fields.Binary(string='Image', attachment=True)
+    # image_preview = fields.Binary(string='Image Preview')
+    # video_preview = fields.(
+    #     string='Video Preview',
+    #     compute='_compute_video_preview',
+    #     store=False,
+    # )
 
-    name = fields.Char(string='Stage Name', required=True)
-    learner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user,
-                              index=True)
-    sequence = fields.Integer(string='Sequence', default=1)
-    fold = fields.Boolean(string='Folded in Kanban',
-                           help='If enabled, this stage will be shown as folded in the Kanban view.')
-    active = fields.Boolean(string='Active', default=True)
-
-    legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
-    legend_done = fields.Char('Done Label', default='Ready', required=True)
-    legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
-
-    # task_id
-    # goal_id
-
+    # @api.depends('video')
+    # def _compute_video_preview(self):
+    #     for rec in self:
+    #         rec.video_preview = (
+    #             video_utils.Video.from_binary(rec.video).preview_image()
+    #             if rec.video else False
+    #         )
 
 
 class GoalResult(models.Model):
