@@ -16,9 +16,6 @@ class Goal(models.Model):
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,
                                               # domain="[('plan_owner_id', '=', uid)]"
                                               )
-    goal_name = fields.Char('Goal')
-    # learner_id
-    # related_task_id
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
     result_ids = fields.One2many('skill_development.goal_result', 'goal_id')
@@ -37,14 +34,14 @@ class Goal(models.Model):
     ], required=True)
     # is_smart = fields.Boolean(string='SMART Compliant')
     # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
-    
+
     # Contents of SMART Goal record
     specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
     measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
     achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
     relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
-    name = fields.Text('Complete Goal Statement')
+    goal_name = fields.Text('Complete Goal Statement')
     task_count = fields.Integer(compute='compute_count')
 
     @api.constrains('name')
@@ -115,6 +112,15 @@ class Goal(models.Model):
             name = record.goal_name or "Unnamed Goal"
             result.append((record.id, name))
         return result
+
+    # def action_open_goal_popup(self):
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'New Goal',
+    #         'res_model': 'skill_development.goal_project',
+    #         'view_mode': 'form',
+    #         'target': 'new',
+    #     }
 
 
 class GoalTask(models.Model):
