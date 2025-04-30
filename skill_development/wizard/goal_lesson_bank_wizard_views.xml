@@ -19,6 +19,8 @@
                         </group>
 
                         <group>
+                            <field name="goal_id"/>
+                            <field name="learner_plan_record_ids"/>
                             <field name="lesson_title"/>
                             <field name="lesson" string="I Learned: " widget="html"/>
                         </group>
