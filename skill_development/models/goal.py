@@ -65,6 +65,10 @@ class Goal(models.Model):
             vals['learner_id'] = self.env.user.id
         return super(Goal, self).create(vals)
 
+    def action_create_goal_draft(self):
+        for rec in self:
+            rec.goal_status = 'draft'
+
     def action_finalize_goal(self):
         for rec in self:
             rec.goal_status = 'finalized'

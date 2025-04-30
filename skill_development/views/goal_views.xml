@@ -6,6 +6,7 @@
             <field name="model">skill_development.goal_project</field>
             <field name="arch" type="xml">
                 <kanban on_create="skill_development.open_create_goal_form_view">
+                    <field name="goal_status" invisible="1"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click"
@@ -31,7 +32,8 @@
                                 <a name="action_view_tasks" type="object"
                                    style="text-decoration: none;">
                                     <div class="o_kanban_record_bottom"
-                                         style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; text-align: right;">
+                                         style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border-radius: 4px; text-align: right;"
+                                        attrs="{'invisible':[('goal_status', '=', 'draft')]}">
                                         <span style="color: #333; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
                                             Tasks
@@ -67,9 +69,9 @@
                                    style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"/>
                         </div>
 
-                                        <!-- SMART Goals Section -->
-                                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
-                                            <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- SMART Goals Section -->
+                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
 
                                 <!-- Each SMART field -->
                                 <div style="flex: 1;">
@@ -86,7 +88,7 @@
                                            style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                                 </div>
 
-                                                <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
+                                <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
 
                                 <div style="flex: 1;">
                                     <div style="font-size: 13px; font-weight: 500;">
@@ -143,8 +145,8 @@
                                            style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                                 </div>
 
-                                            </div>
-                                        </div>
+                            </div>
+                        </div>
 
                         <h1 style="font-size: 18px; font-weight: 600; text-align: center;">Complete Goal
                             Statement
@@ -155,6 +157,15 @@
                                required="True"
                         />
                     </div>
+                    <footer>
+                        <button name="action_create_goal_draft" string="Create Goal Draft" type="object"
+                                class="btn btn-light"/>
+                        <button name="action_finalize_goal" string="Finalize" type="object"
+                                class="btn btn-primary"/>
+                        <button string="Cancel"
+                                class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>
@@ -177,9 +188,13 @@
                     <header>
                         <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
                     </header>
+                     <button name="action_finalize_goal" string="Finalize" type="object"
+                                class="btn btn-primary"
+                        attrs="{'invisible':['|', ('goal_status', '=', 'finalized'), ('goal_status','=','complete')]}"/>
+                        <field name="goal_name" attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
                     <!--<sheet>-->
                     <notebook>
-                        <field name="goal_name" readonly="1" widget="Char"/>
+
                         <page string="Expected Results">
                             <group>
                                 <field name="result_ids"
@@ -191,13 +206,9 @@
                                 </field>
                             </group>
                             <button name="action_complete_goal" string="Goal Complete" type="object"
-                                class="btn btn-success w-100"
-                                icon="fa-check-square-o"/>
+                                    class="btn btn-success w-100"
+                                    icon="fa-check-square-o"/>
                         </page>
-
-                        <button name="action_finalize_goal" string="Finalize" type="object"
-                                class="btn btn-success w-100"
-                                attrs="{'invisible': [('goal_status', '=', 'finalized')]}"/>
 
 
                         <page string="SMART">
@@ -206,54 +217,58 @@
                                     Criteria
                                 </h3>
 
-                                            <!-- Specific Goal -->
-                                            <div class="mb-3">
-                                                <label class="fw-bold" for="specific_goal">Specific: [What exactly do
-                                                    you
-                                                    want to
-                                                    achieve?]
-                                                </label>
-                                                <div class="input-group">
-                                                    <field name="specific_goal" class="o_field_char form-control"
-                                                           id="specific_goal" readonly="1"/>
-                                                </div>
-                                            </div>
+                                <!-- Specific Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="specific_goal">Specific: [What exactly do
+                                        you
+                                        want to
+                                        achieve?]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="specific_goal" class="o_field_char form-control"
+                                               id="specific_goal"
+                                               attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                    </div>
+                                </div>
 
-                                            <!-- Measurable Goal -->
-                                            <div class="mb-3">
-                                                <label class="fw-bold" for="measurable_goal" style="text-weight: bold">
-                                                    Measurable:
-                                                </label>
-                                                <!--                                <div class="input-group">-->
-                                                <field name="measurable_goal" class="o_field_char form-control"
-                                                       id="measurable_goal" readonly="1"/>
-                                                <!--                                </div>-->
-                                            </div>
+                                <!-- Measurable Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="measurable_goal" style="text-weight: bold">
+                                        Measurable:
+                                    </label>
+                                    <!--                                <div class="input-group">-->
+                                    <field name="measurable_goal" class="o_field_char form-control"
+                                           id="measurable_goal"
+                                           attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                    <!--                                </div>-->
+                                </div>
 
-                                            <!-- Achievable Goal -->
-                                            <div class="mb-3">
-                                                <label class="fw-bold" for="achievable_goal">Achievable: [what makes you
-                                                    sure you can do
-                                                    it?]
-                                                </label>
-                                                <div class="input-group">
-                                                    <field name="achievable_goal" class="o_field_char form-control"
-                                                           id="achievable_goal" readonly="1"/>
-                                                </div>
-                                            </div>
+                                <!-- Achievable Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="achievable_goal">Achievable: [what makes you
+                                        sure you can do
+                                        it?]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="achievable_goal" class="o_field_char form-control"
+                                               id="achievable_goal"
+                                               attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                    </div>
+                                </div>
 
-                                            <!-- Relevant Goal -->
-                                            <div class="mb-3">
-                                                <label class="fw-bold" for="relevant_goal">Relevant: [Why is it
-                                                    important to
-                                                    you? (think
-                                                    of your motivation)]
-                                                </label>
-                                                <div class="input-group">
-                                                    <field name="relevant_goal" class="o_field_char form-control"
-                                                           id="relevant_goal" readonly="1"/>
-                                                </div>
-                                            </div>
+                                <!-- Relevant Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="relevant_goal">Relevant: [Why is it
+                                        important to
+                                        you? (think
+                                        of your motivation)]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="relevant_goal" class="o_field_char form-control"
+                                               id="relevant_goal"
+                                               attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                    </div>
+                                </div>
 
                                 <!-- Time-Bound Goal -->
                                 <div class="mb-3">
@@ -262,7 +277,8 @@
                                     </label>
                                     <div class="input-group">
                                         <field name="timed_goal" class="o_field_char form-control"
-                                               id="timed_goal" readonly="1"/>
+                                               id="timed_goal"
+                                               attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
                                     </div>
                                 </div>
                             </div>
@@ -293,29 +309,29 @@
         <!--            </field>-->
         <!--        </record>-->
         <record id="goal_task_view_kanban" model="ir.ui.view">
-        <field name="name">My Tasks</field>
-        <field name="model">skill_development.goal_task</field>
-        <field name="arch" type="xml">
-        <kanban default_group_by="stage_id">
-            <templates>
-                <t t-name="kanban-box">
-                    <div class="oe_kanban_global_click"
-                         style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
-                        <!-- Title -->
-                        <header>
-                            <div class="oe_title" style="overflow: visible; white-space: nowrap;">
-                                <h4 style="text-align: left; margin-bottom: 8px;">
-                                    <field name="name"/>
-                                </h4>
+            <field name="name">My Tasks</field>
+            <field name="model">skill_development.goal_task</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id">
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click"
+                                 style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
+                                <!-- Title -->
+                                <header>
+                                    <div class="oe_title" style="overflow: visible; white-space: nowrap;">
+                                        <h4 style="text-align: left; margin-bottom: 8px;">
+                                            <field name="name"/>
+                                        </h4>
+                                    </div>
+                                </header>
+                                <field name="priority" widget="priority"/>
+                                <field name="date_end" widget="remaining_days"/>
                             </div>
-                        </header>
-                        <field name="priority" widget="priority"/>
-                        <field name="date_end" widget="remaining_days"/>
-                    </div>
-                </t>
-            </templates>
-        </kanban>
-        </field>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
         </record>
 
         <record id="goal_task_view_form" model="ir.ui.view">
@@ -323,16 +339,16 @@
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <form>
-                <div class="oe_title pe-0">
-                    <h1 class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex w-100">
-                            <field name="priority" widget="priority" class="me-3"/>
-                            <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                   placeholder="Task Title..."/>
-                        </div>
-                        <field name="kanban_state" widget="state_selection"/>
-                    </h1>
-                </div>
+                    <div class="oe_title pe-0">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="priority" widget="priority" class="me-3"/>
+                                <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                       placeholder="Task Title..."/>
+                            </div>
+                            <field name="kanban_state" widget="state_selection"/>
+                        </h1>
+                    </div>
                     <group>
                         <field name="goal_id"/>
                         <field name="date_end"/>
