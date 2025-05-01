@@ -43,6 +43,11 @@ class Goal(models.Model):
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
     goal_name = fields.Text('Complete Goal Statement')
     task_count = fields.Integer(string=' ', compute='_compute_task_count')
+    kanban_state = fields.Selection([
+        ('normal', 'In Progress'),
+        ('done', 'Ready'),
+        ('blocked', 'Blocked')],
+        string='Status', default='normal')
 
     @api.constrains('name')
     def _check_SMART_fields(self):

@@ -11,6 +11,15 @@
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click"
                                  style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
+                                <div style="position: absolute; top: 5px; right: 10px;">
+                                    <field name="kanban_state" widget="state_selection"/>
+                                </div>
+                                <t t-if="record.goal_status.raw_value == 'draft'">
+                                    <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-right-radius: 4px;">
+                                        Draft
+                                    </div>
+                                </t>
+
                                 <!-- Title -->
                                 <header>
                                     <div class="oe_title" style="overflow: visible; white-space: nowrap;">
@@ -27,6 +36,17 @@
                                         <field name="learner_plan_record_ids"/>
                                     </span>
                                 </div>
+                                <div class="o_kanban_primary_right">
+                                    <div class="o_primary">
+                                        <div class="text-muted o_row">
+                                            <span class="fa fa-clock-o me-2" title="Dates"></span>
+                                            <field name="date_start" widget="date"/>
+                                            <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon"
+                                               title="Arrow"/>
+                                            <field name="date" widget="date"/>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- Tasks Button -->
                                 <a name="action_view_tasks" type="object"
@@ -37,7 +57,7 @@
                                         <span style="color: #505050; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
                                             Tasks
-                                          <field name="task_count" style="margin-left: 5px;" widget="statinfo"/>
+                                            <field name="task_count" style="margin-left: 5px;" widget="statinfo"/>
                                         </span>
                                     </div>
                                 </a>
@@ -187,25 +207,49 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
+
+                        <!--                            <button name="action_finalize_goal" string="Finalize" type="object"-->
+                        <!--                                    class="btn btn-primary"-->
+                        <!--                                    attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>-->
+
                         <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="action_view_tasks"
-                                    type="object"
                                     icon="fa-tasks"
-                                    class="oe_stat_button">
+                                    class="oe_stat_button"
+                                    type="object"
+                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}">
                                 <field name="task_count" widget="statinfo"/>Tasks
+                            </button>
+
+                            <button name="action_finalize_goal"
+                                    type="object"
+                                    icon="fa-check"
+                                    class="oe_stat_button"
+                                    t-att-style="'background-color: #71639c; color:white; font-weight:bold'"
+                                    attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}">
+                                Finalize
                             </button>
                         </div>
 
-                        <button name="action_finalize_goal" string="Finalize" type="object"
-                                class="btn btn-primary"
-                                attrs="{'invisible':['|', ('goal_status', '=', 'finalized'), ('goal_status','=','complete')]}"/>
-                        <field name="goal_name" attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
-                        <!--<sheet>-->
-                        <notebook>
+                        <h2>
+                            <field name="goal_name"
+                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                        </h2>
+                        <div style="display: flex; align-items: center; color: #555; margin-down: 0;">
+                            <span style="font-weight: bold; margin-right: 5px;">Start Date:</span>
+                            <field name="date_start" widget="daterange" nolabel="1" class="oe_inline"
+                                   options="{'related_end_date': 'date'}"/>
+                            <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                            <span style="font-weight: bold; margin-right: 5px;">End Date:</span>
+                            <field name="date" widget="daterange" nolabel="1" class="oe_inline"
+                                   options="{'related_start_date': 'date_start'}"/>
+                        </div>
 
+
+                        <notebook>
                             <page string="Expected Results">
                                 <group>
                                     <field name="result_ids"

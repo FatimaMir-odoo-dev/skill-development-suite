@@ -12,8 +12,7 @@
                     <field name="skill_name"/>
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
-                    <button name="goals_button" type="object" string="My Goals" icon="fa-dot-circle-o"
-                    />
+                    <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
                 </tree>
             </field>
         </record>
@@ -26,7 +25,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="goals_button"
-                                    string="View My Goals"
+                                    string="Goals"
                                     type="object"
                                     icon="fa-bullseye"
                                     class="oe_stat_button"
