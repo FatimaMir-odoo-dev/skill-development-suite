@@ -4,7 +4,7 @@
 
 <odoo>
     <data>
-        <record model="ir.ui.view" id="skill_plan_view">
+        <record id="skill_plan_view" model="ir.ui.view">
             <field name="name">My Skill Plan</field>
             <field name="model">skill_development.initial_plan_wizard</field>
             <field name="arch" type="xml">

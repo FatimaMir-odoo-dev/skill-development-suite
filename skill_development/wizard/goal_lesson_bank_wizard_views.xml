@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record model="ir.ui.view" id="skill_plan_view">
+        <record model="ir.ui.view" id="lesson_bank_form_view_popup">
             <field name="name">My Reflection</field>
             <field name="model">skill_development.goal_lesson_bank_wizard</field>
             <field name="arch" type="xml">
