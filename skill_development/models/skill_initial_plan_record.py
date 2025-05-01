@@ -58,6 +58,7 @@ class SkillPlan(models.Model):
             'res_model': 'skill_development.goal_project',
             'view_mode': 'kanban,form',
             'target': 'self',
+            'domain': [('learner_plan_record_ids', '=', self.id)],
         }
 
     # @api.model
