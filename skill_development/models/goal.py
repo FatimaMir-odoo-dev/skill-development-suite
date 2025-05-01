@@ -42,7 +42,7 @@ class Goal(models.Model):
     relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
     goal_name = fields.Text('Complete Goal Statement')
-    task_count = fields.Integer(compute='compute_count')
+    task_count = fields.Integer(string=' ', compute='_compute_task_count')
 
     @api.constrains('name')
     def _check_SMART_fields(self):
@@ -100,7 +100,7 @@ class Goal(models.Model):
             'context': {'default_goal_id': self.id},
         }
 
-    def compute_count(self):
+    def _compute_task_count(self):
         for record in self:
             record.task_count = self.env['skill_development.goal_task'].search_count(
                 [('goal_id', '=', record.id)])
@@ -189,11 +189,6 @@ class GoalTask(models.Model):
     #         }
     #     }
 
-
-    # def compute_count(self):
-    #     for record in self:
-    #         record.vehicle_count = self.env['fleet.vehicle'].search_count(
-    #             [('driver_id', '=', self.id)])
 
 class GoalResource(models.Model):
     _name = 'skill_development.goal_task_resource'

@@ -13,7 +13,7 @@ class SkillPlan(models.Model):
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
 
     skill_name = fields.Char(string="Skill", readonly=True)
-    motivation = fields.Text(string="Motivation to Learn")
+    motivation = fields.Text(string="My Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
     progress_knowledge = fields.Float('Knowledge Progression')
@@ -21,6 +21,7 @@ class SkillPlan(models.Model):
     progress_contribute = fields.Float('Creation & Contribution Progression')
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
     overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True)
+    goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
 
     title = fields.Selection([
         ('seeker', 'Seeker'),
@@ -49,6 +50,11 @@ class SkillPlan(models.Model):
                 rec.title = 'learner'
             else:
                 rec.title = 'seeker'
+
+    def _compute_goal_count(self):
+        for record in self:
+            record.goal_count = self.env['skill_development.goal_project'].search_count(
+                [('learner_plan_record_ids', '=', record.id)])
 
     def goals_button(self):
 

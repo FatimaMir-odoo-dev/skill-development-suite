@@ -11,9 +11,8 @@
                 <tree string="My Skill Growth">
                     <field name="skill_name"/>
                     <field name="motivation"/>
-                    <field name="endpoint"/>
-                    <field name="msg_2self"/>
-                    <button name="goals_button" type="object" string="My Goals" icon="fa-bullseye"
+                    <field name="endpoint" widget="remaining_days"/>
+                    <button name="goals_button" type="object" string="My Goals" icon="fa-dot-circle-o"
                     />
                 </tree>
             </field>
@@ -25,14 +24,14 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <div class="oe_button_box" colspan="2" style="text-align: right;">
-                            <!--in the Event Information Screen-->
-                            <!--Add the Volunteers button, to display volunteers requests in it-->
+                        <div class="oe_button_box" name="button_box">
                             <button name="goals_button"
-                                    type="object" class="oe_stat_button"
-                                    t-att-style="'background-color: #71639c; color:white; font-weight:bold;
-                             text-align: left; font-size: 16px;'">
-                                My Goals
+                                    string="View My Goals"
+                                    type="object"
+                                    icon="fa-bullseye"
+                                    class="oe_stat_button"
+                                    t-att-style="'font-weight: bold; font-size: 14px;'">
+                                <field name="goal_count" widget="statinfo"/>
                             </button>
                         </div>
                         <group string="Skill Plan Overview" col="2">
