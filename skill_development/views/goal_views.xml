@@ -361,15 +361,19 @@
             </field>
         </record>
 
-        <!--        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">-->
-        <!--            <field name="name">Lesson Bank</field>-->
-        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                    <form>-->
-        <!--                        -->
-        <!--                    </form>-->
-        <!--            </field>-->
-        <!--        </record>-->
+                <record id="goal_lesson_bank_view_tree" model="ir.ui.view">
+                    <field name="name">Lesson Bank</field>
+                    <field name="model">skill_development.goal_lesson_bank</field>
+                    <field name="arch" type="xml">
+                            <tree>
+                                <field name="sequence" widget="handle"/>
+                                <field name="priority" widget="priority" class="me-3"/>
+                                <field name="lesson_title"/>
+                                <field name="lesson"/>
+                                <field name="goal_id" widget="badge"/>
+                            </tree>
+                    </field>
+                </record>
         <!--        -->
         <record id="goal_lesson_bank_view_form" model="ir.ui.view">
             <field name="name">Lesson Bank</field>
@@ -388,7 +392,7 @@
                                     <field name="goal_id" readonly="1" style="text-align:right"/>
                                 </div>
                             </header>
-
+                            <field name="priority" widget="priority" class="me-3"/>
                             <div class="oe_title" style="margin-bottom: 10px;">
                                 <label for="lesson_title">
                                     <strong>Lesson Title</strong>

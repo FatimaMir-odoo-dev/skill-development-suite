@@ -256,5 +256,18 @@ class LessonBank(models.Model):
 
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
-    lesson_title = fields.Char('Lesson')
-    lesson = fields.Html(String='Scribbles', anitize_attributes=False)
+    lesson_title = fields.Char('Title')
+    lesson = fields.Html(String='Lesson', sanitize_attributes=False)
+    sequence = fields.Integer(string="Sequence", default=10)
+    priority = fields.Selection([
+        ('0', 'Low'),
+        ('1', 'High')],
+        default='0', index=True, string="Priority")
+    
+    def name_get(self):
+        result = []
+        for record in self:
+            # Return the skill_name as the display name in the learner_skill_id dropdown
+            name = record.lesson_title or "Unnamed Lesson"
+            result.append((record.id, name))
+        return result
