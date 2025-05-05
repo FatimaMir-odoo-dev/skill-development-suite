@@ -20,6 +20,7 @@ class Goal(models.Model):
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
     result_ids = fields.One2many('skill_development.goal_result', 'goal_id')
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
+
     goal_status = fields.Selection(
         [
             ('draft', 'Draft'),

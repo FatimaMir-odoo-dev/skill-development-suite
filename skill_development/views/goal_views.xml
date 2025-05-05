@@ -228,7 +228,7 @@
                                     class="oe_stat_button"
                                     attrs="{'invisible': [('goal_status', '=', 'draft')]}"
                                     t-att-style="'font-weight:bold'">
-<!--                                <field name="task_count" widget="statinfo"/>Tasks-->
+                                <!--                                <field name="task_count" widget="statinfo"/>Tasks-->
                             </button>
 
                             <button name="action_view_tasks"
@@ -371,15 +371,46 @@
         <!--            </field>-->
         <!--        </record>-->
         <!--        -->
-        <!--        <record id="goal_lesson_bank_view_form" model="ir.ui.view">-->
-        <!--            <field name="name">Lesson Bank</field>-->
-        <!--            <field name="model">skill_development.goal_lesson_bank</field>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                    <form>-->
-        <!--                        -->
-        <!--                    </form>-->
-        <!--            </field>-->
-        <!--        </record>-->
+        <record id="goal_lesson_bank_view_form" model="ir.ui.view">
+            <field name="name">Lesson Bank</field>
+            <field name="model">skill_development.goal_lesson_bank</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <!-- Card 1: Skill Section -->
+                        <div style="border: 1px solid #dcdcdc; border-radius: 10px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+                            <header>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <div>
+                                        <strong>Skill:</strong>
+                                        <field name="learner_plan_record_ids" readonly="1" style="margin-left: 8px;"/>
+                                    </div>
+                                    <field name="goal_id" readonly="1" style="text-align:right"/>
+                                </div>
+                            </header>
+
+                            <div class="oe_title" style="margin-bottom: 10px;">
+                                <label for="lesson_title">
+                                    <strong>Lesson Title</strong>
+                                </label>
+                                <h1 style="margin-top: 0;">
+                                    <field name="lesson_title" class="text-break"/>
+                                </h1>
+                            </div>
+
+                            <div>
+                                <label for="lesson">
+                                    <strong>Lesson</strong>
+                                </label>
+                                <field name="lesson"/>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
         <record id="goal_task_view_kanban" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
