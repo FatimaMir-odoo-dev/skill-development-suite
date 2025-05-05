@@ -267,7 +267,9 @@
                                 </group>
                                 <button name="action_complete_goal" string="Goal Complete" type="object"
                                         class="btn btn-success w-100"
-                                        icon="fa-check-square-o"/>
+                                        icon="fa-check-square-o"
+                                        attrs="{'invisible': [('goal_status', '=', 'complete')]}"
+                                />
                             </page>
 
 

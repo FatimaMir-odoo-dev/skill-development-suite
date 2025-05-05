@@ -44,9 +44,9 @@ class Goal(models.Model):
     goal_name = fields.Text('Complete Goal Statement')
     task_count = fields.Integer(string=' ', compute='_compute_task_count')
     kanban_state = fields.Selection([
-        ('normal', 'In Progress'),
-        ('done', 'Ready'),
-        ('blocked', 'Blocked')],
+        ('normal', 'On Hold'),
+        ('done', 'In Progress'),
+        ('blocked', 'Canceled')],
         string='Status', default='normal')
 
     @api.constrains('name')
