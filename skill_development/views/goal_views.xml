@@ -221,6 +221,16 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button name="action_view_lesson"
+                                    string="Lessons"
+                                    type="object"
+                                    icon="fa-paperclip"
+                                    class="oe_stat_button"
+                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}"
+                                    t-att-style="'font-weight:bold'">
+<!--                                <field name="task_count" widget="statinfo"/>Tasks-->
+                            </button>
+
                             <button name="action_view_tasks"
                                     icon="fa-tasks"
                                     class="oe_stat_button"

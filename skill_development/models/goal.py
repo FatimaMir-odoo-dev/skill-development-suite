@@ -105,6 +105,16 @@ class Goal(models.Model):
             'context': {'default_goal_id': self.id},
         }
 
+    def action_view_lesson(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Lesson',
+            'res_model': 'skill_development.goal_lesson_bank',
+            'view_mode': 'tree,form',
+            'domain': [('goal_id', '=', self.id)],
+            'context': {'default_goal_id': self.id},
+        }
+
     def _compute_task_count(self):
         for record in self:
             record.task_count = self.env['skill_development.goal_task'].search_count(
