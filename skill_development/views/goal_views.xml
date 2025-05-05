@@ -15,8 +15,13 @@
                                     <field name="kanban_state" widget="state_selection"/>
                                 </div>
                                 <t t-if="record.goal_status.raw_value == 'draft'">
-                                    <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-right-radius: 4px;">
+                                    <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
                                         Draft
+                                    </div>
+                                </t>
+                                <t t-if="record.goal_status.raw_value == 'complete'">
+                                    <div style="position: absolute; top: 0; right: 0; background: #00cc00; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
+                                        Done
                                     </div>
                                 </t>
 
