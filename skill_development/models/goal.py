@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from random import randint
 # from odoo.tools import video as video_utils
 
 
@@ -49,6 +50,7 @@ class Goal(models.Model):
         ('done', 'In Progress'),
         ('blocked', 'Canceled')],
         string='Status', default='normal')
+    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
 
     @api.constrains('name')
     def _check_SMART_fields(self):
@@ -175,7 +177,7 @@ class GoalTask(models.Model):
         ondelete='restrict',
         required='True'
     )
-    # tag_id
+    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
     description = fields.Html(string='Description', anitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
@@ -279,3 +281,17 @@ class LessonBank(models.Model):
             name = record.lesson_title or "Unnamed Lesson"
             lesson.append((record.id, name))
         return lesson
+
+class GoalTags(models.Model):
+    _name = "skill_development.goal_tag"
+    _description = "Goal Tags"
+
+    def _get_default_color(self):
+        return randint(1, 11)
+
+    name = fields.Char('Name', required=True, unique=True)  # Unique name field
+    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the tag")
+
+    project_ids = fields.Many2many('project.project', 'project_project_tags_rel', string='Projects')
+    task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
+

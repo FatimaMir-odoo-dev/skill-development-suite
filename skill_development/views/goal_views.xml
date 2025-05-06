@@ -450,7 +450,7 @@
                                     </div>
                                 </header>
                                 <i class="fa fa-calendar-times-o"/>
-                                    <field name="date_end" widget="remaining_days"/>
+                                <field name="date_end" widget="remaining_days"/>
 
                             </div>
                         </t>
@@ -472,14 +472,15 @@
                                     <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
                                            placeholder="Task Title..."/>
                                 </div>
-                                <field name="kanban_state" widget="state_selection"/>
+                                <div class="d-flex flex-column align-items-start ms-0">
+                                    <field name="kanban_state" widget="state_selection" class="ms-0"/>
+                                </div>
                             </h1>
                         </div>
-                        <group>
+                        <group style="width: 500px;">
                             <field name="goal_id" readonly="1"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="date_end"/>
-                        </group>
-                        <group width="30%">
                             <field name="resource_url" widget="url"/>
                             <!--                        <button name="action_open_resource_form" type="object" string="Add Resource"/>-->
                         </group>
@@ -501,8 +502,10 @@
                                 </field>
                             </page>
                             <page string="Task Notes">
-                                <field name="description" widget="html"/>
+                                <field name="description" widget="html"
+                                       placeholder="Write notes to help you with the task (tracking, important details...)"/>
                             </page>
+
                         </notebook>
                     </sheet>
                 </form>
