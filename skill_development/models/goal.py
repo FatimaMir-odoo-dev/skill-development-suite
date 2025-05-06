@@ -4,7 +4,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from random import randint
-# from odoo.tools import video as video_utils
+
 
 
 class Goal(models.Model):
@@ -21,6 +21,7 @@ class Goal(models.Model):
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
     result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
+    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
 
     goal_status = fields.Selection(
         [
@@ -267,12 +268,41 @@ class LessonBank(models.Model):
         ('1', 'High')],
         default='0', index=True, string="Priority")
     lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
+    tag_ids = fields.Many2many(
+        'skill_development.goal_tag',
+        relation='goal_tag_rel',
+        column1='goal_id',
+        column2='tag_id',
+        string="Tags"
+    )
+
+    @api.model
+    def create(self, vals):
+        if vals.get('goal_id'):
+            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
+            if goal.learner_plan_record_ids:
+                vals['learner_plan_record_ids'] = goal.learner_plan_record_ids.id
+        return super().create(vals)
+
+    def write(self, vals):
+        if vals.get('goal_id'):
+            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
+            if goal.learner_plan_record_ids:
+                vals['learner_plan_record_ids'] = goal.learner_plan_record_ids.id
+        return super().write(vals)
 
     @api.depends('lesson')
     def _compute_lesson_short(self):
         for record in self:
             record.lesson_short = (record.lesson[:50] + '...') if record.lesson and len(
                 record.lesson) > 50 else record.lesson
+
+    @api.onchange('goal_id')
+    def _onchange_goal_id(self):
+        if self.goal_id and self.goal_id.learner_plan_record_ids:
+            self.learner_plan_record_ids = self.goal_id.learner_plan_record_ids
+        else:
+            self.learner_plan_record_ids = False
 
     def name_get(self):
         lesson = []
@@ -294,4 +324,10 @@ class GoalTags(models.Model):
 
     project_ids = fields.Many2many('project.project', 'project_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
-
+    lesson_id = fields.Many2many(
+        'skill_development.goal_lesson_bank',
+        relation='goal_lesson_rel',
+        column1='goal_id',
+        column2='lesson_id',
+        string='Lesson'
+    )

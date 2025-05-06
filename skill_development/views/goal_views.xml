@@ -42,6 +42,7 @@
                                         <field name="learner_plan_record_ids"/>
                                     </span>
                                 </div>
+                                <field name="tag_ids"/>
                                 <div class="o_kanban_primary_right">
                                     <div class="o_primary">
                                         <div class="text-muted o_row">
@@ -254,6 +255,7 @@
                             <field name="goal_name"
                                    attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                         </h2>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <div style="display: flex; align-items: center; color: #555; margin-down: 0;">
                             <span style="font-weight: bold; margin-right: 5px;">Start Date:</span>
                             <field name="date_start" widget="daterange" nolabel="1" class="oe_inline"
@@ -402,6 +404,7 @@
                                     <field name="learner_plan_record_ids" readonly="1" widget="badge" class="ms-2"/>
                                 </div>
                                 <field name="priority" widget="priority" class="me-3"/>
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             </div>
 
                             <!-- Lesson Title -->
@@ -427,6 +430,54 @@
             </field>
         </record>
 
+        <record id="goal_lesson_bank_view_form_popup" model="ir.ui.view">
+            <field name="name">Lesson Bank</field>
+            <field name="model">skill_development.goal_lesson_bank</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <!-- Skill & Goal Card -->
+                        <div class="o_form_card mb-4 p-4"
+                             style="border: 1px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+
+                                <div class="fw-bold" style="font-size: 1.1em;">
+                                    <span>Goal:</span>
+                                    <field name="goal_id"/>
+                                </div>
+
+                            <!-- Skill and Priority -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="fw-bold" style="font-size: 1em;">
+                                    <span>Skill:</span>
+                                    <field name="learner_plan_record_ids" readonly="1" widget="badge" class="ms-2"/>
+                                </div>
+                                <field name="priority" widget="priority" class="me-3"/>
+                            </div>
+                            <span>Tags:</span>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+
+
+                            <!-- Lesson Title -->
+                            <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
+                            <div class="oe_title mb-3"
+                                 style="font-weight: bold;">
+                                <h1>
+                                    <field name="lesson_title"/>
+                                </h1>
+                            </div>
+
+                            <!-- Lesson Body -->
+                            <div>
+                                <label for="lesson" class="form-label fw-bold">Lesson</label>
+                                <field name="lesson"/>
+                            </div>
+
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <record id="goal_task_view_kanban" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
@@ -449,7 +500,8 @@
                                         </h6>
                                     </div>
                                 </header>
-                                <i class="fa fa-calendar-times-o"/>
+                                <field name="tag_ids"/>
+                                <i class="fa fa-calendar-times-o" aria-hidden="true"/>
                                 <field name="date_end" widget="remaining_days"/>
 
                             </div>
@@ -512,7 +564,7 @@
             </field>
         </record>
 
-        <record id="goal_task_resource_view_form" model="ir.ui.view">
+        <record id="goal_task_resource_view_tree" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task_resource</field>
             <field name="arch" type="xml">
