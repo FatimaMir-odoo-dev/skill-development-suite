@@ -361,19 +361,19 @@
             </field>
         </record>
 
-                <record id="goal_lesson_bank_view_tree" model="ir.ui.view">
-                    <field name="name">Lesson Bank</field>
-                    <field name="model">skill_development.goal_lesson_bank</field>
-                    <field name="arch" type="xml">
-                            <tree>
-                                <field name="sequence" widget="handle"/>
-                                <field name="priority" widget="priority" class="me-3"/>
-                                <field name="lesson_title"/>
-                                <field name="lesson"/>
-                                <field name="goal_id" widget="badge"/>
-                            </tree>
-                    </field>
-                </record>
+        <record id="goal_lesson_bank_view_tree" model="ir.ui.view">
+            <field name="name">Lesson Bank</field>
+            <field name="model">skill_development.goal_lesson_bank</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sequence" widget="handle"/>
+                    <field name="priority" widget="priority" class="me-3"/>
+                    <field name="lesson_title"/>
+                    <field name="lesson"/>
+                    <field name="goal_id" widget="badge"/>
+                </tree>
+            </field>
+        </record>
         <!--        -->
         <record id="goal_lesson_bank_view_form" model="ir.ui.view">
             <field name="name">Lesson Bank</field>
@@ -381,36 +381,46 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                        <!-- Card 1: Skill Section -->
-                        <div style="border: 1px solid #dcdcdc; border-radius: 10px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
-                            <header>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                                    <div>
-                                        <strong>Skill:</strong>
-                                        <field name="learner_plan_record_ids" readonly="1" style="margin-left: 8px;"/>
-                                    </div>
-                                    <field name="goal_id" readonly="1" style="text-align:right"/>
+                        <!-- Skill & Goal Card -->
+                        <div class="o_form_card mb-4 p-4"
+                             style="border: 1px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+
+                            <!-- Header with Goal -->
+                            <header class="mb-3">
+                                <div class="fw-bold" style="font-size: 1.1em;">
+                                    <span>View Goal</span>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <field name="goal_id" readonly="1"/>
                                 </div>
                             </header>
-                            <field name="priority" widget="priority" class="me-3"/>
-                            <div class="oe_title" style="margin-bottom: 10px;">
-                                <label for="lesson_title">
-                                    <strong>Lesson Title</strong>
-                                </label>
-                                <h1 style="margin-top: 0;">
-                                    <field name="lesson_title" class="text-break"/>
+
+                            <!-- Skill and Priority -->
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <div class="fw-bold" style="font-size: 1em;">
+                                    <span>Skill:</span>
+                                    <field name="learner_plan_record_ids" readonly="1" widget="badge" class="ms-2"/>
+                                </div>
+                                <field name="priority" widget="priority" class="me-3"/>
+                            </div>
+
+                            <!-- Lesson Title -->
+                            <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
+                            <div class="oe_title mb-3" style="margin: 0 auto; max-width: 600px; text-align: center; font-weight: bold;">
+                                <h1 class="mt-0 text-break">
+                                    <field name="lesson_title"/>
                                 </h1>
                             </div>
 
+                            <!-- Lesson Body -->
                             <div>
-                                <label for="lesson">
-                                    <strong>Lesson</strong>
-                                </label>
+                                <label for="lesson" class="form-label fw-bold">Lesson</label>
                                 <field name="lesson"/>
                             </div>
+
                         </div>
                     </sheet>
                 </form>
+
 
             </field>
         </record>

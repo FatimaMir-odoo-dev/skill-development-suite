@@ -263,7 +263,7 @@ class LessonBank(models.Model):
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
-    
+
     def name_get(self):
         result = []
         for record in self:

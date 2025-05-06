@@ -34,6 +34,29 @@
                   action="skill_development.initial_plan_record_action"
                   sequence="10"/>
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
+        <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
+
+        <!--        <record id="action_goal_project_popup_form" model="ir.actions.act_window">-->
+        <!--            <field name="name">New Goal Popup</field>-->
+        <!--            <field name="res_model">skill_development.goal_project</field>-->
+        <!--            <field name="view_mode">form</field>-->
+        <!--            <field name="target">new</field> &lt;!&ndash; Modal popup &ndash;&gt;-->
+        <!--        </record>-->
+
+
+        <record id="action_goal_project" model="ir.actions.act_window">
+            <field name="name">My Goals</field>
+            <field name="res_model">skill_development.goal_project</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="context">{'group_by': 'learner_plan_record_ids'}</field>
+        </record>
+
+        <menuitem id="menu_goal_project"
+                  name="My Goals"
+                  parent="menu_skill_growth_record"
+                  action="action_goal_project"
+                  sequence="5"/>
+
         <record id="skill_development.goal_lesson_bank_action" model="ir.actions.act_window">
             <field name="name">Lesson Bank</field>
             <field name="type">ir.actions.act_window</field>
@@ -47,27 +70,6 @@
                   action="skill_development.goal_lesson_bank_action"
                   parent="menu_skill_growth_record"
                   sequence="10"/>
-        <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
-
-        <!--        <record id="action_goal_project_popup_form" model="ir.actions.act_window">-->
-        <!--            <field name="name">New Goal Popup</field>-->
-        <!--            <field name="res_model">skill_development.goal_project</field>-->
-        <!--            <field name="view_mode">form</field>-->
-        <!--            <field name="target">new</field> &lt;!&ndash; Modal popup &ndash;&gt;-->
-        <!--        </record>-->
-
-
-                <record id="action_goal_project" model="ir.actions.act_window">
-                    <field name="name">My Goals</field>
-                    <field name="res_model">skill_development.goal_project</field>
-                    <field name="view_mode">kanban,form</field>
-                    <field name="context">{'group_by': 'learner_plan_record_ids'}</field>
-                </record>
-
-                <menuitem id="menu_goal_project"
-                          name="My Goals"
-                          parent="menu_skill_growth_record"
-                          action="action_goal_project"/>
 
         <record id="action_resource_form" model="ir.actions.act_window">
             <field name="name">Resources</field>
