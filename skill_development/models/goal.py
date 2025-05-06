@@ -18,7 +18,7 @@ class Goal(models.Model):
                                               )
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
-    result_ids = fields.One2many('skill_development.goal_result', 'goal_id')
+    result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
 
     goal_status = fields.Selection(
@@ -166,6 +166,7 @@ class GoalTask(models.Model):
 
     name = fields.Char('Task')
     # learner_id
+    # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', string='Goal')
     stage_id = fields.Many2one(
         'skill_development.goal_task_stage',
@@ -263,11 +264,18 @@ class LessonBank(models.Model):
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
+    lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
+
+    @api.depends('lesson')
+    def _compute_lesson_short(self):
+        for record in self:
+            record.lesson_short = (record.lesson[:50] + '...') if record.lesson and len(
+                record.lesson) > 50 else record.lesson
 
     def name_get(self):
-        result = []
+        lesson = []
         for record in self:
             # Return the skill_name as the display name in the learner_skill_id dropdown
             name = record.lesson_title or "Unnamed Lesson"
-            result.append((record.id, name))
-        return result
+            lesson.append((record.id, name))
+        return lesson

@@ -57,6 +57,20 @@
                   action="action_goal_project"
                   sequence="5"/>
 
+        <record id="action_priority_task" model="ir.actions.act_window">
+            <field name="name">Priority Tasks</field>
+            <field name="res_model">skill_development.goal_task</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('priority', '=', 1)]</field>
+            <field name="context">{'group_by': 'goal_id'}</field>
+        </record>
+
+        <menuitem id="menu_priority_task"
+                  name="Priority Tasks"
+                  parent="menu_skill_growth_record"
+                  action="action_priority_task"
+                  sequence="6"/>
+
         <record id="skill_development.goal_lesson_bank_action" model="ir.actions.act_window">
             <field name="name">Lesson Bank</field>
             <field name="type">ir.actions.act_window</field>
