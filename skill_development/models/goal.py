@@ -251,8 +251,19 @@ class GoalResult(models.Model):
     _auto = True
 
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
-    result = fields.Char(string="Expected Results")
-    is_done = fields.Boolean('Achieved')
+    result = fields.Text(string="Expected Results")
+    is_done = fields.Boolean("Achieved")
+    is_not_done = fields.Boolean("Not Achieved", compute='_compute_is_not_done', inverse='_inverse_is_not_done')
+
+    @api.depends('is_done')
+    def _compute_is_not_done(self):
+        for rec in self:
+            rec.is_not_done = not rec.is_done
+
+    def _inverse_is_not_done(self):
+        for rec in self:
+            rec.is_done = not rec.is_not_done
+
 
 class LessonBank(models.Model):
     _name = 'skill_development.goal_lesson_bank'
@@ -311,6 +322,7 @@ class LessonBank(models.Model):
             name = record.lesson_title or "Unnamed Lesson"
             lesson.append((record.id, name))
         return lesson
+
 
 class GoalTags(models.Model):
     _name = "skill_development.goal_tag"

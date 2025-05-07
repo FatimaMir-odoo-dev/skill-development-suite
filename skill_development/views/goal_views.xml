@@ -274,18 +274,12 @@
                                            attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                         <tree editable="bottom">
                                             <field name="result"/>
-                                            <field name="is_done"/>
+                                            <field name="is_done" style="width: 30%;" widget="boolean_toggle"/>
+                                            <field name="is_not_done" style="width: 30%;" widget="boolean_toggle"/>
                                         </tree>
                                     </field>
                                 </group>
-                                <button name="action_complete_goal" string="Goal Complete" type="object"
-                                        class="btn btn-success w-100"
-                                        icon="fa-check-square-o"
-                                        attrs="{'invisible': [('goal_status', '=', 'complete')]}"
-                                />
                             </page>
-
-
                             <page string="SMART">
                                 <div class="o_form_sheet border p-3">
                                     <h3 class=" text-center mb-3" style="color: color: #71639c;">SMART
@@ -359,6 +353,11 @@
                                 </div>
                             </page>
                         </notebook>
+                        <button name="action_complete_goal" string="Goal Complete" type="object"
+                                class="btn btn-success w-100"
+                                icon="fa-check-square-o"
+                                attrs="{'invisible': [('goal_status', '=', 'complete')]}"
+                        />
                     </sheet>
                 </form>
             </field>
@@ -440,10 +439,10 @@
                         <div class="o_form_card mb-4 p-4"
                              style="border: 1px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
 
-                                <div class="fw-bold" style="font-size: 1.1em;">
-                                    <span>Goal:</span>
-                                    <field name="goal_id"/>
-                                </div>
+                            <div class="fw-bold" style="font-size: 1.1em;">
+                                <span>Goal:</span>
+                                <field name="goal_id"/>
+                            </div>
 
                             <!-- Skill and Priority -->
                             <div class="d-flex align-items-center justify-content-between mb-3">
