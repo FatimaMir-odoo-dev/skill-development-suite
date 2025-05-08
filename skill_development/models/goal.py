@@ -4,6 +4,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from random import randint
+from ..services.skill_growth_logic_helper import GoalLogicHelper
 
 
 
@@ -29,12 +30,30 @@ class Goal(models.Model):
             ('finalized', 'Finalized'),
             ('complete', 'Complete')
         ], default='draft', string='Status', readonly=True)
-    # is_complete = fields.Boolean(string="Goal Complete", default="False")
+
+    is_complete = fields.Boolean(string="Goal Complete", default="False")
+    goal_progress = fields.Float(string="Goal Contribution", compute='_compute_goal_progress')
+
+    @api.depends('goal_status', 'result_ids.is_done',
+                 'specific_goal', 'measurable_goal', 'achievable_goal',
+                 'relevant_goal', 'timed_goal',
+                 'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
+    def _compute_goal_progress(self):
+        for goal in self:
+            goal.goal_progress = GoalLogicHelper.calculate_progress(goal)
+
     category = fields.Selection([
         ('knowledge', 'Knowledge'),
         ('practice', 'Practice'),
         ('creation', 'Creation & Contribution')
     ], required=True)
+    lesson_id = fields.Many2many(
+        'skill_development.goal_lesson_bank',
+        relation='goal_lesson_rel',
+        column1='goal_id',
+        column2='lesson_id',
+        string='Lesson'
+    )
     # is_smart = fields.Boolean(string='SMART Compliant')
     # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
 
@@ -51,7 +70,7 @@ class Goal(models.Model):
         ('done', 'In Progress'),
         ('blocked', 'Canceled')],
         string='Status', default='normal')
-    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
+
 
     @api.constrains('name')
     def _check_SMART_fields(self):
@@ -82,6 +101,7 @@ class Goal(models.Model):
     def action_complete_goal(self):
         for rec in self:
             rec.goal_status = 'complete'
+            rec.is_complete = True
 
         learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
         learner_id = learner.id if learner else False
@@ -272,7 +292,11 @@ class LessonBank(models.Model):
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
     lesson_title = fields.Char('Title')
-    lesson = fields.Html(String='Lesson', sanitize_attributes=False)
+
+    lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
+    lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
+    lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
+    extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
     sequence = fields.Integer(string="Sequence", default=10)
     priority = fields.Selection([
         ('0', 'Low'),
@@ -302,11 +326,11 @@ class LessonBank(models.Model):
                 vals['learner_plan_record_ids'] = goal.learner_plan_record_ids.id
         return super().write(vals)
 
-    @api.depends('lesson')
+    @api.depends('lesson_worked')
     def _compute_lesson_short(self):
         for record in self:
-            record.lesson_short = (record.lesson[:50] + '...') if record.lesson and len(
-                record.lesson) > 50 else record.lesson
+            record.lesson_short = (record.lesson_worked[:50] + '...') if record.lesson_worked and len(
+                record.lesson_worked) > 50 else record.lesson_worked
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
@@ -334,12 +358,12 @@ class GoalTags(models.Model):
     name = fields.Char('Name', required=True, unique=True)  # Unique name field
     color = fields.Integer(string='Color', default=_get_default_color, help="Color for the tag")
 
-    project_ids = fields.Many2many('project.project', 'project_project_tags_rel', string='Projects')
+    goal_ids = fields.Many2many('skill_development.goal_project', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
     lesson_id = fields.Many2many(
         'skill_development.goal_lesson_bank',
-        relation='goal_lesson_rel',
-        column1='goal_id',
+        relation='tag_lesson_rel',
+        column1='tag_id',
         column2='lesson_id',
         string='Lesson'
     )

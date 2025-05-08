@@ -13,23 +13,35 @@
                                style="color: #5b84d7; text-transform: none;">
                             <div style="text-align: center; margin-bottom: 20px;">
                                 <h2 style="font-size: 24px; font-weight: bold;">
-                                    <field name="goal_id" readonly="1"/>
+                                    <field name="goal_id" readonly="1" context="{'show_view': False}"/>
                                 </h2>
                             </div>
                         </group>
 
-                        <group>
-                            <field name="goal_id"/>
-                            <field name="learner_plan_record_ids"/>
+                        <div>
+                            <field name="learner_plan_record_ids" readonly="1" context="{'show_view': False}"/>
                             <field name="lesson_title"/>
-                            <field name="lesson" string="I Learned: " widget="html"/>
-                        </group>
+                        </div>
+                        <div>
+                                <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."
+                                string="What worked well for you this time?"/>
+
+                                <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."
+                                       string="What Would you Do Differently Next Time?"/>
+
+                                <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."
+                                       string="What's Something New You've Learned?"/>
+
+                                <field name="extra_thoughts"
+                                       placeholder="Optional"
+                                       string="Any other thoughts you’d like to share? (Optional)"/>
+                        </div>
                     </sheet>
 
 <!--                form buttons-->
                     <footer>
                         <button name="button_save_lesson"
-                                string="Create Learning Plan"
+                                string="Save Lesson"
                                 type="object"
                                 class="btn-primary"/>
 

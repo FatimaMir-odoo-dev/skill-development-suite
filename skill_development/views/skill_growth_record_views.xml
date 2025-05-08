@@ -45,6 +45,7 @@
                             <field name="progress_knowledge" widget="percentpie"/>
                             <field name="progress_practice" widget="percentpie"/>
                             <field name="progress_contribute" widget="percentpie"/>
+                            <field name="overall_progress" widget="percentpie"/>
 
                         </group>
                         <notebook>

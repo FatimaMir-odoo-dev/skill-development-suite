@@ -11,17 +11,45 @@ class SkillPlan(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
+    goal_ids = fields.One2many('skill_development.goal_project','learner_plan_record_ids', string='Goal')
 
     skill_name = fields.Char(string="Skill", readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
-    progress_knowledge = fields.Float('Knowledge Progression')
-    progress_practice = fields.Float('Practice Progression')
-    progress_contribute = fields.Float('Creation & Contribution Progression')
+
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
-    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True)
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
+
+    progress_knowledge = fields.Float('Knowledge Progression', compute="_compute_category_progress", store=True)
+    progress_practice = fields.Float('Practice Progression', compute="_compute_category_progress", store=True)
+    progress_contribute = fields.Float('Creation & Contribution Progression', compute="_compute_category_progress", store=True)
+    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True)
+
+    @api.depends('goal_ids.goal_progress', 'goal_ids.category')
+    def _compute_category_progress(self):
+        for learner in self:
+            knowledge = practice = cc = 0.0
+            for goal in learner.goal_ids:
+                if goal.category == 'knowledge':
+                    knowledge += goal.goal_progress
+                elif goal.category == 'practice':
+                    practice += goal.goal_progress
+                elif goal.category == 'cc':
+                    cc += goal.goal_progress
+
+            learner.progress_knowledge = min(knowledge, 100)
+            learner.progress_practice = min(practice, 100)
+            learner.progress_contribute = min(cc, 100)
+
+    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
+    def _compute_overall_progress(self):
+        for learner in self:
+            learner.overall_progress = (
+                    learner.progress_knowledge * 0.15 +
+                    learner.practice_progress * 0.35 +
+                    learner.progress_contribute * 0.50
+            )
 
     title = fields.Selection([
         ('seeker', 'Seeker'),
@@ -29,7 +57,7 @@ class SkillPlan(models.Model):
         ('skilled', 'Skilled'),
         ('proficient', 'Proficient'),
         ('master', 'Master')
-    ], default='seeker', string='Title', compute='_compute_title', store=True)
+    ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
 
     @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
     def _compute_overall_progress(self):

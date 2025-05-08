@@ -417,8 +417,17 @@
 
                             <!-- Lesson Body -->
                             <div>
-                                <label for="lesson" class="form-label fw-bold">Lesson</label>
-                                <field name="lesson"/>
+                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This Time?</label>
+                                <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next Time?</label>
+                                <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="lesson_learned" class="form-label fw-bold" >What's Something New You've Learned?</label>
+                                <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind? (Optional)</label>
+                                <field name="extra_thoughts"/>
                             </div>
 
                         </div>
@@ -466,9 +475,18 @@
                             </div>
 
                             <!-- Lesson Body -->
-                            <div>
-                                <label for="lesson" class="form-label fw-bold">Lesson</label>
-                                <field name="lesson"/>
+                             <div>
+                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This Time?</label>
+                                <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next Time?</label>
+                                <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="lesson_learned" class="form-label fw-bold" >What's Something New You've Learned?</label>
+                                <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind? (Optional)</label>
+                                <field name="extra_thoughts"/>
                             </div>
 
                         </div>
