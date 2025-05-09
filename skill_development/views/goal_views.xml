@@ -41,6 +41,8 @@
                                     <span style="color: #ac00e6;">
                                         <field name="learner_plan_record_ids"/>
                                     </span>
+                                    Category:
+                                    <field name="category"/>
                                 </div>
                                 <field name="tag_ids"/>
                                 <div class="o_kanban_primary_right">

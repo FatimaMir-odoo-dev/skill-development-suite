@@ -33,8 +33,10 @@ class GoalLogicHelper:
 
     @staticmethod
     def _lesson_bonus(goal):
-        fields = [goal.lesson_id.lesson_worked, goal.lesson_id.lesson_change, goal.lesson_id.lesson_learned]
-        return 5 if all(fields) else 0
+        for lesson in goal.lesson_id:
+            if lesson.lesson_worked and lesson.lesson_change and lesson.lesson_learned:
+                return 5  # Bonus applied if at least one complete reflection exists
+        return 0
 
     @staticmethod
     def _incomplete_result_penalty(goal):
@@ -45,5 +47,10 @@ class GoalLogicHelper:
 
     @staticmethod
     def _get_goal_position_in_category(goal):
-        same_category_goals = goal.search([("category", "=", goal.category)], order="id")
-        return list(same_category_goals.ids).index(goal.id) + 1
+        same_category_goals = goal.search([
+            ("category", "=", goal.category),
+            ("learner_plan_record_ids", "=", goal.learner_plan_record_ids.id)
+        ], order="id")
+
+        goal_ids = list(same_category_goals.ids)
+        return goal_ids.index(goal.id) + 1 if goal.id in goal_ids else 1

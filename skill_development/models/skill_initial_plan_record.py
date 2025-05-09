@@ -35,7 +35,7 @@ class SkillPlan(models.Model):
                     knowledge += goal.goal_progress
                 elif goal.category == 'practice':
                     practice += goal.goal_progress
-                elif goal.category == 'cc':
+                elif goal.category == 'creation':
                     cc += goal.goal_progress
 
             learner.progress_knowledge = min(knowledge, 100)
@@ -68,11 +68,11 @@ class SkillPlan(models.Model):
     @api.depends('overall_progress')
     def _compute_title(self):
         for rec in self:
-            if rec.overall_progress >= 100:
+            if rec.overall_progress >= 80:
                 rec.title = 'master'
-            elif rec.overall_progress >= 75:
+            elif rec.overall_progress >= 60:
                 rec.title = 'proficient'
-            elif rec.overall_progress >= 50:
+            elif rec.overall_progress >= 40:
                 rec.title = 'skilled'
             elif rec.overall_progress >= 5:
                 rec.title = 'learner'

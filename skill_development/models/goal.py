@@ -33,6 +33,7 @@ class Goal(models.Model):
 
     is_complete = fields.Boolean(string="Goal Complete", default="False")
     goal_progress = fields.Float(string="Goal Contribution", compute='_compute_goal_progress')
+    lesson_id = fields.One2many('skill_development.goal_lesson_bank','goal_id')
 
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
@@ -47,13 +48,7 @@ class Goal(models.Model):
         ('practice', 'Practice'),
         ('creation', 'Creation & Contribution')
     ], required=True)
-    lesson_id = fields.Many2many(
-        'skill_development.goal_lesson_bank',
-        relation='goal_lesson_rel',
-        column1='goal_id',
-        column2='lesson_id',
-        string='Lesson'
-    )
+
     # is_smart = fields.Boolean(string='SMART Compliant')
     # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
 
