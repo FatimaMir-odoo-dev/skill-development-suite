@@ -8,7 +8,7 @@
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.initial_plan_record</field>
             <field name="arch" type="xml">
-                <tree string="My Skill Growth">
+                <tree string="My Skill Growth" create="false">
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
                     <field name="motivation"/>
@@ -22,7 +22,7 @@
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.initial_plan_record</field>
             <field name="arch" type="xml">
-                <form>
+                <form create="false">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="goals_button"
