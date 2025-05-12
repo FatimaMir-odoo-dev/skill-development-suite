@@ -355,7 +355,7 @@ class GoalTags(models.Model):
 
     goal_ids = fields.Many2many('skill_development.goal_project', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
-    lesson_id = fields.Many2many(
+    tag_ids = fields.Many2many(
         'skill_development.goal_lesson_bank',
         relation='tag_lesson_rel',
         column1='tag_id',

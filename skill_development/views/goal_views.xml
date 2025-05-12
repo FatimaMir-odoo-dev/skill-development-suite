@@ -48,10 +48,20 @@
                                 <div class="o_kanban_primary_right">
                                     <div class="o_primary">
                                         <div class="text-muted o_row">
-                                            <span class="fa fa-clock-o me-2" title="Dates"></span>
-                                            <field name="date_start" widget="date"/>
-                                            <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon"
-                                               title="Arrow"/>
+                                            <t t-if="record.date_start.raw_value">
+                                                <span class="fa fa-clock-o me-2" title="Dates"/>
+                                                <field name="date_start" widget="date"/>
+                                                <i class="fa fa-long-arrow-right mx-2 oe_read_only"
+                                                   aria-label="Arrow icon"
+                                                   title="Arrow"/>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="fa fa-clock-o me-2 invisible" title="Dates"/>
+                                                <field name="date_start" widget="date"/>
+                                                <i class="fa fa-long-arrow-right mx-2 invisible oe_read_only"
+                                                   aria-label="Arrow icon"
+                                                   title="Arrow"/>
+                                            </t>
                                             <field name="date" widget="date"/>
                                         </div>
                                     </div>
@@ -419,16 +429,24 @@
 
                             <!-- Lesson Body -->
                             <div>
-                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This Time?</label>
+                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This
+                                    Time?
+                                </label>
                                 <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next Time?</label>
+                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next
+                                    Time?
+                                </label>
                                 <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="lesson_learned" class="form-label fw-bold" >What's Something New You've Learned?</label>
+                                <label for="lesson_learned" class="form-label fw-bold">What's Something New You've
+                                    Learned?
+                                </label>
                                 <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind? (Optional)</label>
+                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind?
+                                    (Optional)
+                                </label>
                                 <field name="extra_thoughts"/>
                             </div>
 
@@ -472,23 +490,32 @@
                             <div class="oe_title mb-3"
                                  style="font-weight: bold;">
                                 <h1>
-                                    <field name="lesson_title"/>
+                                    <field name="lesson_title" placeholder="Lesson Title..."/>
                                 </h1>
                             </div>
 
                             <!-- Lesson Body -->
-                             <div>
-                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This Time?</label>
+                            <div>
+                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This
+                                    Time?
+                                </label>
                                 <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next Time?</label>
+                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next
+                                    Time?
+                                </label>
                                 <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="lesson_learned" class="form-label fw-bold" >What's Something New You've Learned?</label>
+                                <label for="lesson_learned" class="form-label fw-bold">What's Something New You've
+                                    Learned?
+                                </label>
                                 <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
 
-                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind? (Optional)</label>
-                                <field name="extra_thoughts"/>
+                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind?
+                                    (Optional)
+                                </label>
+                                <field name="extra_thoughts"
+                                class="o_field_text_block"/>
                             </div>
 
                         </div>

@@ -10,6 +10,17 @@ class SkillPlanWizard(models.TransientModel):
 
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True, readonly=True)
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
+    priority = fields.Selection([
+        ('0', 'Low'),
+        ('1', 'High')],
+        default='0', index=True, string="Priority")
+    tag_ids = fields.Many2many(
+        'skill_development.goal_lesson_bank',
+        relation='wizard_tag_lesson_rel',
+        column1='tag_id',
+        column2='lesson_id',
+        string='Tags'
+    )
     lesson_title = fields.Char('Lesson')
     lesson_worked = fields.Html(String='What Worked', sanitize_attributes=False)
     lesson_change = fields.Html(String='What to Change', sanitize_attributes=False)
@@ -23,6 +34,8 @@ class SkillPlanWizard(models.TransientModel):
             'lesson_change': self.lesson_change,
             'lesson_learned': self.lesson_learned,
             'extra_thoughts': self.extra_thoughts,
+            'priority': self.priority,
+            'tag_ids': self.tag_ids.id,
         })
         return {'type': 'ir.actions.act_window_close'}
 
