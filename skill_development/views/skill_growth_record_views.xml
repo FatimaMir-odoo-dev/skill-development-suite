@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <tree string="My Skill Growth" create="false">
                     <field name="sequence" widget="handle"/>
-                    <field name="skill_name"/>
+                    <field name="skill_id"/>
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
@@ -36,7 +36,7 @@
                         </div>
                         <group string="Skill Plan Overview" col="2">
                             <group>
-                                <field name="skill_name" required="1"/>
+                                <field name="skill_id" required="1"/>
                                 <field name="motivation"/>
                                 <field name="endpoint"/>
                                 <field name="msg_2self"/>

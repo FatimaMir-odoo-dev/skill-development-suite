@@ -15,7 +15,7 @@ class SkillPlan(models.Model):
     goal_ids = fields.One2many('skill_development.goal_project','learner_plan_record_ids', string='Goal')
 
     sequence = fields.Integer(string="Sequence", default=10)
-    skill_name = fields.Char(string="Skill", readonly=True)
+    skill_id = fields.Many2one('skill_development.skill_record','Skill', readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
@@ -130,13 +130,13 @@ class SkillPlan(models.Model):
                     f"The skill '{record.skill_name}' already exists for this user.\n"
                     f"You can update it by going to your profile and editing the plan record."
                 )
-    def name_get(self):
-        result = []
-        for record in self:
-            # Return the skill_name as the display name in the learner_skill_id dropdown
-            name = record.skill_name or "Unnamed Skill"
-            result.append((record.id, name))
-        return result
+    # def name_get(self):
+    #     result = []
+    #     for record in self:
+    #         # Return the skill_name as the display name in the learner_skill_id dropdown
+    #         name = record.skill_name or "Unnamed Skill"
+    #         result.append((record.id, name))
+    #     return result
 
     # Ensures plan_owner_id is automatically set to the current user
     @api.model

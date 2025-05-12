@@ -16,7 +16,7 @@
                                style="color: #5b84d7; text-transform: none;">
                             <div style="text-align: center; margin-bottom: 20px;">
                                 <h2 style="font-size: 24px; font-weight: bold;">
-                                    <field name="skill_name" readonly="1"/>
+                                    <field name="skill_id"/>
                                 </h2>
                             </div>
                         </group>
