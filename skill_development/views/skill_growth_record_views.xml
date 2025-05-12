@@ -24,7 +24,13 @@
             <field name="arch" type="xml">
                 <form create="false">
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
+                        <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
+                            <!-- Title as Badge -->
+                            <h1 t-att-style="'position: absolute; background-color: #007bff; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
+                                <field name="title"/>
+                            </h1>
+
+                            <!-- Button Box with the Goal Button -->
                             <button name="goals_button"
                                     string="Goals"
                                     type="object"
@@ -34,6 +40,7 @@
                                 <field name="goal_count" widget="statinfo"/>
                             </button>
                         </div>
+
                         <group string="Skill Plan Overview" col="2">
                             <group>
                                 <field name="skill_name" required="1"/>
@@ -48,7 +55,6 @@
                                        widget="gauge"
                                        options="{'max_field': 'maximum_progress'}"
                                        nolabel="1"/>
-                                <h1></h1>
                             </group>
                         </group>
 
