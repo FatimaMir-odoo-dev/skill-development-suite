@@ -4,7 +4,9 @@ from email.policy import default
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class SkillPlan(models.Model):
     _name = 'skill_development.initial_plan_record'
@@ -48,9 +50,10 @@ class SkillPlan(models.Model):
     @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
     def _compute_overall_progress(self):
         for learner in self:
+            _logger.info(f"[DEBUG] Maximum Progress: {learner.maximum_progress=}")
             learner.overall_progress = (
                     learner.progress_knowledge * 0.15 +
-                    learner.progress_progress * 0.35 +
+                    learner.progress_practice * 0.35 +
                     learner.progress_contribute * 0.50
             )
 
@@ -61,12 +64,6 @@ class SkillPlan(models.Model):
         ('proficient', 'Proficient'),
         ('master', 'Master')
     ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
-
-    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
-    def _compute_overall_progress(self):
-        for rec in self:
-            rec.overall_progress = (rec.progress_knowledge * 0.15) + (rec.progress_practice * 0.35) + (
-                        rec.progress_contribute * 0.5)
 
     @api.depends('overall_progress')
     def _compute_title(self):
@@ -96,6 +93,7 @@ class SkillPlan(models.Model):
             'view_mode': 'kanban,form',
             'target': 'self',
             'domain': [('learner_plan_record_ids', '=', self.id)],
+            # 'context': {'default_learner_plan_record_ids': self.id},
         }
 
     # @api.model

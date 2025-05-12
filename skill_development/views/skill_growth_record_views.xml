@@ -42,13 +42,13 @@
                                 <field name="msg_2self"/>
                             </group>
                             <group col="1">
+                                <field name="maximum_progress" invisible="1"/>
                                 <field name="overall_progress"
+                                       style="font-size: 30px; font-weight: bold"
                                        widget="gauge"
                                        options="{'max_field': 'maximum_progress'}"
                                        nolabel="1"/>
-                                <h2>
-                                    <field name="title" readonly="1"/>
-                                </h2>
+                                <h1></h1>
                             </group>
                         </group>
 
