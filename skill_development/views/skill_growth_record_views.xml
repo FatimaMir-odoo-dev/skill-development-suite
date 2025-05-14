@@ -26,7 +26,7 @@
                     <sheet>
                         <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
                             <!-- Title as Badge -->
-                            <h1 t-att-style="'position: absolute; background-color: #007bff; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
+                            <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
                                 <field name="title"/>
                             </h1>
 
@@ -41,22 +41,26 @@
                             </button>
                         </div>
 
-                        <group string="Skill Plan Overview" col="2">
+                        <group col="1">
                             <group>
-                                <field name="skill_name" required="1"/>
-                                <field name="motivation"/>
-                                <field name="endpoint"/>
-                                <field name="msg_2self"/>
-                            </group>
-                            <group col="1">
-                                <field name="maximum_progress" invisible="1"/>
-                                <field name="overall_progress"
-                                       style="font-size: 30px; font-weight: bold"
-                                       widget="gauge"
-                                       options="{'max_field': 'maximum_progress'}"
-                                       nolabel="1"/>
+                                <group style="width: 66%; display: inline-block; vertical-align: top;">
+                                    <field name="skill_name" required="1"/>
+                                    <field name="motivation"/>
+                                    <field name="endpoint"/>
+                                    <field name="msg_2self"/>
+                                </group>
+
+                                <group style="width: 33%; display: inline-block; vertical-align: top;" col="1">
+                                    <field name="maximum_progress" invisible="1"/>
+                                    <field name="overall_progress"
+                                           style="font-size: 30px; font-weight: bold"
+                                           widget="gauge"
+                                           options="{'max_field': 'maximum_progress'}"
+                                           nolabel="1"/>
+                                </group>
                             </group>
                         </group>
+
 
                         <group string="Progress Categories" col="3">
                             <!--                            <div class="row">-->
@@ -74,7 +78,12 @@
                         <notebook>
                             <page string="Scribbles">
                                 <group>
-                                    <field name="scribble_note" type="html"/>
+                                    <field name="scribble_note"
+                                           type="html"
+                                           class="o_field_text_block"
+                                           style="height: 200px;"
+                                           placeholder="Use this to quickly note skill ideas before you lose them..."
+                                           colspan="2"/>
                                 </group>
                             </page>
                         </notebook>

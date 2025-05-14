@@ -28,7 +28,7 @@ class SkillPlan(models.Model):
     progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True)
     progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True)
     progress_contribute = fields.Float('Creation & Contribution', compute="_compute_category_progress", store=True)
-    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True)
+    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True, digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
 
     @api.depends('goal_ids.goal_progress', 'goal_ids.category')
