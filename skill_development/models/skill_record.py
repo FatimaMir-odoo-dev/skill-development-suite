@@ -2,6 +2,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 from odoo import models, fields, api, exceptions
+from random import randint
 
 
 class SkillRecord(models.Model):
@@ -11,6 +12,20 @@ class SkillRecord(models.Model):
     # Skill Record Details:
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
+    learn = fields.Char()
+    # difficulty = fields.
+    # rating_ids
+    career_path_ids = fields.Many2many('skill_development.career_path',
+                                       relation='skill_career_rel',
+                                       column1='skill_id',
+                                       column2='career_id',
+                                       string='Job roles for this skill')
+    # related_skill_ids = fields.Many2many('kill_development.skill_record')
+    # pre_requisite_skill = fields.Many2many()
+    pre_requisites = fields.Text()
+    is_transferable = fields.Boolean()
+
+
 
     # Check if the Skill Name is unique to prevent duplicated skill creation
     @api.constrains('skill_name')
@@ -49,3 +64,31 @@ class SkillRecord(models.Model):
             name = record.skill_name  # Only use skill_name, without the ID or extra Info
             result.append((record.id, name))
         return result
+
+class CareerPath(models.Model):
+    _name = "skill_development.career_path"
+    _description = "Skill Career Paths"
+
+    def _get_default_color(self):
+        return randint(1, 11)
+
+    name = fields.Char(string="Career", required=True)
+    description = fields.Text(string="")
+    industry_ids = fields.Many2many('skill_development.industry',
+                                    relation='career_industry_rel',
+                                    column1='career_id',
+                                    column2='industry_id',
+                                    string="Industries")
+    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the career tag")
+
+class Industry(models.Model):
+    _name = "skill_development.industry"
+    _description = "Skill Career Paths Industries"
+
+    def _get_default_color(self):
+        return randint(1, 11)
+
+    name = fields.Char('Industry Name', required=True, unique=True)  # Unique name field
+    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the Industry tag")
+
+    # career_ids = fields.Many2many('skill_development.skill_career', string="")

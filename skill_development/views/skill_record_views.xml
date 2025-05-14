@@ -54,6 +54,7 @@
                             <group string="General Information" colspan="2">
                                 <field name="skill_name" placeholder="Enter skill name here"/>
                                 <field name="description" widget="text" placeholder="Enter description..."/>
+                                <field name="career_path_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             </group>
                         </div>
                     </sheet>
