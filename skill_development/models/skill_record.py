@@ -9,10 +9,11 @@ class SkillRecord(models.Model):
     _name = "skill_development.skill_record"
     _description = 'Skill'
 
+
     # Skill Record Details:
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
-    learn = fields.Char()
+    # learn = fields.Char(string="")
     # difficulty = fields.
     # rating_ids
     career_path_ids = fields.Many2many('skill_development.career_path',
@@ -20,10 +21,27 @@ class SkillRecord(models.Model):
                                        column1='skill_id',
                                        column2='career_id',
                                        string='Job roles for this skill')
-    # related_skill_ids = fields.Many2many('kill_development.skill_record')
-    # pre_requisite_skill = fields.Many2many()
-    pre_requisites = fields.Text()
-    is_transferable = fields.Boolean()
+
+    related_skill_ids = fields.Many2many('skill_development.skill_record',  relation='skill_related_rel',
+                                       column1='skill_id',
+                                       column2='related_id',
+                                       string='Related Skills',
+                                       domain="[('id', '!=', id)]")
+
+    pre_requisites = fields.Text(string="Pre-Requisites")
+    prereq_skill_ids = fields.Many2many('skill_development.skill_record',  relation='skill_prereq_rel',
+                                           column1='skill_id',
+                                           column2='rprereq_id',
+                                           string='Consider Learning First',
+                                           domain="[('id', '!=', id)]")
+
+    is_transferable = fields.Boolean(string="This Skill is Transferable")
+
+    @api.model
+    def unlink(self):
+        for record in self:
+            record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
+        return super(SkillRecord, self).unlink()
 
 
 
@@ -80,6 +98,12 @@ class CareerPath(models.Model):
                                     column2='industry_id',
                                     string="Industries")
     color = fields.Integer(string='Color', default=_get_default_color, help="Color for the career tag")
+
+    @api.model
+    def unlink(self):
+        for record in self:
+            record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
+        return super(CareerPath, self).unlink()
 
 class Industry(models.Model):
     _name = "skill_development.industry"

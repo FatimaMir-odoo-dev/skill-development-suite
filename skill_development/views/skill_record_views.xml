@@ -55,6 +55,12 @@
                                 <field name="skill_name" placeholder="Enter skill name here"/>
                                 <field name="description" widget="text" placeholder="Enter description..."/>
                                 <field name="career_path_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="related_skill_ids" widget="many2many_tags"/>
+                                <field name="pre_requisites"/>
+                                <field name="is_transferable" widget="boolean_toggle"/>
+<!--                                for user, restrictred by security group, add a t-if check raw value if field it true
+ show text "This skill can be used trans" if not show text, this skills is specific to one role/ industry-->
+                                <field name="prereq_skill_ids" widget="many2many_tags"/>
                             </group>
                         </div>
                     </sheet>
