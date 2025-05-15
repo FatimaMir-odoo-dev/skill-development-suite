@@ -49,3 +49,4 @@ class SkillRecord(models.Model):
             name = record.skill_name  # Only use skill_name, without the ID or extra Info
             result.append((record.id, name))
         return result
+

@@ -11,6 +11,7 @@
                 <tree string="My Skill Growth" create="false">
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
+                    <field name="title" widget="badge"/>
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
@@ -82,7 +83,7 @@
                                            type="html"
                                            class="o_field_text_block"
                                            style="height: 200px;"
-                                           placeholder="Use this to quickly note skill ideas before you lose them..."
+                                           placeholder="Use this to quickly note your ideas before you lose them..."
                                            colspan="2"/>
                                 </group>
                             </page>
