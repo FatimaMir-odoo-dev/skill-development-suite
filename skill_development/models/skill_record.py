@@ -87,7 +87,7 @@ class SkillRecord(models.Model):
 
     # Opens the wizard form for the skill's initial plan.
     # Activated upon clicking the Button: Start Learning
-    @api.model
+
     def action_open_initial_plan_wizard(self, context=None):
 
         # get the Learner ID to pass it tp the wizard form in context
@@ -102,8 +102,8 @@ class SkillRecord(models.Model):
             'name': 'My Skill Plan',
             'target': 'new',
             'context': {
-                'default_learner_id': learner_id,},  # Pass the learner ID to the wizard form
-            'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
+                'default_learner_id': learner_id,  # Pass the learner ID to the wizard form
+                'default_skill_id': self.id,},  # Pass the skill name to the wizard form
         }
 
 # Get the Skill Name to be used by other records

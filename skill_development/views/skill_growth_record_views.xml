@@ -8,8 +8,9 @@
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.initial_plan_record</field>
             <field name="arch" type="xml">
-                <tree string="My Skill Growth">
-                    <field name="skill_name"/>
+                <tree string="My Skill Growth" create="false">
+                    <field name="sequence" widget="handle"/>
+                    <field name="skill_id"/>
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
@@ -21,7 +22,7 @@
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.initial_plan_record</field>
             <field name="arch" type="xml">
-                <form>
+                <form create="false">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
                             <button name="goals_button"
@@ -42,19 +43,35 @@
                             </button>
                         </div>
                         <group string="Skill Plan Overview" col="2">
-                            <field name="skill_name" required="1"/>
-                            <field name="title"/>
-                            <field name="motivation"/>
-                            <field name="endpoint"/>
-                            <field name="msg_2self"/>
+                            <group>
+                                <field name="skill_id" required="1"/>
+                                <field name="motivation"/>
+                                <field name="endpoint"/>
+                                <field name="msg_2self"/>
+                            </group>
+                            <group col="1">
+                                <field name="overall_progress"
+                                       widget="gauge"
+                                       options="{'max_field': 'maximum_progress'}"
+                                       nolabel="1"/>
+                                <h2>
+                                    <field name="title" readonly="1"/>
+                                </h2>
+                            </group>
                         </group>
-                        <group string="Progress">
 
-                            <field name="progress_knowledge" widget="percentpie"/>
-                            <field name="progress_practice" widget="percentpie"/>
-                            <field name="progress_contribute" widget="percentpie"/>
-                            <field name="overall_progress" widget="percentpie"/>
-
+                        <group string="Progress Categories" col="3">
+                            <!--                            <div class="row">-->
+                            <group>
+                                <field name="progress_knowledge" widget="percentpie"/>
+                            </group>
+                            <group>
+                                <field name="progress_practice" widget="percentpie"/>
+                            </group>
+                            <group>
+                                <field name="progress_contribute" widget="percentpie"/>
+                            </group>
+                            <!--                            </div>-->
                         </group>
                         <notebook>
                             <page string="Scribbles">

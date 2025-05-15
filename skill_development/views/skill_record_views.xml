@@ -23,7 +23,7 @@
                                             <!-- (open_wizard_form) method is located in the model (skill_record) -->
                                             <!--to pass the skill name to the wizard, this context is needed-->
                                             <button type="object" name="action_open_initial_plan_wizard" class="btn btn-primary"
-                                                    t-att-context="{'default_skill_name': record.skill_name.value}"
+                                                    t-att-context="{'default_skill_id': record.id}"
                                                     string="Open Skill Plan Wizard">
 <!--                                                    groups="skill_dev_ieeeanusb.group_skillDen_learner,skill_dev_ieeeanusb.group_skillDen_general_admin">-->
                                                 Start Learning
