@@ -95,6 +95,17 @@ class SkillPlan(models.Model):
             'domain': [('learner_plan_record_ids', '=', self.id)],
         }
 
+    def skill_acquired_button(self):
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Skill Rating',
+            'res_model': 'skill_development.rating',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('learner_plan_record_ids', '=', self.id)],
+        }
+
     # @api.model
     # def open_wizard_form(self, context=None):
     #

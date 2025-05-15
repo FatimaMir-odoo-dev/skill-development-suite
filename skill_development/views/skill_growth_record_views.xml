@@ -32,6 +32,14 @@
                                     t-att-style="'font-weight: bold; font-size: 14px;'">
                                 <field name="goal_count" widget="statinfo"/>
                             </button>
+                            <button name="skill_acquired_button"
+                                    string="Mark Skill As Acquired"
+                                    type="object"
+                                    icon="fa-bullseye"
+                                    class="oe_stat_button"
+                                    t-att-style="'font-weight: bold; font-size: 14px;'">
+                                <field name="goal_count" widget="statinfo"/>
+                            </button>
                         </div>
                         <group string="Skill Plan Overview" col="2">
                             <field name="skill_name" required="1"/>

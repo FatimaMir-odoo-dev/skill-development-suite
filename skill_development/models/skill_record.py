@@ -14,8 +14,10 @@ class SkillRecord(models.Model):
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     # learn = fields.Char(string="")
-    # difficulty = fields.
-    # rating_ids
+    rating_ids = fields.One2many('skill_development.rating', 'skill_id', stirng="Rating")
+    avg_overall_rating = fields.Float('Overall Rating', compute='_compute_avg_ratings', store=True)
+    avg_difficulty = fields.Float("Average Difficulty", compute='_compute_avg_ratings', store=True)
+
     career_path_ids = fields.Many2many('skill_development.career_path',
                                        relation='skill_career_rel',
                                        column1='skill_id',
@@ -36,6 +38,35 @@ class SkillRecord(models.Model):
                                            domain="[('id', '!=', id)]")
 
     is_transferable = fields.Boolean(string="This Skill is Transferable")
+
+    @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
+    def _compute_avg_ratings(self):
+        for skill in self:
+            usefulness_total = 0
+            fun_total = 0
+            difficulty_total = 0
+            count = 0
+
+            for rating in skill.rating_ids:
+                try:
+                    usefulness = int(rating.usefulness or 0)
+                    fun = int(rating.fun2learn or 0)
+                    difficulty = int(rating.difficulty or 0)
+
+                    usefulness_total += usefulness
+                    fun_total += fun
+                    difficulty_total += difficulty
+                    count += 1
+                except (ValueError, TypeError):
+                    # Skip any ratings with bad data
+                    continue
+
+            if count:
+                skill.avg_overall_rating = round((usefulness_total + fun_total) / (2 * count), 2)
+                skill.avg_difficulty = round(difficulty_total / count, 2)
+            else:
+                skill.avg_overall_rating = 0.0
+                skill.avg_difficulty = 0.0
 
     @api.model
     def unlink(self):
@@ -116,3 +147,37 @@ class Industry(models.Model):
     color = fields.Integer(string='Color', default=_get_default_color, help="Color for the Industry tag")
 
     # career_ids = fields.Many2many('skill_development.skill_career', string="")
+
+class Rating(models.Model):
+    _name = "skill_development.rating"
+    _description = "Skill Rating"
+
+    skill_id = fields.Many2one('skill_development.skill_record', string="Skill", ondelete='cascade')
+
+    usefulness = fields.Selection([
+        ('0', 'Low'),
+        ('1', 'Limited'),
+        ('2', 'Basic'),
+        ('3', 'Moderate'),
+        ('4', 'High'),
+        ('5', 'Essential'),
+    ],
+        default='0', index=True, string="Usefulness", tracking=True)
+    fun2learn = fields.Selection([
+        ('0', 'Dreadful'),
+        ('1', 'Unpleasant'),
+        ('2', 'Neutral'),
+        ('3', 'Engaging'),
+        ('4', 'Fun'),
+        ('5', 'Exciting'),
+    ],
+        default='0', index=True, string="Fun", tracking=True)
+    difficulty = fields.Selection([
+        ('0', 'Impossible'),
+        ('1', 'Demanding'),
+        ('2', 'Challenging'),
+        ('3', 'Manageable'),
+        ('4', 'Easy'),
+        ('5', 'Effortless'),
+    ],
+        default='0', index=True, string="Difficulty", tracking=True)
