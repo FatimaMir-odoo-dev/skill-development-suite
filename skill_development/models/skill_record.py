@@ -15,8 +15,27 @@ class SkillRecord(models.Model):
     description = fields.Text(string='Skill Description', required=True)
     # learn = fields.Char(string="")
     rating_ids = fields.One2many('skill_development.rating', 'skill_id', stirng="Rating")
-    avg_overall_rating = fields.Float('Overall Rating', compute='_compute_avg_ratings', store=True)
+    avg_overall_rating = fields.Float('Overall Rating Calculation', compute='_compute_avg_ratings', store=True)
+    star_avg_rating = fields.Selection([
+        ('0', 'Not Recommended'),
+        ('1', 'Poor'),
+        ('2', 'Fair'),
+        ('3', 'Good'),
+        ('4', 'Very Good'),
+        ('5', 'Excellent'),
+    ], store=True, string="Overall Rating")
+
+    star_avg_difficulty = fields.Selection([
+        ('0', 'Impossible'),
+        ('1', 'Demanding'),
+        ('2', 'Challenging'),
+        ('3', 'Manageable'),
+        ('4', 'Easy'),
+        ('5', 'Effortless'),
+    ], store=True, string="Overall Rating")
+
     avg_difficulty = fields.Float("Average Difficulty", compute='_compute_avg_ratings', store=True)
+
 
     career_path_ids = fields.Many2many('skill_development.career_path',
                                        relation='skill_career_rel',
@@ -42,10 +61,7 @@ class SkillRecord(models.Model):
     @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
         for skill in self:
-            usefulness_total = 0
-            fun_total = 0
-            difficulty_total = 0
-            count = 0
+            total_usefulness = total_fun = total_difficulty = count = 0
 
             for rating in skill.rating_ids:
                 try:
@@ -53,20 +69,41 @@ class SkillRecord(models.Model):
                     fun = int(rating.fun2learn or 0)
                     difficulty = int(rating.difficulty or 0)
 
-                    usefulness_total += usefulness
-                    fun_total += fun
-                    difficulty_total += difficulty
-                    count += 1
+                    # Only count if usefulness, fun, and difficulty are rated above 0
+                    if usefulness > 0 and fun > 0 and difficulty > 0:
+                        total_usefulness += usefulness
+                        total_fun += fun
+                        total_difficulty += difficulty
+                        count += 1
                 except (ValueError, TypeError):
-                    # Skip any ratings with bad data
-                    continue
+                    continue  # skip invalid entries
 
             if count:
-                skill.avg_overall_rating = round((usefulness_total + fun_total) / (2 * count), 2)
-                skill.avg_difficulty = round(difficulty_total / count, 2)
+                avg_rating = round((total_usefulness + total_fun) / (2 * count), 2)
+                avg_difficulty = round(total_difficulty / count, 2)
             else:
-                skill.avg_overall_rating = 0.0
-                skill.avg_difficulty = 0.0
+                avg_rating = 0.0
+                avg_difficulty = 0.0
+
+            skill.avg_overall_rating = avg_rating
+            skill.avg_difficulty = avg_difficulty
+
+            def to_star(value):
+                if 1 <= value < 2:
+                    return '1'
+                elif 2 <= value < 3:
+                    return '2'
+                elif 3 <= value < 4:
+                    return '3'
+                elif 4 <= value < 5:
+                    return '4'
+                elif value >= 5:
+                    return '5'
+                else:
+                    return '0'  # Not rated
+
+            skill.star_avg_rating = to_star(avg_rating)
+            skill.star_avg_difficulty = to_star(avg_difficulty)
 
     @api.model
     def unlink(self):
@@ -152,7 +189,11 @@ class Rating(models.Model):
     _name = "skill_development.rating"
     _description = "Skill Rating"
 
-    skill_id = fields.Many2one('skill_development.skill_record', string="Skill", ondelete='cascade')
+    skill_id = fields.Many2one('skill_development.skill_record',
+                               string="Skill",
+                               ondelete='cascade',
+                               readonly=True,
+                               required=True)
 
     usefulness = fields.Selection([
         ('0', 'Low'),

@@ -16,6 +16,7 @@ class SkillPlan(models.Model):
 
     sequence = fields.Integer(string="Sequence", default=10)
     skill_id = fields.Many2one('skill_development.skill_record','Skill', readonly=True)
+    skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
@@ -108,6 +109,7 @@ class SkillPlan(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'domain': [('learner_plan_record_ids', '=', self.id)],
+            'context': {'default_skill_id': self.skill_id.id},
         }
 
     # @api.model
@@ -130,25 +132,25 @@ class SkillPlan(models.Model):
     #     }
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
-    @api.constrains('skill_name')
-    def _check_unique_skill_name(self):
+    @api.constrains('skill_id')
+    def _check_unique_skill_id(self):
         for record in self:
             # Ensure that the skill name is unique for the current user (record_learner_id)
             if self.search_count([
-                ('skill_name', '=', record.skill_name),
+                ('skill_id', '=', record.skill_id.id),
                 ('plan_owner_id', '=', record.plan_owner_id.id)
             ]) > 1:
                 raise ValidationError(
-                    f"The skill '{record.skill_name}' already exists for this user.\n"
+                    f"The skill '{record.skill_id}' already exists for this user.\n"
                     f"You can update it by going to your profile and editing the plan record."
                 )
-    # def name_get(self):
-    #     result = []
-    #     for record in self:
-    #         # Return the skill_name as the display name in the learner_skill_id dropdown
-    #         name = record.skill_name or "Unnamed Skill"
-    #         result.append((record.id, name))
-    #     return result
+    def name_get(self):
+        result = []
+        for record in self:
+            # Return the skill_name as the display name in the learner_skill_id dropdown
+            name = record.skill_name or "Unnamed Skill"
+            result.append((record.id, name))
+        return result
 
     # Ensures plan_owner_id is automatically set to the current user
     @api.model
