@@ -4,9 +4,7 @@ from email.policy import default
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-import logging
 
-_logger = logging.getLogger(__name__)
 
 class SkillPlan(models.Model):
     _name = 'skill_development.initial_plan_record'
@@ -17,7 +15,8 @@ class SkillPlan(models.Model):
     goal_ids = fields.One2many('skill_development.goal_project','learner_plan_record_ids', string='Goal')
 
     sequence = fields.Integer(string="Sequence", default=10)
-    skill_name = fields.Char(string="Skill", readonly=True)
+    skill_id = fields.Many2one('skill_development.skill_record','Skill', readonly=True)
+    skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
@@ -50,7 +49,6 @@ class SkillPlan(models.Model):
     @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
     def _compute_overall_progress(self):
         for learner in self:
-            _logger.info(f"[DEBUG] Maximum Progress: {learner.maximum_progress=}")
             learner.overall_progress = (
                     learner.progress_knowledge * 0.15 +
                     learner.progress_practice * 0.35 +
@@ -64,6 +62,12 @@ class SkillPlan(models.Model):
         ('proficient', 'Proficient'),
         ('master', 'Master')
     ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
+
+    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
+    def _compute_overall_progress(self):
+        for rec in self:
+            rec.overall_progress = (rec.progress_knowledge * 0.15) + (rec.progress_practice * 0.35) + (
+                        rec.progress_contribute * 0.5)
 
     @api.depends('overall_progress')
     def _compute_title(self):
@@ -93,7 +97,19 @@ class SkillPlan(models.Model):
             'view_mode': 'kanban,form',
             'target': 'self',
             'domain': [('learner_plan_record_ids', '=', self.id)],
-            # 'context': {'default_learner_plan_record_ids': self.id},
+            'context': {'default_skill_id':self.skill_id.id},
+        }
+
+    def skill_acquired_button(self):
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Skill Rating',
+            'res_model': 'skill_development.rating',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('learner_plan_record_ids', '=', self.id)],
+            'context': {'default_skill_id': self.skill_id.id},
         }
 
     # @api.model
@@ -116,12 +132,12 @@ class SkillPlan(models.Model):
     #     }
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
-    @api.constrains('skill_name')
-    def _check_unique_skill_name(self):
+    @api.constrains('skill_id')
+    def _check_unique_skill_id(self):
         for record in self:
             # Ensure that the skill name is unique for the current user (record_learner_id)
             if self.search_count([
-                ('skill_name', '=', record.skill_name),
+                ('skill_id', '=', record.skill_id.id),
                 ('plan_owner_id', '=', record.plan_owner_id.id)
             ]) > 1:
                 raise ValidationError(

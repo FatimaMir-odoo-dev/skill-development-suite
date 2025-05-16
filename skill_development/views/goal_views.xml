@@ -95,18 +95,21 @@
                     <div style="display: flex; flex-direction: column; align-items: center;">
                         <!-- Skill Selection -->
                         <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
-                            <label for="learner_plan_record_ids"
-                                   string="Choose the skill you want to develop with this goal."
+                            <label for="skill_id"
+                                   string="The skill you will develop with this goal."
                                    style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
-                            <field name="learner_plan_record_ids"
-                                   style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"
+                            <field name="skill_id"
+                                   style="margin-bottom: 10px; color: #444444; font--size: 20px"
                                    options="{'no_create': True}"/>
                             <label for="category"
                                    string="Which category?"
-                                   widget="radio"
                                    style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                            <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 15px; margin-top: 10px;">
                             <field name="category"
-                                   style="width: 50%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px;"/>
+                                   widget="radio"
+                                   options="{'horizontal' : 'True'}"
+                                   />
+                            </div>
                         </div>
 
                         <!-- SMART Goals Section -->

@@ -15,7 +15,7 @@
                         <div class="o_list_view">
                             <field name="plan_skill_ids">
                                 <tree>
-                                    <field name="skill_name"/>
+                                    <field name="skill_id"/>
                                     <field name="motivation"/>
                                     <field name="endpoint"/>
                                     <field name="msg_2self"/>
