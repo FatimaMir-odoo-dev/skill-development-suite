@@ -96,6 +96,7 @@ class SkillPlan(models.Model):
             'view_mode': 'kanban,form',
             'target': 'self',
             'domain': [('learner_plan_record_ids', '=', self.id)],
+            'context': {'default_skill_id':self.skill_id.id},
         }
 
     def skill_acquired_button(self):
