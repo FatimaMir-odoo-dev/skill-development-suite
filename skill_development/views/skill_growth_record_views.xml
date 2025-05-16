@@ -40,14 +40,6 @@
                                     t-att-style="'font-weight: bold; font-size: 14px;'">
                                 <field name="goal_count" widget="statinfo"/>
                             </button>
-                            <button name="skill_acquired_button"
-                                    string="Mark Skill As Acquired"
-                                    type="object"
-                                    icon="fa-bullseye"
-                                    class="oe_stat_button"
-                                    t-att-style="'font-weight: bold; font-size: 14px;'">
-                                <field name="goal_count" widget="statinfo"/>
-                            </button>
                         </div>
 
                         <group col="1">
@@ -93,6 +85,15 @@
                                            placeholder="Use this to quickly note your ideas before you lose them..."
                                            colspan="2"/>
                                 </group>
+                                <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
+                                    <button name="skill_acquired_button"
+                                            string="Mark Skill As Acquired"
+                                            type="object"
+                                            icon="fa-bullseye"
+                                            class="btn btn-sm btn-success"
+                                            style="font-weight: bold; font-size: 14px; float: right;">
+                                    </button>
+                                </div>
                             </page>
                         </notebook>
                     </sheet>
