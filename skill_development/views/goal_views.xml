@@ -39,7 +39,7 @@
                                 <div style="margin-top: 0; color: #555;">
                                     Skill:
                                     <span style="color: #ac00e6;">
-                                        <field name="learner_plan_record_ids"/>
+                                        <field name="skill_id"/>
                                     </span>
                                     Category:
                                     <field name="category"/>

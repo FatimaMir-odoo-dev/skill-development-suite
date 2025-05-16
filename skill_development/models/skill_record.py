@@ -23,7 +23,7 @@ class SkillRecord(models.Model):
         ('3', 'Good'),
         ('4', 'Very Good'),
         ('5', 'Excellent'),
-    ], store=True, string="Overall Rating")
+    ], store=True, string="Overall Rating", readonly=True)
 
     star_avg_difficulty = fields.Selection([
         ('0', 'Impossible'),
@@ -32,7 +32,7 @@ class SkillRecord(models.Model):
         ('3', 'Manageable'),
         ('4', 'Easy'),
         ('5', 'Effortless'),
-    ], store=True, string="Overall Rating")
+    ], store=True, string="Overall Difficulty Rating", readonly=True)
 
     avg_difficulty = fields.Float("Average Difficulty", compute='_compute_avg_ratings', store=True)
 
