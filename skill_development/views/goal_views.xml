@@ -536,7 +536,10 @@
                                 <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind?
                                     (Optional)
                                 </label>
-                                <field name="extra_thoughts"/>
+                                <field name="extra_thoughts"
+                                       class="o_field_text_block"
+                                       style="height: 200px;"
+                                       colspan="2"/>
                             </div>
 
                         </div>
@@ -604,7 +607,9 @@
                                     (Optional)
                                 </label>
                                 <field name="extra_thoughts"
-                                       class="o_field_text_block"/>
+                                       class="o_field_text_block"
+                                       style="height: 200px;"
+                                       colspan="2"/>
                             </div>
 
                         </div>
