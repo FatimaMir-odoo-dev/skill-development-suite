@@ -94,9 +94,9 @@
                                     <button name="skill_acquired_button"
                                             string="Mark Skill As Acquired"
                                             type="object"
-                                            icon="fa-bullseye"
-                                            class="btn btn-sm btn-success"
-                                            style="font-weight: bold; font-size: 14px; float: right;"
+                                            icon="fa-flag-checkered"
+                                            class="btn btn-success btn-lg"
+                                            style="font-weight: bold; font-size: 18px; padding: 10px 20px; float: right; border-radius: 8px;"
                                             attrs="{'invisible': [('is_acquired', '=', True)]}">
                                     </button>
                                 </div>
