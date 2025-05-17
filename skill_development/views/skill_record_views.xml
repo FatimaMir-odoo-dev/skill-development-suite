@@ -98,5 +98,32 @@
                 </form>
             </field>
         </record>
+
+        <record id="skill_rating_view_form" model="ir.ui.view">
+            <field name="name">skill_rating.form</field>
+            <field name="model">skill_development.rating</field>
+            <field name="arch" type="xml">
+                <form string="Skill Evaluation">
+                    <sheet>
+                        <div class="oe_title">
+                            <h2 style="color: #5b84d7; margin-bottom: 12px;">
+                                Please evaluate your experience with this skill
+                            </h2>
+                            <h3>
+                                <field name="skill_id"/>
+                            </h3>
+                        </div>
+
+                        <group string="Skill Reflection">
+                            <field name="usefulness" widget="priority" string="How Useful Was This Skill To You?"/>
+                            <field name="fun2learn" widget="priority" string="How Fun Was This Skill To Learn?"/>
+                            <field name="difficulty" widget="priority" string="How Easy Was This Skill To Acquire?"/>
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
     </data>
 </odoo>
