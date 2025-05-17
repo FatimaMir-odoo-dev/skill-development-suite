@@ -25,6 +25,7 @@
             <field name="arch" type="xml">
                 <form create="false">
                     <sheet>
+                        <field name="is_acquired" invisible="1"/>
                         <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
@@ -46,9 +47,12 @@
                             <group>
                                 <group style="width: 66%; display: inline-block; vertical-align: top;">
                                     <field name="skill_name" required="1"/>
-                                    <field name="motivation"/>
-                                    <field name="endpoint"/>
-                                    <field name="msg_2self"/>
+                                    <field name="motivation"
+                                           attrs="{'readonly': [('is_acquired', '=', True)]}"/>
+                                    <field name="endpoint"
+                                           attrs="{'readonly': [('is_acquired', '=', True)]}"/>
+                                    <field name="msg_2self"
+                                           attrs="{'readonly': [('is_acquired', '=', True)]}"/>
                                 </group>
 
                                 <group style="width: 33%; display: inline-block; vertical-align: top;" col="1">
@@ -83,7 +87,8 @@
                                            class="o_field_text_block"
                                            style="height: 200px;"
                                            placeholder="Use this to quickly note your ideas before you lose them..."
-                                           colspan="2"/>
+                                           colspan="2"
+                                           attrs="{'readonly': [('is_acquired', '=', True)]}"/>
                                 </group>
                                 <div style="display: flex; justify-content: flex-end; margin-top: 40px;">
                                     <button name="skill_acquired_button"
@@ -91,7 +96,8 @@
                                             type="object"
                                             icon="fa-bullseye"
                                             class="btn btn-sm btn-success"
-                                            style="font-weight: bold; font-size: 14px; float: right;">
+                                            style="font-weight: bold; font-size: 14px; float: right;"
+                                            attrs="{'invisible': [('is_acquired', '=', True)]}">
                                     </button>
                                 </div>
                             </page>

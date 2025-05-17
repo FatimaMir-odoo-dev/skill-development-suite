@@ -18,6 +18,7 @@ class Goal(models.Model):
     learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,
                                               # domain="[('plan_owner_id', '=', uid)]"
                                               )
+    is_acquired = fields.Boolean()
     skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)

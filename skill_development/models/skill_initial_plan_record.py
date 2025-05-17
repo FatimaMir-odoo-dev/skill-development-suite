@@ -30,6 +30,8 @@ class SkillPlan(models.Model):
     overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True, digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
 
+    is_acquired = fields.Boolean(string="Skill Acquired", default=False)
+
     @api.depends('goal_ids.goal_progress', 'goal_ids.category')
     def _compute_category_progress(self):
         for learner in self:
@@ -97,10 +99,14 @@ class SkillPlan(models.Model):
             'view_mode': 'kanban,form',
             'target': 'self',
             'domain': [('skill_id', '=', self.skill_id.id)],
-            'context': {'default_skill_id':self.skill_id.id},
+            'context': {'default_skill_id':self.skill_id.id,
+                        'default_is_acquired': self.is_acquired},
         }
 
     def skill_acquired_button(self):
+
+        for rec in self:
+            rec.is_acquired = True
 
         return {
             'type': 'ir.actions.act_window',
