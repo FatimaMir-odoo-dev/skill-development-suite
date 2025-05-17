@@ -16,7 +16,7 @@
             <!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
         </record>
         <menuitem id="menu_skill_record"
-                  name="Skills"
+                  name="Skill Catalog"
                   action="skill_development.skill_record_action"
                   sequence="10"
                   web_icon="skill_development,static/description/icon1.png"/>
