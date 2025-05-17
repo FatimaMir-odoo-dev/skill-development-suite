@@ -65,12 +65,6 @@ class SkillPlan(models.Model):
         ('master', 'Master')
     ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
 
-    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
-    def _compute_overall_progress(self):
-        for rec in self:
-            rec.overall_progress = (rec.progress_knowledge * 0.15) + (rec.progress_practice * 0.35) + (
-                        rec.progress_contribute * 0.5)
-
     @api.depends('overall_progress')
     def _compute_title(self):
         for rec in self:
@@ -88,7 +82,7 @@ class SkillPlan(models.Model):
     def _compute_goal_count(self):
         for record in self:
             record.goal_count = self.env['skill_development.goal_project'].search_count(
-                [('learner_plan_record_ids', '=', record.id)])
+                [('skill_id', '=', record.skill_id.id)])
 
     def goals_button(self):
         view_id = self.env.ref(
