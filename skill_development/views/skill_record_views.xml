@@ -60,9 +60,12 @@
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <div class="oe_title" style="overflow: visible; white-space: nowrap;">
-                            <h2 style="text-align:center">Skill Details</h2>
-                        </div>
+                        <button type="object"
+                                name="action_open_initial_plan_wizard"
+                                class="btn btn-primary"
+                                style="font-size: 25px; padding: 12px 24px; border-radius: 8px;">
+                            Start Learning
+                        </button>
                     </header>
                     <sheet>
                         <!-- Add some padding to make the form more spacious -->
