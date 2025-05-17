@@ -91,6 +91,8 @@ class SkillPlan(models.Model):
                 [('learner_plan_record_ids', '=', record.id)])
 
     def goals_button(self):
+        view_id = self.env.ref(
+            'skill_development.goal_project_view_kanban_no_create' if self.is_acquired else 'skill_development.goal_project_view_kanban').id
 
         return {
             'type': 'ir.actions.act_window',
@@ -101,6 +103,7 @@ class SkillPlan(models.Model):
             'domain': [('skill_id', '=', self.skill_id.id)],
             'context': {'default_skill_id':self.skill_id.id,
                         'default_is_acquired': self.is_acquired},
+            'views': [(view_id, 'kanban')],
         }
 
     def skill_acquired_button(self):
