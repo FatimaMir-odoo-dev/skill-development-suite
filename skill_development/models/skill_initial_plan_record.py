@@ -37,8 +37,7 @@ class SkillPlan(models.Model):
     @api.depends('is_acquired')
     def _compute_skill_status(self):
         for rec in self:
-            rec.skill_status
-            = 'Acquired' if rec.is_acquired else ''
+            rec.skill_status = 'Acquired' if rec.is_acquired else ''
 
     @api.depends('goal_ids.goal_progress', 'goal_ids.category')
     def _compute_category_progress(self):

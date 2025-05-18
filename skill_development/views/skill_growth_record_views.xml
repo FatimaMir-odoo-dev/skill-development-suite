@@ -16,7 +16,7 @@
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
-                    <field name="acquired_badge" widget="badge" decoration-success="is_acquired"/>
+                    <field name="skill_status" widget="badge" decoration-success="is_acquired"/>
                 </tree>
             </field>
         </record>
