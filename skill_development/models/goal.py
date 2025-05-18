@@ -219,6 +219,13 @@ class GoalTask(models.Model):
     resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
 
+    # @api.model
+    # def create(self, vals):
+    #     goal = self.env['skill_development.goal_project'].browse(vals.get('goal_id'))
+    #     if goal and goal.goal_status == 'complete':
+    #         raise UserError("You cannot add a record under a completed goal.")
+    #     return super(GoalTask, self).create(vals)
+
     def _compute_resource_count(self):
         for record in self:
             record.resource_count = self.env['skill_development.goal_task_resource'].search_count(

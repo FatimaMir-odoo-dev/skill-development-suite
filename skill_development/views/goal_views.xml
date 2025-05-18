@@ -369,16 +369,19 @@
                             <span>Skill:</span>
                             <field name="skill_id" style="font-size: 15px; font-weight: bold" nolabel="1"/>
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
-                                   class="oe_inline"/>
+                                   class="oe_inline"
+                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                         </group>
                         <div style="display: flex; align-items: center; color: #555; margin-down: 0;">
                             <span style="font-weight: bold; margin-right: 5px;">Start Date:</span>
                             <field name="date_start" widget="daterange" nolabel="1" class="oe_inline"
-                                   options="{'related_end_date': 'date'}"/>
+                                   options="{'related_end_date': 'date'}"
+                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                             <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
                             <span style="font-weight: bold; margin-right: 5px;">End Date:</span>
                             <field name="date" widget="daterange" nolabel="1" class="oe_inline"
-                                   options="{'related_start_date': 'date_start'}"/>
+                                   options="{'related_start_date': 'date_start'}"
+                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                         </div>
 
 
@@ -411,7 +414,7 @@
                                         <div class="input-group">
                                             <field name="specific_goal" class="o_field_char form-control"
                                                    id="specific_goal"
-                                                   attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                                         </div>
                                     </div>
 
@@ -423,7 +426,7 @@
                                         <!--                                <div class="input-group">-->
                                         <field name="measurable_goal" class="o_field_char form-control"
                                                id="measurable_goal"
-                                               attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                                         <!--                                </div>-->
                                     </div>
 
@@ -436,7 +439,7 @@
                                         <div class="input-group">
                                             <field name="achievable_goal" class="o_field_char form-control"
                                                    id="achievable_goal"
-                                                   attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                                         </div>
                                     </div>
 
@@ -450,7 +453,7 @@
                                         <div class="input-group">
                                             <field name="relevant_goal" class="o_field_char form-control"
                                                    id="relevant_goal"
-                                                   attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                                         </div>
                                     </div>
 
@@ -462,7 +465,7 @@
                                         <div class="input-group">
                                             <field name="timed_goal" class="o_field_char form-control"
                                                    id="timed_goal"
-                                                   attrs="{'readonly':[('goal_status', '=', 'finalized')]}"/>
+                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -639,7 +642,7 @@
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="stage_id">
+                <kanban default_group_by="stage_id" on_create="False">
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card"
