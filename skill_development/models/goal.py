@@ -62,6 +62,7 @@ class Goal(models.Model):
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
     goal_name = fields.Text('Complete Goal Statement')
     task_count = fields.Integer(string=' ', compute='_compute_task_count')
+    lesson_count = fields.Integer(string=' ', compute='_compute_lesson_count')
     kanban_state = fields.Selection([
         ('normal', 'On Hold'),
         ('done', 'In Progress'),
@@ -141,6 +142,11 @@ class Goal(models.Model):
             record.task_count = self.env['skill_development.goal_task'].search_count(
                 [('goal_id', '=', record.id)])
 
+    def _compute_lesson_count(self):
+        for record in self:
+            record.lesson_count = self.env['skill_development.goal_lesson_bank'].search_count(
+                [('goal_id', '=', record.id)])
+
     def name_get(self):
         result = []
         for record in self:
@@ -211,6 +217,12 @@ class GoalTask(models.Model):
         ('blocked', 'Blocked')],
         string='Status',default='normal')
     resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
+    resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
+
+    def _compute_resource_count(self):
+        for record in self:
+            record.resource_count = self.env['skill_development.goal_task_resource'].search_count(
+                [('task_id', '=', record.id)])
 
     # def action_open_resource_form(self):
     #     return {
@@ -242,7 +254,7 @@ class GoalResource(models.Model):
 
     file = fields.Binary('Upload File')
     url = fields.Char('External URL')
-    task_id = fields.Many2one('skill_development.goal_task', string='Related Task')  # Replace with your task model
+    task_id = fields.Many2one('skill_development.goal_task', string='Related Task', ondelete="cascade")  # Replace with your task model
     description = fields.Text('Description')
     video = fields.Binary(string='Video', attachment=True)
     image = fields.Binary(string='Image', attachment=True)
