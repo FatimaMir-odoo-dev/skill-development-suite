@@ -687,7 +687,7 @@
                                            placeholder="Task Title..."/>
                                 </div>
                                 <div class="d-flex flex-column align-items-start ms-0">
-                                    <field name="kanban_state" widget="state_selection" class="ms-0"/>
+                                    <field name="kanban_state" widget="state_selection" class="ms-0" />
                                 </div>
                             </h1>
                         </div>

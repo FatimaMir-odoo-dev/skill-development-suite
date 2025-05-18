@@ -9,12 +9,14 @@
             <field name="model">skill_development.initial_plan_record</field>
             <field name="arch" type="xml">
                 <tree string="My Skill Growth" create="false">
+                    <field name="is_acquired" invisible="1"/>
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
                     <field name="title" widget="badge"/>
                     <field name="motivation"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
+                    <field name="acquired_badge" widget="badge" decoration-success="is_acquired"/>
                 </tree>
             </field>
         </record>

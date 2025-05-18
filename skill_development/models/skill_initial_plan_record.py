@@ -32,6 +32,14 @@ class SkillPlan(models.Model):
 
     is_acquired = fields.Boolean(string="Skill Acquired", default=False)
 
+    skill_status = fields.Char(string="Status",compute='_compute_skill_status', store=False)
+
+    @api.depends('is_acquired')
+    def _compute_skill_status(self):
+        for rec in self:
+            rec.skill_status
+            = 'Acquired' if rec.is_acquired else ''
+
     @api.depends('goal_ids.goal_progress', 'goal_ids.category')
     def _compute_category_progress(self):
         for learner in self:
