@@ -187,7 +187,7 @@ class GoalTask(models.Model):
     name = fields.Char('Task')
     # learner_id
     # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
-    goal_id = fields.Many2one('skill_development.goal_project', string='Goal')
+    goal_id = fields.Many2one('skill_development.goal_project', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one(
         'skill_development.goal_task_stage',
         string='Stage',
