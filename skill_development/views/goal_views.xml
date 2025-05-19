@@ -521,7 +521,7 @@
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="fw-bold" style="font-size: 1em;">
                                     <span>Skill:</span>
-                                    <field name="learner_plan_record_ids" readonly="1" widget="badge" class="ms-2"/>
+                                    <field name="skill_id" readonly="1" widget="badge" class="ms-2"/>
                                 </div>
                                 <field name="priority" widget="priority" class="me-3"/>
                                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
@@ -589,7 +589,7 @@
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="fw-bold" style="font-size: 1em;">
                                     <span>Skill:</span>
-                                    <field name="learner_plan_record_ids" readonly="1" widget="badge" class="ms-2"/>
+                                    <field name="skill_id" readonly="1" widget="badge" class="ms-2"/>
                                 </div>
                                 <field name="priority" widget="priority" class="me-3"/>
                             </div>
@@ -642,7 +642,7 @@
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="stage_id" on_create="False">
+                <kanban default_group_by="stage_id">
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card"

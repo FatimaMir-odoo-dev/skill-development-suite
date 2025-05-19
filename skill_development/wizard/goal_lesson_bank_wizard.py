@@ -8,14 +8,14 @@ class SkillPlanWizard(models.TransientModel):
     _name = 'skill_development.goal_lesson_bank_wizard'
     _description = 'Lesson Bank Pop-up Form'
 
-    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True, readonly=True)
-    goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
+    goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True, required=True,)
+    skill_id = fields.Many2one('skill_development.skill_record', string="Skill", readonly=True)
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
     tag_ids = fields.Many2many(
-        'skill_development.goal_lesson_bank',
+        'skill_development.goal_tag',
         relation='wizard_tag_lesson_rel',
         column1='tag_id',
         column2='lesson_id',
@@ -34,8 +34,10 @@ class SkillPlanWizard(models.TransientModel):
             'lesson_change': self.lesson_change,
             'lesson_learned': self.lesson_learned,
             'extra_thoughts': self.extra_thoughts,
+            'skill_id': self.skill_id.id,
             'priority': self.priority,
-            'tag_ids': self.tag_ids.id,
+            'goal_id': self.goal_id.id,
+            'tag_ids': [(6, 0, self.tag_ids.ids)],
         })
         return {'type': 'ir.actions.act_window_close'}
 

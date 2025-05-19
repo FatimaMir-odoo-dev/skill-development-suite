@@ -114,7 +114,7 @@ class Goal(models.Model):
             'context': {
                 'default_learner_plan_record_ids': self.learner_plan_record_ids.id,  # Pass the learner ID to the wizard form
                 'default_goal_id': self.id,
-                },  # Pass the skill name to the wizard form
+                'default_skill_id': self.skill_id.id},  # Pass the skill name to the wizard form
         }
 
     def action_view_tasks(self):
@@ -183,8 +183,7 @@ class GoalStage(models.Model):
     legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
 
     # task_id
-    # goal_id
-
+    goal_id = fields.Many2one('skill_development.goal_project')
 
 class GoalTask(models.Model):
     _name = "skill_development.goal_task"
@@ -199,7 +198,7 @@ class GoalTask(models.Model):
         string='Stage',
         domain="[('learner_id', '=', uid)]",
         ondelete='restrict',
-        required='True'
+        required=True
     )
     tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
     description = fields.Html(string='Description', anitize_attributes=False)
@@ -219,12 +218,15 @@ class GoalTask(models.Model):
     resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
 
-    # @api.model
-    # def create(self, vals):
-    #     goal = self.env['skill_development.goal_project'].browse(vals.get('goal_id'))
-    #     if goal and goal.goal_status == 'complete':
-    #         raise UserError("You cannot add a record under a completed goal.")
-    #     return super(GoalTask, self).create(vals)
+    @api.model
+    def create(self, vals):
+        if not vals.get('stage_id') and vals.get('goal_id'):
+            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
+            first_stage = self.env['skill_development.goal_task_stage'].search([
+                ('goal_id', '=', goal.id)
+            ], order='sequence', limit=1)
+            vals['stage_id'] = first_stage.id if first_stage else False
+        return super(GoalTask, self).create(vals)
 
     def _compute_resource_count(self):
         for record in self:
@@ -305,7 +307,8 @@ class LessonBank(models.Model):
     _name = 'skill_development.goal_lesson_bank'
     _description = 'Lesson Bank'
 
-    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
+    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill")
+    skill_id = fields.Many2one('skill_development.skill_record', string="Skill")
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
     lesson_title = fields.Char('Title')
 
@@ -327,20 +330,8 @@ class LessonBank(models.Model):
         string="Tags"
     )
 
-    @api.model
-    def create(self, vals):
-        if vals.get('goal_id'):
-            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
-            if goal.learner_plan_record_ids:
-                vals['learner_plan_record_ids'] = goal.learner_plan_record_ids.id
-        return super().create(vals)
 
-    def write(self, vals):
-        if vals.get('goal_id'):
-            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
-            if goal.learner_plan_record_ids:
-                vals['learner_plan_record_ids'] = goal.learner_plan_record_ids.id
-        return super().write(vals)
+
 
     @api.depends('lesson_worked')
     def _compute_lesson_short(self):

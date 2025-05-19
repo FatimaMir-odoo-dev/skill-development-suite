@@ -12,47 +12,53 @@
                                 <field name="lesson_title" placeholder="Lesson Title..."/>
                             </h1>
                         </div>
-<group string="YAdd to your learning journey: Answer these three reflection questions!!"
+                        <group string="YAdd to your learning journey: Answer these three reflection questions!!"
                                style="color: #5b84d7; text-transform: none;">
-                        <group name="top_info">
-                            <group string="Goal &amp; Skill">
-                                <field name="goal_id" options="{'no_open': True, 'no_create': True}"/>
-                                <field name="learner_plan_record_ids" widget="many2many_badge"
-                                       options="{'no_open': True, 'no_create': True}"/>
+                            <group name="top_info">
+                                <group string="Goal &amp; Skill">
+                                    <field name="goal_id" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="skill_id" widget="many2many_badge"
+                                           options="{'no_open': True, 'no_create': True}"/>
+                                </group>
+                                <group string="Priority &amp; Tags" name="priority_tags">
+                                    <field name="priority" widget="priority"/>
+                                    <field name="tag_ids" widget="many2many_tags"
+                                           options="{'color_field': 'color', 'no_open': True, 'no_create': True}"/>
+                                </group>
                             </group>
-                            <group string="Priority &amp; Tags" name="priority_tags">
-                                <field name="priority" widget="priority"/>
-                                <field name="tag_ids" widget="many2many_tags"
-                                       options="{'color_field': 'color', 'no_open': True, 'no_create': True}"/>
-                            </group>
-                        </group>
 
-                        <notebook>
-                            <page string="Learning Insights">
-                                <h4>What worked?</h4>
+                            <notebook>
+                                <page string="Learning Insights">
+                                    <h4>What worked?</h4>
                                     <field name="lesson_worked"
                                            placeholder="Write 'None' if nothing comes to mind."
                                            nolabel="1"
                                            class="o_field_text_block"/>
-                                <h4>What would you change next time?</h4>
+                                    <h4>What would you change next time?</h4>
                                     <field name="lesson_change"
                                            placeholder="Write 'None' if nothing comes to mind."
                                            nolabel="1"
                                            class="o_field_text_block"/>
-                                <h4>What's something new you've learned?</h4>
+                                    <h4>What's something new you've learned?</h4>
                                     <field name="lesson_learned"
                                            placeholder="Write 'None' if nothing comes to mind."
                                            nolabel="1"
                                            class="o_field_text_block"/>
-                            </page>
-                            <page string="Additional Thoughts" name="extra">
-                                <field name="extra_thoughts"
-                                       placeholder="Optional notes..."
-                                       nolabel="1"
-                                       class="o_field_text_block"/>
-                            </page>
-                        </notebook>
+                                </page>
+                                <page string="Additional Thoughts" name="extra">
+                                    <field name="extra_thoughts"
+                                           placeholder="Optional notes..."
+                                           nolabel="1"
+                                           class="o_field_text_block"/>
+                                </page>
+                            </notebook>
                         </group>
+                        <footer>
+                            <button name="button_save_lesson"
+                                    string="Save Lesson"
+                                    type="object"
+                                    class="btn-primary"/>
+                        </footer>
                     </sheet>
                 </form>
             </field>
