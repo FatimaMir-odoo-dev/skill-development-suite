@@ -108,6 +108,16 @@ class SkillPlan(models.Model):
             # 'views': [(view_id, 'kanban')],
         }
 
+    def popup_help_button(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Help',
+            'res_model': 'skill_development.help_popup',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_skill_plan_id': self.id},
+        }
+
     def skill_acquired_button(self):
 
         for rec in self:
@@ -171,6 +181,103 @@ class SkillPlan(models.Model):
 
     # For the Smart Goal wizard where a learner can select one of the
     # skills saved in this record to connect the goal to
+
+from odoo import models, fields, api
+
+class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
+    _name = 'skill_development.help_popup'
+    _description = 'Help'
+
+    step = fields.Selection([
+        ('page1', 'Overview'),
+        ('page2', 'Details')
+    ], default='page1', store=True)
+
+    message = fields.Html(string='Help Message', readonly=True)
+    tips = fields.Html(string='Tips', readonly=True)
+    skill_plan_id = fields.Many2one('skill_development.initial_plan_record', string="Plan")
+    overall_progress = fields.Float(related='skill_plan_id.overall_progress', store=True)
+    maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
+
+    @api.model
+    def default_get(self, fields):
+        res = super().default_get(fields)
+        res['message'] = self._get_page1_content()
+        return res
+
+    def go_to_page2(self):
+        self.write({
+            'step': 'page2',
+            'message': self._get_page2_content(),
+            'tips': self._get_page2_tips()
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'skill_development.help_popup',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def go_to_page1(self):
+        self.write({
+            'step': 'page1',
+            'message': self._get_page1_content(),
+            'tips': self._get_page1_tips()
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'skill_development.help_popup',
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def _get_page1_content(self):
+        return """
+            <h2>Skill Progress Guide – Page 1</h2>
+            <p>Your overall progress is a weighted average of:</p>
+            <ul>
+                <li><strong>Knowledge:</strong> 15%</li>
+                <li><strong>Practice:</strong> 35%</li>
+                <li><strong>Contributions & Collaboration:</strong> 50%</li>
+            </ul>
+            
+        """
+
+    def _get_page1_tips(self):
+        return """
+        <p><strong>Tips:</strong></p>
+            <ul>
+                <li>Set complete SMART goals</li>
+                <li>Add at least two results per goal</li>
+                <li>Fill in lessons learned for bonus points</li>
+            </ul>
+        """
+
+    def _get_page2_tips(self):
+        return """
+        <h2>Skill Progress Guide – Page 2</h2>
+            <p><strong>Title Achievements:</strong></p>
+            <ul>
+                <li>Seeker: &lt; 5%</li>
+                <li>Learner: ≥ 5%</li>
+                <li>Skilled: ≥ 40%</li>
+                <li>Proficient: ≥ 60%</li>
+                <li>Master: ≥ 80%</li>
+            </ul>
+        """
+
+    def _get_page2_content(self):
+        return """
+            <p><strong>Category Calculation:</strong></p>
+            <ul>
+                <li>Each goal is weighted: earlier goals give more %</li>
+                <li>Smart goals, completed results, and reflections add bonuses</li>
+                <li>Maximum per goal: ~30%</li>
+            </ul>
+        """
+
 
 
 
