@@ -5,6 +5,8 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from random import randint
 from ..services.skill_growth_logic_helper import GoalLogicHelper
+import logging
+_logger = logging.getLogger(__name__)
 
 
 
@@ -15,8 +17,7 @@ class Goal(models.Model):
     # Connects to the learner profile for security and filter?
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
     # Connect to the learner's initial plan records to get all their skills
-    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,
-                                              # domain="[('plan_owner_id', '=', uid)]"
+    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan",
                                               )
     is_acquired = fields.Boolean()
     skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
@@ -34,7 +35,7 @@ class Goal(models.Model):
         ], default='draft', string='Status', readonly=True)
 
     is_complete = fields.Boolean(string="Goal Complete", default="False")
-    goal_progress = fields.Float(string="Goal Contribution", compute='_compute_goal_progress')
+    goal_progress = fields.Float(string="Goal Contribution", compute='_compute_goal_progress', store=True)
     lesson_id = fields.One2many('skill_development.goal_lesson_bank','goal_id')
 
     @api.depends('goal_status', 'result_ids.is_done',
@@ -43,7 +44,9 @@ class Goal(models.Model):
                  'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
     def _compute_goal_progress(self):
         for goal in self:
+            _logger.info("Recomputing progress for goal ID %s (status: %s)", goal.id, goal.goal_status)
             goal.goal_progress = GoalLogicHelper.calculate_progress(goal)
+            _logger.info("Computed goal_progress = %.2f for goal ID %s", goal.goal_progress, goal.id)
 
     category = fields.Selection([
         ('knowledge', 'Knowledge'),
@@ -70,17 +73,17 @@ class Goal(models.Model):
         string='Status', default='normal')
 
 
-    @api.constrains('name')
-    def _check_SMART_fields(self):
-        for record in self:
-            if record.name:
-                # Check if all the other fields are filled before allowing `name` field
-                if not (
-                        record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
-                    raise ValidationError(
-                        "To make your goal really effective, please make sure all SMART fields are filled out accurately."
-                        " before entering the final goal statement.\n"
-                        "Take your time and think about each guideline carefully for the best results.")
+    # @api.constrains('goal_name')
+    # def _check_SMART_fields(self):
+    #     for record in self:
+    #         if record.name:
+    #             # Check if all the other fields are filled before allowing `name` field
+    #             if not (
+    #                     record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
+    #                 raise ValidationError(
+    #                     "To make your goal really effective, please make sure all SMART fields are filled out accurately."
+    #                     " before entering the final goal statement.\n"
+    #                     "Take your time and think about each guideline carefully for the best results.")
 
     @api.model
     def create(self, vals):
@@ -100,6 +103,7 @@ class Goal(models.Model):
         for rec in self:
             rec.goal_status = 'complete'
             rec.is_complete = True
+            # rec._compute_goal_progress()
 
         learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
         learner_id = learner.id if learner else False
@@ -111,8 +115,7 @@ class Goal(models.Model):
             'view_mode': 'form',
             'name': 'My Reflection',
             'target': 'new',
-            'context': {
-                'default_learner_plan_record_ids': self.learner_plan_record_ids.id,  # Pass the learner ID to the wizard form
+            'context': {  # Pass the learner ID to the wizard form
                 'default_goal_id': self.id,
                 'default_skill_id': self.skill_id.id},  # Pass the skill name to the wizard form
         }

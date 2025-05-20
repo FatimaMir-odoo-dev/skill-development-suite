@@ -1,10 +1,15 @@
 # from odoo import models
 
+import logging
+_logger = logging.getLogger(__name__)
 
 class GoalLogicHelper:
     @staticmethod
     def calculate_progress(goal):
+        _logger.info("Calculating progress for Goal ID: %s", goal.id)
+
         if goal.goal_status != "complete":
+            _logger.info("Goal status is not complete: %s", goal.goal_status)
             return 0.0
 
         full_goal_mark = GoalLogicHelper._calculate_full_goal_mark(goal)
@@ -12,7 +17,12 @@ class GoalLogicHelper:
         reflection_bonus = GoalLogicHelper._lesson_bonus(goal)
         penalty = GoalLogicHelper._incomplete_result_penalty(goal)
 
-        return max(0.0, full_goal_mark + smart_bonus + reflection_bonus - penalty)
+        _logger.info("Full mark: %s, SMART bonus: %s, Reflection bonus: %s, Penalty: %s",
+                     full_goal_mark, smart_bonus, reflection_bonus, penalty)
+
+        final_score = max(0.0, full_goal_mark + smart_bonus + reflection_bonus - penalty)
+        _logger.info("Final calculated progress: %s", final_score)
+        return final_score
     #
     @staticmethod
     def _calculate_full_goal_mark(goal):
@@ -49,7 +59,7 @@ class GoalLogicHelper:
     def _get_goal_position_in_category(goal):
         same_category_goals = goal.search([
             ("category", "=", goal.category),
-            ("learner_plan_record_ids", "=", goal.learner_plan_record_ids.id)
+            ("skill_id", "=", goal.skill_id.id)
         ], order="id")
 
         goal_ids = list(same_category_goals.ids)

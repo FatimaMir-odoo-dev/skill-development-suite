@@ -12,7 +12,7 @@ class SkillPlan(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
-    goal_ids = fields.One2many('skill_development.goal_project','learner_plan_record_ids', string='Goal')
+    goal_ids = fields.One2many('skill_development.goal_project','learner_plan_ids', string='Goal')
 
     sequence = fields.Integer(string="Sequence", default=10)
     skill_id = fields.Many2one('skill_development.skill_record','Skill', readonly=True)
@@ -103,7 +103,8 @@ class SkillPlan(models.Model):
             'target': 'self',
             'domain': [('skill_id', '=', self.skill_id.id)],
             'context': {'default_skill_id':self.skill_id.id,
-                        'default_is_acquired': self.is_acquired},
+                        'default_is_acquired': self.is_acquired,
+                        'default_learner_plan_ids': self.id,},
             # 'views': [(view_id, 'kanban')],
         }
 
