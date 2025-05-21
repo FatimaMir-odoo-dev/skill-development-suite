@@ -18,7 +18,7 @@ class Goal(models.Model):
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
     # Connect to the learner's initial plan records to get all their skills
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan", ondelete='cascade')
-    is_acquired = fields.Boolean()
+    is_acquired = fields.Boolean(string="Skill Acquired")
     skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
@@ -121,13 +121,17 @@ class Goal(models.Model):
         }
 
     def action_view_tasks(self):
+        _logger.info("Record ID %s: is_acquired = %s", self.id, self.is_acquired)
         return {
             'type': 'ir.actions.act_window',
             'name': 'Tasks',
             'res_model': 'skill_development.goal_task',
             'view_mode': 'kanban,form',
             'domain': [('goal_id', '=', self.id)],
-            'context': {'default_goal_id': self.id},
+            'context': {'default_goal_id': self.id,
+                        # 'default_is_acquired': self.is_acquired,
+                        # 'create': not self.is_acquired,
+                        },
         }
 
     def action_view_lesson(self):
@@ -196,6 +200,7 @@ class GoalTask(models.Model):
     # learner_id
     # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', string='Goal', ondelete='cascade')
+    is_acquired = fields.Boolean(string="Skill Acquired")
     stage_id = fields.Many2one(
         'skill_development.goal_task_stage',
         string='Stage',
@@ -221,15 +226,15 @@ class GoalTask(models.Model):
     resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
 
-    @api.model
-    def create(self, vals):
-        if not vals.get('stage_id') and vals.get('goal_id'):
-            goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
-            first_stage = self.env['skill_development.goal_task_stage'].search([
-                ('goal_id', '=', goal.id)
-            ], order='sequence', limit=1)
-            vals['stage_id'] = first_stage.id if first_stage else False
-        return super(GoalTask, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get('stage_id') and vals.get('goal_id'):
+    #         goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
+    #         first_stage = self.env['skill_development.goal_task_stage'].search([
+    #             ('goal_id', '=', goal.id)
+    #         ], order='sequence', limit=1)
+    #         vals['stage_id'] = first_stage.id if first_stage else False
+    #     return super(GoalTask, self).create(vals)
 
     def _compute_resource_count(self):
         for record in self:

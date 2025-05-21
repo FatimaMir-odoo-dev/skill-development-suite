@@ -4,6 +4,8 @@ from email.policy import default
 
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+import logging
+_logger = logging.getLogger(__name__)
 
 
 class SkillPlan(models.Model):
@@ -92,9 +94,7 @@ class SkillPlan(models.Model):
                 [('skill_id', '=', record.skill_id.id)])
 
     def goals_button(self):
-        # view_id = self.env.ref(
-        #     'skill_development.goal_project_view_kanban_no_create' if self.is_acquired else 'skill_development.goal_project_view_kanban').id
-
+        _logger.info("Record ID %s: is_acquired = %s", self.id, self.is_acquired)
         return {
             'type': 'ir.actions.act_window',
             'name': 'My Goals',
@@ -103,9 +103,9 @@ class SkillPlan(models.Model):
             'target': 'self',
             'domain': [('skill_id', '=', self.skill_id.id)],
             'context': {'default_skill_id':self.skill_id.id,
+                        'default_learner_plan_ids': self.id,
                         'default_is_acquired': self.is_acquired,
-                        'default_learner_plan_ids': self.id,},
-            # 'views': [(view_id, 'kanban')],
+                        'create': not self.is_acquired,},
         }
 
     def popup_help_button(self):
