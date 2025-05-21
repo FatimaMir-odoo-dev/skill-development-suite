@@ -12,7 +12,7 @@
                                 <field name="lesson_title" placeholder="Lesson Title..."/>
                             </h1>
                         </div>
-                        <group string="YAdd to your learning journey: Answer these three reflection questions!!"
+                        <group string="Add to your learning journey: Answer these three reflection questions!!"
                                style="color: #5b84d7; text-transform: none;">
                             <group name="top_info">
                                 <group string="Goal &amp; Skill">

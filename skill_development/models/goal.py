@@ -17,8 +17,7 @@ class Goal(models.Model):
     # Connects to the learner profile for security and filter?
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
     # Connect to the learner's initial plan records to get all their skills
-    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan",
-                                              )
+    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan", ondelete='cascade')
     is_acquired = fields.Boolean()
     skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
     date_start = fields.Date(string='Start Date')
@@ -117,7 +116,8 @@ class Goal(models.Model):
             'target': 'new',
             'context': {  # Pass the learner ID to the wizard form
                 'default_goal_id': self.id,
-                'default_skill_id': self.skill_id.id},  # Pass the skill name to the wizard form
+                'default_skill_id': self.skill_id.id,
+                'default_learner_plan_ids':self.learner_plan_ids.id},  # Pass the skill name to the wizard form
         }
 
     def action_view_tasks(self):
@@ -310,7 +310,7 @@ class LessonBank(models.Model):
     _name = 'skill_development.goal_lesson_bank'
     _description = 'Lesson Bank'
 
-    learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill")
+    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
     skill_id = fields.Many2one('skill_development.skill_record', string="Skill")
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
     lesson_title = fields.Char('Title')
@@ -347,7 +347,7 @@ class LessonBank(models.Model):
         if self.goal_id and self.goal_id.learner_plan_record_ids:
             self.learner_plan_record_ids = self.goal_id.learner_plan_record_ids
         else:
-            self.learner_plan_record_ids = False
+            self.learner_plan_ids = False
 
     def name_get(self):
         lesson = []
