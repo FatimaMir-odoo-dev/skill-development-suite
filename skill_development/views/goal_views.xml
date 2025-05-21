@@ -294,10 +294,10 @@
                                required="True"
                         />
                     </div>
-                    <footer>
-                        <button name="action_create_goal_draft" string="Create Goal Draft" type="object"
+                    <footer class="d-flex justify-content-between">
+                        <button name="action_create_goal_draft" string="Create Draft" type="object"
                                 class="btn btn-light"/>
-                        <button name="action_finalize_goal" string="Finalize" type="object"
+                        <button name="action_finalize_goal" string="Finalize Goal" type="object"
                                 class="btn btn-primary"/>
                         <button string="Cancel"
                                 class="btn-secondary"
