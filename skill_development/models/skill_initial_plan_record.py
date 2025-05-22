@@ -305,25 +305,71 @@ class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
 
     def _get_page2_tips(self):
         return """
-        <h2>Skill Progress Guide – Page 2</h2>
-            <p><strong>Title Achievements:</strong></p>
-            <ul>
-                <li>Seeker: &lt; 5%</li>
-                <li>Learner: ≥ 5%</li>
-                <li>Skilled: ≥ 40%</li>
-                <li>Proficient: ≥ 60%</li>
-                <li>Master: ≥ 80%</li>
-            </ul>
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">Your Skill Titles</h2>
+
+        <p class="text-lg text-gray-700 mb-6">
+            As your overall progress increases, you'll unlock new skill titles:
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Progress</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0 – 4%</td>
+                    <td>Seeker</td>
+                </tr>
+                <tr>
+                    <td>5 – 39%</td>
+                    <td>Learner</td>
+                </tr>
+                <tr>
+                    <td>40 – 59%</td>
+                    <td>Skilled</td>
+                </tr>
+                <tr>
+                    <td>60 – 79%</td>
+                    <td>Proficient</td>
+                </tr>
+                <tr>
+                    <td>80 – 100%</td>
+                    <td>Master</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="bonus-box">
+            <p class="text-gray-700">
+                <strong>So, every action you take moves you forward!</strong>
+            </p>
+        </div>
         """
 
     def _get_page2_content(self):
         return """
-            <p><strong>Category Calculation:</strong></p>
-            <ul>
-                <li>Each goal is weighted: earlier goals give more %</li>
-                <li>Smart goals, completed results, and reflections add bonuses</li>
-                <li>Maximum per goal: ~30%</li>
-            </ul>
+            <h2 class="text-3xl font-semibold text-gray-800 mb-4">Understanding Your Progress</h2>
+
+        <p class="text-lg text-gray-700 mb-8">
+            This page explains how progress is calculated in each category and how your overall progress translates into skill titles.
+        </p>
+
+        <h2 class="text-3xl font-semibold text-gray-800 mb-4">Progress by Category</h2>
+
+        <p class="text-gray-700 mb-4">
+            Each time you complete a goal, you earn progress in that category. Here's how it works:
+        </p>
+
+        <ul class="list-disc ml-6 mb-6 text-gray-700">
+            <li><strong class="highlight">Base Value:</strong> Your first goal = 20% progress. Each following goal adds 2% less (e.g., 2nd goal = 18%, 3rd goal = 16%, and so on).</li>
+            <li><strong class="highlight">SMART Goal Bonus:</strong> Get up to +5% extra progress if your goal is <strong class="highlight">S</strong>pecific, <strong class="highlight">M</strong>easurable, <strong class="highlight">A</strong>chievable, <strong class="highlight">R</strong>elevant, and <strong class="highlight">T</strong>ime-bound.</li>
+            <li><strong class="highlight">Reflection Bonus:</strong> Get +5% extra progress if you answer all 3 reflection questions when you complete a goal.</li>
+            <li><strong class="highlight">"Done" Requirement Penalty:</strong> Lose -1% if you mark fewer than 2 expected results as "Done" for a goal.</li>
+            <li><strong class="highlight">Category Limit:</strong> You can earn a maximum of 100% progress in each of the **Knowledge**, **Practice**, and **Connect &amp; Contribute** categories.</li>
+        </ul>
         """
 
 
