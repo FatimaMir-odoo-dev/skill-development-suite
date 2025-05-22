@@ -7,6 +7,7 @@
             <field name="arch" type="xml">
                 <kanban on_create="skill_development.open_create_goal_form_view">
                     <field name="goal_status" invisible="1"/>
+                    <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click"
@@ -643,6 +644,7 @@
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
+                    <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card"
@@ -698,6 +700,7 @@
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <form>
+                    <field name="is_acquired" invisible="1" readonly="1"/>
                     <sheet>
                         <div class="oe_title pe-0">
                             <h1 class="d-flex justify-content-between align-items-center">
@@ -721,7 +724,8 @@
                         </group>
                         <notebook>
                             <page string="Additional Resources">
-                                <field name="resource_ids">
+                                <field name="is_acquired" readonly="1"/>
+                                <field name="resource_ids" attrs="{'readonly':[('is_acquired', '=', True)]}">
                                     <tree>
                                         <field name="name"/>
                                         <field name="resource_type" widget="badge"

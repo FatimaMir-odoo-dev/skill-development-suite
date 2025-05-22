@@ -129,8 +129,8 @@ class Goal(models.Model):
             'view_mode': 'kanban,form',
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id,
-                        # 'default_is_acquired': self.is_acquired,
-                        # 'create': not self.is_acquired,
+                        'default_is_acquired': self.is_acquired,
+                        'create': not self.is_acquired and not self.is_complete,
                         },
         }
 
@@ -271,7 +271,8 @@ class GoalResource(models.Model):
 
     file = fields.Binary('Upload File')
     url = fields.Char('External URL')
-    task_id = fields.Many2one('skill_development.goal_task', string='Related Task', ondelete="cascade")  # Replace with your task model
+    task_id = fields.Many2one('skill_development.goal_task', string='Related Task', ondelete="cascade")
+    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_ids.is_acquired", string="Skill Acquired" , store=False)
     description = fields.Text('Description')
     video = fields.Binary(string='Video', attachment=True)
     image = fields.Binary(string='Image', attachment=True)

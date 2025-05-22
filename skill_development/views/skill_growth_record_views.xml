@@ -48,6 +48,15 @@
 
                         <group col="1">
                             <group>
+                                <div style="display: flex; justify-content: flex-end; width: 100%; margin-bottom: 8px;">
+                                    <button name="popup_help_button"
+                                            type="object"
+                                            icon="fa-question"
+                                            help="Find helpful information, tips, and explanations about skill progress."
+                                            class="btn btn-info btn-sm"
+                                            style="font-weight: bold; font-size: 14px;">
+                                    </button>
+                                </div>
                                 <group style="width: 66%; display: inline-block; vertical-align: top;">
                                     <field name="skill_name" required="1"/>
                                     <field name="motivation"
@@ -67,14 +76,8 @@
                                            nolabel="1"/>
                                 </group>
                             </group>
+
                         </group>
-                        <button name="popup_help_button"
-                                string="Help"
-                                type="object"
-                                icon="fa-bullseye"
-                                class="btn-info"
-                                t-att-style="'font-weight: bold; font-size: 14px;'">
-                        </button>
                         <group string="Progress Categories" col="3">
                             <!--                            <div class="row">-->
                             <group>
@@ -123,17 +126,20 @@
                 <form string="Skill Progress Help" create="false" edit="false">
                     <sheet>
                         <field name="step" invisible="1"/>
-                        <group col="2">
-                            <field name="message" widget="html" readonly="1"/>
-                            <group style="width: 33%; display: inline-block; vertical-align: top;" col="1">
-                                    <field name="maximum_progress" invisible="1"/>
-                                    <field name="overall_progress"
-                                           style="font-size: 30px; font-weight: bold"
-                                           widget="gauge"
-                                           options="{'max_field': 'maximum_progress'}"
-                                           nolabel="1"/>
-                                </group>
+                        <group>
+                            <group style="width: 66%; display: inline-block; vertical-align: top;">
+                                <field name="message" widget="html" readonly="1"/>
+                            </group>
+                            <group style="width: 33%; display: inline-block; " col="1">
+                                <field name="maximum_progress" invisible="1"/>
+                                <field name="overall_progress"
+                                       style="font-size: 30px; font-weight: bold"
+                                       widget="gauge"
+                                       options="{'max_field': 'maximum_progress'}"
+                                       nolabel="1"/>
+                            </group>
                         </group>
+                        <field name="tips" widget="html" readonly="1"/>
 
                         <footer>
                             <button name="go_to_page1" string="Back" type="object"
