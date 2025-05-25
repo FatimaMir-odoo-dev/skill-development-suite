@@ -12,9 +12,12 @@
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click"
                                  style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
-                                <div style="position: absolute; top: 5px; right: 10px;">
-                                    <field name="kanban_state" widget="state_selection"/>
-                                </div>
+<!--                                <div style="position: absolute; top: 5px; right: 10px;">-->
+<!--                                    <field name="kanban_state" widget="state_selection" help="Indicate the current status of your goal.-->
+<!--In Progress: You are actively working on this goal.-->
+<!--Stopped: This goal is currently paused.-->
+<!--Didn't Start: You haven't begun working on this goal yet."/>-->
+<!--                                </div>-->
                                 <t t-if="record.goal_status.raw_value == 'draft'">
                                     <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
                                         Draft
@@ -339,7 +342,8 @@
                                     icon="fa-paperclip"
                                     class="oe_stat_button"
                                     attrs="{'invisible': [('goal_status', '=', 'draft')]}"
-                                    t-att-style="'font-weight:bold'">
+                                    t-att-style="'font-weight:bold'"
+                                    help="Quickly access and manage all lessons learned attached to this specific goal.">
                                 <field name="lesson_count" widget="statinfo"/>Lessons
                             </button>
 
@@ -348,7 +352,8 @@
                                     icon="fa-tasks"
                                     class="oe_stat_button"
                                     type="object"
-                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}">
+                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}"
+                                    help="Tasks are the actionable steps you take to achieve your goal.">
                                 <field name="task_count" widget="statinfo"/>Tasks
                             </button>
 
@@ -361,8 +366,13 @@
                                 Finalize
                             </button>
                         </div>
-
                         <h2>
+<!--                            <div style="position: absolute; top: 10px; right: 15px;">-->
+<!--                                <field name="kanban_state" widget="state_selection" help="Indicate the current status of your goal.-->
+<!--In Progress: You are actively working on this goal.-->
+<!--Stopped: This goal is currently paused.-->
+<!--Didn't Start: You haven't begun working on this goal yet."/>-->
+<!--                            </div>-->
                             <field name="goal_name"
                                    attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                         </h2>
@@ -478,7 +488,8 @@
                                     type="object"
                                     class="btn btn-success w-25"
                                     icon="fa-check-square-o"
-                                    attrs="{'invisible': [('goal_status', '=', 'complete')]}"/>
+                                    attrs="{'invisible': [('goal_status', '=', 'complete')]}"
+                                    help="Once a goal is complete, it's finalized.  You can't add more tasks or modify anything on it, but you can record your lessons learned"/>
                         </div>
                     </sheet>
                 </form>

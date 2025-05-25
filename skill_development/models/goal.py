@@ -217,7 +217,9 @@ class GoalTask(models.Model):
     # create_date = fields.Datetime("Created On", readonly=True)
     # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
-    resource_url = fields.Char('Quick Access URL')
+    resource_url = fields.Char(string="Quick Access URL",
+                               help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task."
+                               )
     kanban_state = fields.Selection([
         ('normal', 'In Progress'),
         ('done', 'Ready'),

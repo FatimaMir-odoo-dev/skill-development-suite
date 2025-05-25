@@ -32,7 +32,7 @@
                         <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
-                                <field name="title"/>
+                                <field name="title" />
                             </h1>
 
                             <!-- Button Box with the Goal Button -->
@@ -41,7 +41,8 @@
                                     type="object"
                                     icon="fa-bullseye"
                                     class="oe_stat_button"
-                                    t-att-style="'font-weight: bold; font-size: 14px;'">
+                                    t-att-style="'font-weight: bold; font-size: 14px;'"
+                                    help="Transform your learning aspirations into actionable steps by creating a new goal. This helps you focus your efforts and measure your progress.">
                                 <field name="goal_count" widget="statinfo"/>
                             </button>
                         </div>
@@ -52,7 +53,7 @@
                                     <button name="popup_help_button"
                                             type="object"
                                             icon="fa-question"
-                                            help="Find helpful information, tips, and explanations about skill progress."
+                                            help="Find helpful information, tips, and explanations about skill progress and calculations."
                                             class="btn btn-info btn-sm"
                                             style="font-weight: bold; font-size: 14px;">
                                     </button>
@@ -109,7 +110,8 @@
                                             icon="fa-flag-checkered"
                                             class="btn btn-success btn-lg"
                                             style="font-weight: bold; font-size: 18px; padding: 10px 20px; float: right; border-radius: 8px;"
-                                            attrs="{'invisible': [('is_acquired', '=', True)]}">
+                                            attrs="{'invisible': [('is_acquired', '=', True)]}"
+                                            help="Acquired skills are considered complete.  You cannot add goals, tasks, or update progress for them.">
                                     </button>
                                 </div>
                             </page>

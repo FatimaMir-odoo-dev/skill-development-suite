@@ -29,9 +29,12 @@ class SkillPlan(models.Model):
     scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
 
-    progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True)
-    progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True)
-    progress_contribute = fields.Float('Creation & Contribution', compute="_compute_category_progress", store=True)
+    progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
+                                      help="Knowledge category is about increasing your understanding of the skill, with reading articles, watching videos, taking courses, and studying relevant materials.")
+    progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True,
+                                     help="The Practice category involves applying the skill through hands-on activities, such as exercises, personal projects, simulations, and practical application.")
+    progress_contribute = fields.Float('Creation & Contribution', compute="_compute_category_progress", store=True,
+                                       help="Creation & Contribution involves sharing and benefiting from your knowledge: teaching, mentoring, working for return and publishing projects.")
     overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True,
                                     digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
