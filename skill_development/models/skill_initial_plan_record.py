@@ -2,8 +2,8 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 from email.policy import default
 
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError, UserError
 import logging
 
 from sass import and_join
@@ -42,6 +42,7 @@ class SkillPlan(models.Model):
     is_acquired = fields.Boolean(string="Skill Acquired", stor=True)
 
     skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
+    active = fields.Boolean(default=True)
 
     @api.depends('is_acquired')
     def _compute_skill_status(self):
@@ -126,6 +127,35 @@ class SkillPlan(models.Model):
                         'default_overall_progress': self.overall_progress, },
         }
 
+    def action_archive_plan(self):
+        self.active = False
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Plan Archived'),
+                'message': _('The skill "%s" has been archived, view by filtering with (Active is No).' % self.skill_id.skill_name),
+                'type': 'warning',
+                'sticky': False,
+            }
+        }
+
+    def action_delete_plan(self):
+        skill = self.browse(self.id)
+        if not skill.exists():
+            raise UserError(_("The skill you're trying to delete does not exist."))
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Confirm Deletion'),
+            'res_model': 'skill_development.delete.confirm.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_plan_id': self.id,
+            },
+        }
+
     def skill_acquired_button(self):
 
         for rec in self:
@@ -191,8 +221,8 @@ class SkillPlan(models.Model):
     # For the Smart Goal wizard where a learner can select one of the
     # skills saved in this record to connect the goal to
 
-
-from odoo import models, fields, api
+#
+# from odoo import models, fields, api
 
 
 class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups

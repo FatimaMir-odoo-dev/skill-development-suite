@@ -24,6 +24,7 @@
         'views/skill_growth_record_views.xml',
         'views/goal_views.xml',
         'wizard/goal_lesson_bank_wizard_views.xml',
+        'wizard/delete_confirm_wizard_views.xml',
              ],
     # 'demo': ['demo/demo.xml'],
     'installable': True,

@@ -3,4 +3,4 @@
 
 from . import skill_initial_plan_wizard
 from . import goal_lesson_bank_wizard
-# from . import smart_goal_form_wizard
+from . import delete_confirm_wizard
