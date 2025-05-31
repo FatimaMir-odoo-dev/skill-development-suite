@@ -341,9 +341,6 @@ class LessonBank(models.Model):
         string="Tags"
     )
 
-
-
-
     @api.depends('lesson_worked')
     def _compute_lesson_short(self):
         for record in self:
@@ -352,8 +349,8 @@ class LessonBank(models.Model):
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
-        if self.goal_id and self.goal_id.learner_plan_record_ids:
-            self.learner_plan_record_ids = self.goal_id.learner_plan_record_ids
+        if self.goal_id and self.goal_id.learner_plan_ids:
+            self.learner_plan_ids = self.goal_id.learner_plan_ids
         else:
             self.learner_plan_ids = False
 
