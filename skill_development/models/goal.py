@@ -321,6 +321,7 @@ class LessonBank(models.Model):
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
     skill_id = fields.Many2one('skill_development.skill_record', string="Skill")
     goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
+    goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')
 
     lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)

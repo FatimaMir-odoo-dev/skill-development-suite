@@ -524,7 +524,8 @@
                             <header class="mb-3">
                                 <div class="fw-bold" style="font-size: 1.1em;">
                                     <span>Goal</span>
-                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"
+                                       attrs="{'invisible': [('goal_id', '=', False)]}"/>
                                     <field name="goal_id"
                                            attrs="{'readonly': [('id', '!=', False)]}"/>
                                     <!--                                    <field name="goal_id" attrs="{'readonly': [('id', '=', False)],'invisible': [('id', '!=', False)]}"/>-->
@@ -534,10 +535,12 @@
 
                             <!-- Skill and Priority -->
                             <group>
-                                <field name="skill_id" class="oe_inline" widget="badge"
-                                       attrs="{'readonly': [('id', '=', False)], 'invisible': [('id', '=', False)]}"/>
-                                <field name="skill_id" class="oe_inline"
-                                       attrs="{'readonly': [('id', '!=', False)], 'invisible': [('id', '!=', False)]}"/>
+                                <field name="goal_skill" readonly="1" style="font-weight: bold"
+                                       attrs="{'invisible': [('goal_id', '=', False)]}"/>
+
+                                <field name="skill_id" class="oe_inline" options="{'no_open': True}"
+                                       style="font-weight: bold"
+                                       attrs="{'invisible': [('goal_id', '!=', False)], 'readonly': [('id', '!=', False)]}"/>
                                 <field name="tag_ids" widget="many2many_tags" class="oe_inline"
                                        options="{'color_field': 'color'}"/>
                             </group>
