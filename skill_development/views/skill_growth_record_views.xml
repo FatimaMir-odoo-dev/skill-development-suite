@@ -144,7 +144,17 @@
                                        attrs="{'invisible':[('step', '=', 'page2')]}"/>
                             </group>
                         </group>
-                        <field name="tips" widget="html" readonly="1" nolable="1"/>
+                        <group>
+                            <group>
+                                <field name="tips" widget="html" readonly="1" nolable="1"/>
+                            </group>
+                            <group attrs="{'invisible':[('step', '=', 'page1')]}">
+                                <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
+                                <field name="title"/>
+                            </h1>
+                            </group>
+                        </group>
+
 
                         <footer>
                             <button name="go_to_page1" string="Back" type="object"

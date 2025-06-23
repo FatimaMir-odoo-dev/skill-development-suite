@@ -124,7 +124,8 @@ class SkillPlan(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'context': {'default_skill_plan_id': self.id,
-                        'default_overall_progress': self.overall_progress, },
+                        'default_overall_progress': self.overall_progress,
+                        'default_title': self.title, },
         }
 
     def action_archive_plan(self):
@@ -237,6 +238,13 @@ class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
     message = fields.Html(string='Help Message', readonly=True)
     tips = fields.Html(string='Tips', readonly=True)
     skill_plan_id = fields.Many2one('skill_development.initial_plan_record', string="Plan")
+    title = fields.Selection([
+        ('seeker', 'Seeker'),
+        ('learner', 'Learner'),
+        ('skilled', 'Skilled'),
+        ('proficient', 'Proficient'),
+        ('master', 'Master')
+    ], default='seeker', string='Title', store=True, readonly=True)
     overall_progress = fields.Float(store=True)
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
 
