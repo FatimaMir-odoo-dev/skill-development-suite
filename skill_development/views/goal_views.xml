@@ -656,11 +656,68 @@
             </field>
         </record>
 
-        <record id="goal_task_view_kanban" model="ir.ui.view">
+        <record id="goal_task_view_kanban_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
+                    <field name="is_acquired" invisible="1" readonly="1"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click oe_kanban_card"
+                                 style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
+
+                                <!-- Header Section -->
+                                <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                    <!-- Left: Priority -->
+                                    <field name="priority" widget="priority"/>
+
+                                    <!-- Right: Kanban State -->
+                                    <field name="kanban_state" widget="state_selection"/>
+                                </header>
+
+                                <!-- Title -->
+                                <div class="oe_kanban_title" style="margin-bottom: 8px;">
+                                    <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
+                                        <field name="name"/>
+                                    </h6>
+                                </div>
+
+                                <!-- Tags -->
+                                <div style="margin-bottom: 6px;">
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                </div>
+
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                    <!-- Left: Deadline -->
+                                    <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
+                                        <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
+                                           title="Deadline"/>
+                                        <field name="date_end" widget="remaining_days"/>
+                                    </div>
+
+                                    <!-- Right: Resource Count -->
+                                    <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
+                                        <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
+                                           title="Resources Involved"/>
+                                        <field name="resource_count" widget="stateinfo"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+
+            </field>
+        </record>
+
+        <record id="goal_task_view_kanban_locked" model="ir.ui.view">
+            <field name="name">My Tasks locked</field>
+            <field name="model">skill_development.goal_task</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
+                 records_draggable="False" group_create="False">
                     <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -789,6 +846,19 @@
                     </sheet>
                 </form>
             </field>
+        </record>
+        <record id="action_goal_task_locked" model="ir.actions.act_window">
+            <field name="name">Tasks (Complete Goal)</field>
+            <field name="res_model">skill_development.goal_task</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_id" ref="skill_development.goal_task_view_kanban_locked"/>
+        </record>
+
+        <record id="action_goal_task_unlocked" model="ir.actions.act_window">
+            <field name="name">Tasks (Incomplete Goal)</field>
+            <field name="res_model">skill_development.goal_task</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_id" ref="skill_development.goal_task_view_kanban_unlocked"/>
         </record>
     </data>
 </odoo>

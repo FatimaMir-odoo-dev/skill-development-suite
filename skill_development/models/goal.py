@@ -19,7 +19,7 @@ class Goal(models.Model):
     # Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan", ondelete='cascade')
     # for goal, task , result, resources lock
-    is_acquired = fields.Boolean(string="Skill Acquired")
+    is_acquired = fields.Boolean(string="Skill Acquired", related="learner_plan_ids.is_acquired")
     # why do we need to connect with the original skill??
     skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
     #goal info
@@ -125,16 +125,36 @@ class Goal(models.Model):
         }
 
     def action_view_tasks(self):
-        _logger.info("Record ID %s: is_complete = %s", self.id, self.is_complete)
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Tasks',
-            'res_model': 'skill_development.goal_task',
-            'view_mode': 'kanban,form',
-            'domain': [('goal_id', '=', self.id)],
-            'context': {'default_goal_id': self.id,
-                        },
+        self.ensure_one()
+
+        _logger.info("Record ID %s: is_complete = %s, is_acquired = %s", self.id, self.is_complete, self.is_acquired)
+
+        if self.is_complete or self.is_acquired:
+            action_ref = 'skill_development.action_goal_task_locked'
+        else:
+            action_ref = 'skill_development.action_goal_task_unlocked'
+
+        action = self.env.ref(action_ref).sudo().read()[0]
+
+        # Inject your domain and context dynamically
+        action['domain'] = [('goal_id', '=', self.id)]
+        action['context'] = {
+            'default_goal_id': self.id,
         }
+
+        return action
+
+    # def action_view_tasks(self):
+    #     _logger.info("Record ID %s: is_complete = %s", self.id, self.is_complete)
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'Tasks',
+    #         'res_model': 'skill_development.goal_task',
+    #         'view_mode': 'kanban,form',
+    #         'domain': [('goal_id', '=', self.id)],
+    #         'context': {'default_goal_id': self.id,
+    #                     },
+    #     }
 
     def action_view_lesson(self):
         return {

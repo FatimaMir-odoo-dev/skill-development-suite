@@ -112,7 +112,6 @@ class SkillPlan(models.Model):
             'domain': [('skill_id', '=', self.skill_id.id)],
             'context': {'default_skill_id': self.skill_id.id,
                         'default_learner_plan_ids': self.id,
-                        'default_is_acquired': self.is_acquired,
                         'create': not self.is_acquired, },
         }
 
