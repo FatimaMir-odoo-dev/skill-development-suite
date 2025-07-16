@@ -185,142 +185,6 @@
         <!--            </field>-->
         <!--        </record>-->
 
-        <record id="goal_project_view_form_popup" model="ir.ui.view">
-            <field name="name">My Goals</field>
-            <field name="model">skill_development.goal_project</field>
-            <field name="arch" type="xml">
-                <form>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <!-- Skill Selection -->
-                        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
-                            <label for="skill_id"
-                                   string="The skill you will develop with this goal."
-                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
-                            <field name="skill_id"
-                                   style="margin-bottom: 10px; color: #444444; font-size: 20px"
-                                   options="{'no_create': True, 'no_open': True}"/>
-                            <label for="category"
-                                   string="Which category?"
-                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
-                            <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 15px; margin-top: 10px;">
-                                <field name="category"
-                                       widget="radio"
-                                       options="{'horizontal' : 'True'}"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- SMART Goals Section -->
-                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
-                            <div style="display: flex; flex-direction: column; gap: 15px;">
-
-                                <!-- Each SMART field -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Specific:
-                                        </span>
-                                        <span style="color: #888888;">[What exactly do you want to
-                                            achieve?]
-                                        </span>
-                                    </div>
-                                    <field name="specific_goal"
-                                           placeholder="e.g. learning to program with python"
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
-
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Measurable:
-                                        </span>
-                                        <span style="color: #888888;">[How do you know your progress is
-                                            good?]
-                                        </span>
-                                    </div>
-                                    <field name="measurable_goal"
-                                           placeholder="e.g. Add two features per week."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Achievable -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Achievable:
-                                        </span>
-                                        <span style="color: #888888;">[What makes you sure you can do
-                                            it?]
-                                        </span>
-                                    </div>
-                                    <field name="achievable_goal"
-                                           placeholder="e.g. I have a study group."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Relevant -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Relevant:
-                                        </span>
-                                        <span style="color: #888888;">[Why is it important to you?]
-                                        </span>
-                                    </div>
-                                    <field name="relevant_goal"
-                                           placeholder="e.g. Important for my portfolio."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Time-Bound -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Time-Bound:
-                                        </span>
-                                        <span style="color: #888888;">[What is your timeline?]</span>
-                                    </div>
-                                    <field name="timed_goal" placeholder="e.g. Finish by October."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <h1 style="font-size: 18px; font-weight: 600; text-align: center;">Complete Goal
-                            Statement
-                        </h1>
-                        <field name="goal_name"
-                               placeholder="e.g. Learn Python and build an app."
-                               style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; margin-bottom: 25px;"
-                               required="True"
-                        />
-                    </div>
-                    <footer class="d-flex justify-content-between">
-                        <button name="action_create_goal_draft" string="Create Draft" type="object"
-                                class="btn btn-light"/>
-                        <button name="action_finalize_goal" string="Finalize Goal" type="object"
-                                class="btn btn-primary"/>
-                        <button string="Cancel"
-                                class="btn-secondary"
-                                special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <record id="open_create_goal_form_view" model="ir.actions.act_window">
-            <field name="name">Create a Project</field>
-            <field name="res_model">skill_development.goal_project</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="goal_project_view_form_popup"/>
-            <field name="target">new</field>
-            <field name="context">{"default_allow_billable": 1}</field>
-        </record>
-
-
         <record id="goal_project_view_form" model="ir.ui.view">
             <field name="name">My Goals</field>
             <field name="model">skill_development.goal_project</field>
@@ -495,6 +359,150 @@
                 </form>
             </field>
         </record>
+
+        <record id="open_goal_form_view" model="ir.actions.act_window">
+            <field name="name">Goal</field>
+            <field name="res_model">skill_development.goal_project</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="goal_project_view_form"/>
+            <field name="context">{}</field>
+        </record>
+
+        <record id="goal_project_view_form_popup" model="ir.ui.view">
+            <field name="name">My Goals</field>
+            <field name="model">skill_development.goal_project</field>
+            <field name="arch" type="xml">
+                <form>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- Skill Selection -->
+                        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
+                            <label for="skill_id"
+                                   string="The skill you will develop with this goal."
+                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                            <field name="skill_id"
+                                   style="margin-bottom: 10px; color: #444444; font-size: 20px"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                            <label for="category"
+                                   string="Which category?"
+                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                            <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 15px; margin-top: 10px;">
+                                <field name="category"
+                                       widget="radio"
+                                       options="{'horizontal' : 'True'}"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- SMART Goals Section -->
+                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                            <div style="display: flex; flex-direction: column; gap: 15px;">
+
+                                <!-- Each SMART field -->
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 500;">
+                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                            Specific:
+                                        </span>
+                                        <span style="color: #888888;">[What exactly do you want to
+                                            achieve?]
+                                        </span>
+                                    </div>
+                                    <field name="specific_goal"
+                                           placeholder="e.g. learning to program with python"
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                </div>
+
+                                <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
+
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 500;">
+                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                            Measurable:
+                                        </span>
+                                        <span style="color: #888888;">[How do you know your progress is
+                                            good?]
+                                        </span>
+                                    </div>
+                                    <field name="measurable_goal"
+                                           placeholder="e.g. Add two features per week."
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                </div>
+
+                                <!-- Achievable -->
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 500;">
+                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                            Achievable:
+                                        </span>
+                                        <span style="color: #888888;">[What makes you sure you can do
+                                            it?]
+                                        </span>
+                                    </div>
+                                    <field name="achievable_goal"
+                                           placeholder="e.g. I have a study group."
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                </div>
+
+                                <!-- Relevant -->
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 500;">
+                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                            Relevant:
+                                        </span>
+                                        <span style="color: #888888;">[Why is it important to you?]
+                                        </span>
+                                    </div>
+                                    <field name="relevant_goal"
+                                           placeholder="e.g. Important for my portfolio."
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                </div>
+
+                                <!-- Time-Bound -->
+                                <div style="flex: 1;">
+                                    <div style="font-size: 13px; font-weight: 500;">
+                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                            Time-Bound:
+                                        </span>
+                                        <span style="color: #888888;">[What is your timeline?]</span>
+                                    </div>
+                                    <field name="timed_goal" placeholder="e.g. Finish by October."
+                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <h1 style="font-size: 18px; font-weight: 600; text-align: center;">Complete Goal
+                            Statement
+                        </h1>
+                        <field name="goal_name"
+                               placeholder="e.g. Learn Python and build an app."
+                               style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; margin-bottom: 25px;"
+                               required="True"
+                        />
+                    </div>
+                    <footer class="d-flex justify-content-between">
+                        <button name="action_create_goal_draft" string="Create Draft" type="object"
+                                class="btn btn-light"/>
+                        <button name="action_finalize_goal" string="Finalize Goal" type="object"
+                                class="btn btn-primary"/>
+                        <button string="Cancel"
+                                class="btn-secondary"
+                                special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="open_create_goal_form_view" model="ir.actions.act_window">
+            <field name="name">Create a Project</field>
+            <field name="res_model">skill_development.goal_project</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="goal_project_view_form_popup"/>
+            <field name="target">new</field>
+            <field name="context">{"default_allow_billable": 1}</field>
+        </record>
+
 
         <record id="goal_lesson_bank_view_tree" model="ir.ui.view">
             <field name="name">Lesson Bank</field>
@@ -903,25 +911,25 @@
                 </form>
             </field>
         </record>
-<!--        <record id="action_goal_task_lock" model="ir.actions.act_window">-->
-<!--            <field name="name">Tasks (Complete Goal)</field>-->
-<!--            <field name="res_model">skill_development.goal_task</field>-->
-<!--            <field name="view_mode">kanban,form</field>-->
-<!--            <field name="view_ids" eval="[-->
-<!--        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_lock')}),-->
-<!--        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_lock')})-->
-<!--    ]"/>-->
-<!--        </record>-->
+        <record id="action_goal_task_lock" model="ir.actions.act_window">
+            <field name="name">Tasks (Complete Goal)</field>
+            <field name="res_model">skill_development.goal_task</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_ids" eval="[
+        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_locked')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_locked')})
+    ]"/>
+        </record>
 
 
-<!--        <record id="action_goal_task_unlock" model="ir.actions.act_window">-->
-<!--            <field name="name">Tasks (Incomplete Goal)</field>-->
-<!--            <field name="res_model">skill_development.goal_task</field>-->
-<!--            <field name="view_mode">kanban,form</field>-->
-<!--            <field name="view_ids" eval="[-->
-<!--        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_unlocked')}),-->
-<!--        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_unlocked')})-->
-<!--    ]"/>-->
-<!--        </record>-->
+        <record id="action_goal_task_unlock" model="ir.actions.act_window">
+            <field name="name">Tasks (Incomplete Goal)</field>
+            <field name="res_model">skill_development.goal_task</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="view_ids" eval="[
+        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_unlocked')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_unlocked')})
+    ]"/>
+        </record>
     </data>
 </odoo>

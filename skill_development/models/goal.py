@@ -127,20 +127,20 @@ class Goal(models.Model):
     def action_view_tasks(self):
         self.ensure_one()
 
-        # if self.is_complete or self.is_acquired:
-        #     action_ref = 'skill_development.action_goal_task_lock'
-        # else:
-        #     action_ref = 'skill_development.action_goal_task_unlock'
-        #
-        # action = self.env.ref(action_ref).sudo().read()[0]
-        #
-        # # Inject your domain and context dynamically
-        # action['domain'] = [('goal_id', '=', self.id)]
-        # action['context'] = {
-        #     'default_goal_id': self.id,
-        # }
-        #
-        # return action
+        if self.is_complete or self.is_acquired:
+            action_ref = 'skill_development.action_goal_task_lock'
+        else:
+            action_ref = 'skill_development.action_goal_task_unlock'
+
+        action = self.env.ref(action_ref).sudo().read()[0]
+
+        # Inject your domain and context dynamically
+        action['domain'] = [('goal_id', '=', self.id)]
+        action['context'] = {
+            'default_goal_id': self.id,
+        }
+
+        return action
 
     # def action_view_tasks(self):
     #     _logger.info("Record ID %s: is_complete = %s", self.id, self.is_complete)
