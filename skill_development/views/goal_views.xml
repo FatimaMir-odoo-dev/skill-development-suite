@@ -661,7 +661,6 @@
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
-                    <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card"
@@ -717,8 +716,7 @@
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
-                 records_draggable="False" group_create="False">
-                    <field name="is_acquired" invisible="1" readonly="1"/>
+                        records_draggable="False" group_create="False">
                     <templates>
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click oe_kanban_card"
@@ -769,19 +767,20 @@
             </field>
         </record>
 
-        <record id="goal_task_view_form" model="ir.ui.view">
+        <record id="goal_task_view_form_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.goal_task</field>
             <field name="arch" type="xml">
                 <form>
-                    <field name="is_acquired" invisible="1" readonly="1"/>
                     <sheet>
                         <div class="oe_title pe-0">
                             <h1 class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex w-100">
-                                    <field name="priority" widget="priority" class="me-3"/>
+                                    <field name="priority" widget="priority" class="me-3"
+                                          />
                                     <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                           placeholder="Task Title..."/>
+                                           placeholder="Task Title..."
+                                           />
                                 </div>
                                 <div class="d-flex flex-column align-items-start ms-0">
                                     <field name="kanban_state" widget="state_selection" class="ms-0"/>
@@ -798,8 +797,65 @@
                         </group>
                         <notebook>
                             <page string="Additional Resources">
-                                <field name="is_acquired" readonly="1"/>
-                                <field name="resource_ids" attrs="{'readonly':[('is_acquired', '=', True)]}">
+                                <field name="resource_ids"
+                                       >
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="resource_type" widget="badge"
+                                               decoration-success="resource_type == 'image'"
+                                               decoration-primary="resource_type == 'tool'"
+                                               decoration-info="resource_type == 'link'"
+                                               decoration-danger="resource_type == 'video'"
+                                               decoration-warning="resource_type == 'document'"/>
+                                        <field name="description"/>
+                                        <field name="url" widget="url" string="External URLs"/>
+                                        <!--                                    <field name="person_id"/>-->
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Task Notes">
+                                <field name="description" widget="html"
+                                       placeholder="Write notes to help you with the task (tracking, important details...)"/>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="goal_task_view_form_locked" model="ir.ui.view">
+            <field name="name">My Tasks(Locked)</field>
+            <field name="model">skill_development.goal_task</field>
+            <field name="arch" type="xml">
+                <form edit="0">
+                    <sheet>
+                        <div class="oe_title pe-0">
+                            <h1 class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex w-100">
+                                    <field name="priority" widget="priority" class="me-3"
+                                           />
+                                    <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                           placeholder="Task Title..."
+                                           />
+                                </div>
+                                <div class="d-flex flex-column align-items-start ms-0">
+                                    <field name="kanban_state" widget="state_selection" class="ms-0"/>
+                                </div>
+                            </h1>
+                        </div>
+                        <group style="width: 500px;">
+                            <field name="goal_id" readonly="1"
+                                   style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="date_end"/>
+                            <field name="resource_url" widget="url"/>
+                            <!--                        <button name="action_open_resource_form" type="object" string="Add Resource"/>-->
+                        </group>
+                        <notebook>
+                            <page string="Additional Resources">
+                                <field name="resource_ids"
+                                       >
                                     <tree>
                                         <field name="name"/>
                                         <field name="resource_type" widget="badge"
@@ -847,18 +903,25 @@
                 </form>
             </field>
         </record>
-        <record id="action_goal_task_locked" model="ir.actions.act_window">
-            <field name="name">Tasks (Complete Goal)</field>
-            <field name="res_model">skill_development.goal_task</field>
-            <field name="view_mode">kanban,form</field>
-            <field name="view_id" ref="skill_development.goal_task_view_kanban_locked"/>
-        </record>
+<!--        <record id="action_goal_task_lock" model="ir.actions.act_window">-->
+<!--            <field name="name">Tasks (Complete Goal)</field>-->
+<!--            <field name="res_model">skill_development.goal_task</field>-->
+<!--            <field name="view_mode">kanban,form</field>-->
+<!--            <field name="view_ids" eval="[-->
+<!--        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_lock')}),-->
+<!--        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_lock')})-->
+<!--    ]"/>-->
+<!--        </record>-->
 
-        <record id="action_goal_task_unlocked" model="ir.actions.act_window">
-            <field name="name">Tasks (Incomplete Goal)</field>
-            <field name="res_model">skill_development.goal_task</field>
-            <field name="view_mode">kanban,form</field>
-            <field name="view_id" ref="skill_development.goal_task_view_kanban_unlocked"/>
-        </record>
+
+<!--        <record id="action_goal_task_unlock" model="ir.actions.act_window">-->
+<!--            <field name="name">Tasks (Incomplete Goal)</field>-->
+<!--            <field name="res_model">skill_development.goal_task</field>-->
+<!--            <field name="view_mode">kanban,form</field>-->
+<!--            <field name="view_ids" eval="[-->
+<!--        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_unlocked')}),-->
+<!--        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_unlocked')})-->
+<!--    ]"/>-->
+<!--        </record>-->
     </data>
 </odoo>

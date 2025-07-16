@@ -127,22 +127,20 @@ class Goal(models.Model):
     def action_view_tasks(self):
         self.ensure_one()
 
-        _logger.info("Record ID %s: is_complete = %s, is_acquired = %s", self.id, self.is_complete, self.is_acquired)
-
-        if self.is_complete or self.is_acquired:
-            action_ref = 'skill_development.action_goal_task_locked'
-        else:
-            action_ref = 'skill_development.action_goal_task_unlocked'
-
-        action = self.env.ref(action_ref).sudo().read()[0]
-
-        # Inject your domain and context dynamically
-        action['domain'] = [('goal_id', '=', self.id)]
-        action['context'] = {
-            'default_goal_id': self.id,
-        }
-
-        return action
+        # if self.is_complete or self.is_acquired:
+        #     action_ref = 'skill_development.action_goal_task_lock'
+        # else:
+        #     action_ref = 'skill_development.action_goal_task_unlock'
+        #
+        # action = self.env.ref(action_ref).sudo().read()[0]
+        #
+        # # Inject your domain and context dynamically
+        # action['domain'] = [('goal_id', '=', self.id)]
+        # action['context'] = {
+        #     'default_goal_id': self.id,
+        # }
+        #
+        # return action
 
     # def action_view_tasks(self):
     #     _logger.info("Record ID %s: is_complete = %s", self.id, self.is_complete)
@@ -223,8 +221,7 @@ class GoalTask(models.Model):
     # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal_project', string='Goal', ondelete='cascade')
 
-    # is_complete = fields.Boolean(string="Goal Complete", related='goal_id.is_complete')
-    is_acquired = fields.Boolean(string="Skill Acquired")
+    is_goal_complete = fields.Boolean(string="Skill Acquired", related = "goal_id.is_complete")
     stage_id = fields.Many2one(
         'skill_development.goal_task_stage',
         string='Stage',

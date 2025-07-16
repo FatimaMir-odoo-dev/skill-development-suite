@@ -4,8 +4,8 @@
 
 <odoo>
     <data>
-        <menuitem id="menu_skill_development"
-                  name="Skills"/>
+<!--        <menuitem id="menu_skill_development"-->
+<!--                  name="Skills"/>-->
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
 
         <record id="skill_development.skill_record_action" model="ir.actions.act_window">
@@ -19,7 +19,8 @@
                   name="Skill Catalog"
                   action="skill_development.skill_record_action"
                   sequence="10"
-                  web_icon="skill_development,static/description/icon1.png"/>
+                  web_icon="skill_development,static/description/icon1.png"
+                  groups="skill_development_group_learner"/>
 
         <record id="skill_development.initial_plan_record_action" model="ir.actions.act_window">
             <field name="name">My Skill Growth</field>
@@ -32,7 +33,7 @@
         <menuitem id="menu_skill_growth_record"
                   name="Skill Growth"
                   action="skill_development.initial_plan_record_action"
-                  sequence="10"/>
+                  sequence="20"/>
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
 
@@ -70,6 +71,7 @@
                   parent="menu_skill_growth_record"
                   action="action_goal_project"
                   sequence="6"/>
+
 
         <record id="skill_development.goal_lesson_bank_action" model="ir.actions.act_window">
             <field name="name">Lesson Bank</field>
