@@ -916,6 +916,7 @@
             <field name="res_model">skill_development.goal_task</field>
             <field name="view_mode">kanban,form</field>
             <field name="view_ids" eval="[
+            (5, 0, 0),
         (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_locked')}),
         (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_locked')})
     ]"/>
@@ -927,6 +928,7 @@
             <field name="res_model">skill_development.goal_task</field>
             <field name="view_mode">kanban,form</field>
             <field name="view_ids" eval="[
+            (5, 0, 0),
         (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_unlocked')}),
         (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_unlocked')})
     ]"/>

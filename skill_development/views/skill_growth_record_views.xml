@@ -31,10 +31,42 @@
                 <form create="false">
                     <sheet>
                         <field name="is_acquired" invisible="1"/>
+                        <div attrs="{'invisible': [('is_acquired', '!=', True)]}"
+     style="
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 500px;
+        height: 500px;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 10;">
+
+    <div style="
+        position: absolute;
+        top: 90px;
+        right: -80px;
+        width: 400px;
+        background: linear-gradient(to right,
+            rgba(39, 174, 96, 0.1) 0%,
+            rgba(39, 174, 96, 1) 35%,
+            rgba(39, 174, 96, 1) 65%,
+            rgba(39, 174, 96, 0.1) 100%);
+        color: white;
+        text-align: center;
+        transform: rotate(45deg);
+        font-weight: bold;
+        font-size: 16px;
+        padding: 10px 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);">
+        Skill Acquired
+    </div>
+</div>
+
                         <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
-                                <field name="title" />
+                                <field name="title"/>
                             </h1>
 
                             <!-- Button Box with the Goal Button -->
@@ -150,8 +182,8 @@
                             </group>
                             <group attrs="{'invisible':[('step', '=', 'page1')]}">
                                 <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
-                                <field name="title"/>
-                            </h1>
+                                    <field name="title"/>
+                                </h1>
                             </group>
                         </group>
 
