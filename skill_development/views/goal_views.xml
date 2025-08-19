@@ -10,7 +10,7 @@
                     <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click"
+                            <div class="oe_kanban_global_click d-flex flex-column h-100"
                                  style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
                                 <!--                                <div style="position: absolute; top: 5px; right: 10px;">-->
                                 <!--                                    <field name="kanban_state" widget="state_selection" help="Indicate the current status of your goal.-->
@@ -40,7 +40,7 @@
                                 </header>
 
                                 <!-- Skill Info -->
-                                <div style="margin-top: 0; color: #555; display: flex; flex-direction: column; gap: 4px;">
+                                <div style="margin-top: 12px; color: #555; display: flex; flex-direction: column; gap: 4px;">
                                     <!-- Skill -->
                                     <div>
                                         <span style="color: #ac00e6; font-size: 13px; font-weight: bold">
@@ -81,7 +81,7 @@
 
                                 <!-- Tasks Button -->
                                 <a name="action_view_tasks" type="object"
-                                   style="text-decoration: none;">
+                                   style="text-decoration: none;" class="mt-auto">
                                     <div class="o_kanban_record_bottom"
                                          style="margin-top: 20px; padding: 10px; background-color: #F5F5F5; border-radius: 4px; text-align: right;"
                                          attrs="{'invisible':[('goal_status', '=', 'draft')]}">
