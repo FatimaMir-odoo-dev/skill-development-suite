@@ -23,6 +23,7 @@ class SkillPlan(models.Model):
     skill_id = fields.Many2one('skill_development.skill_record', 'Skill', readonly=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
+    motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short", sanitize_attributes=False)
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
 
@@ -43,6 +44,12 @@ class SkillPlan(models.Model):
 
     skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
     active = fields.Boolean(default=True)
+
+    @api.depends('motivation')
+    def _compute_motivation_short(self):
+        for record in self:
+            record.motivation_short = (record.motivation[:120] + '...') if record.motivation and len(
+                record.motivation) > 50 else record.motivation
 
     @api.depends('is_acquired')
     def _compute_skill_status(self):

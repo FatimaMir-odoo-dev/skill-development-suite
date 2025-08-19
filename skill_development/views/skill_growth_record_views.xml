@@ -14,7 +14,7 @@
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
                     <field name="title" widget="badge"/>
-                    <field name="motivation"/>
+                    <field name="motivation_short"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
                     <field name="skill_status" widget="badge" decoration-success="is_acquired"/>
