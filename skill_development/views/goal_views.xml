@@ -19,15 +19,23 @@
                                 <!--Didn't Start: You haven't begun working on this goal yet."/>-->
                                 <!--                                </div>-->
                                 <t t-if="record.goal_status.raw_value == 'draft'">
-                                    <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
-                                        Draft
-                                    </div>
-                                </t>
-                                <t t-if="record.goal_status.raw_value == 'complete'">
-                                    <div style="position: absolute; top: 0; right: 0; background: #00cc00; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
-                                        Done
-                                    </div>
-                                </t>
+    <div style="position: absolute; top: 0; right: 0;
+                background: #ffb31a; color: white; padding: 2px 8px;
+                font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
+                box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
+        Draft
+    </div>
+</t>
+
+<t t-if="record.goal_status.raw_value == 'complete'">
+    <div style="position: absolute; top: 0; right: 0;
+                background: #00cc00; color: white; padding: 2px 8px;
+                font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
+                box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
+        Done
+    </div>
+</t>
+
 
                                 <!-- Title -->
                                 <header>
@@ -352,7 +360,7 @@
                                     type="object"
                                     class="btn btn-success w-25"
                                     icon="fa-check-square-o"
-                                    attrs="{'invisible': [('goal_status', '=', 'complete')]}"
+                                    attrs="{'invisible': ['|', ('goal_status', '=', 'complete'), ('goal_status', '=', 'draft')]}"
                                     help="Once a goal is complete, it's finalized.  You can't add more tasks or modify anything on it, but you can record your lessons learned"/>
                         </div>
                     </sheet>
