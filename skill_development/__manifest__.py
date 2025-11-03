@@ -18,6 +18,7 @@
     'data': [
         'security/skill_development_groups.xml',
         'security/ir.model.access.csv',
+        'security/security_groups.xml',
         'views/skill_record_views.xml',
         'wizard/skill_initial_plan_wizard_views.xml',
         'views/skill_growth_record_views.xml',

@@ -128,8 +128,8 @@ class SkillRecord(models.Model):
     def action_open_initial_plan_wizard(self, context=None):
 
         # get the Learner ID to pass it tp the wizard form in context
-        learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
-        learner_id = learner.id if learner else False
+        # learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
+        # learner_id = learner.id if learner else False
 
         return {
             'type': 'ir.actions.act_window',
@@ -139,7 +139,7 @@ class SkillRecord(models.Model):
             'name': 'My Skill Plan',
             'target': 'new',
             'context': {
-                'default_learner_id': learner_id,  # Pass the learner ID to the wizard form
+                'default_learner_id': self.env.uid,  # Pass the learner ID to the wizard form
                 'default_skill_id': self.id,},  # Pass the skill name to the wizard form
         }
 

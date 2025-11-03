@@ -109,7 +109,7 @@ class SkillPlan(models.Model):
                 [('skill_id', '=', record.skill_id.id)])
 
     def goals_button(self):
-        _logger.info("Record ID %s: is_acquired = %s", self.id, self.is_acquired)
+        _logger.info("plan_owner_id %s: current user id = %s", self.plan_owner_id, self._uid)
         return {
             'type': 'ir.actions.act_window',
             'name': 'My Goals',
@@ -423,10 +423,12 @@ class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
 class LearnerProfile(models.Model):
     _inherit = "res.users"
 
+
+    plan_skill_ids = fields.One2many('skill_development.initial_plan_record', 'plan_owner_id', string='Skill Plans')
+
     # # Connect the learner to his volunteering record
     #     volunteer_record_id = fields.Many2one('volunteer_request.record', string="Volunteering Record ID")
     # Connect the learner to his skill plans record (used to save the data in Learner Profile)
-    plan_skill_ids = fields.One2many('skill_development.initial_plan_record', 'plan_owner_id', string='Skill Plans')
 
 # Here the data from skill_plan_record are displayed in the Learner Profile
 # record_skill_name = fields.Char(related="plan_skill_ids.skill_name", string="Skill")
