@@ -17,7 +17,7 @@ class SkillPlan(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
-    goal_ids = fields.One2many('skill_development.goal_project', 'learner_plan_ids', string='Goal')
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_ids', string='Goal')
 
     sequence = fields.Integer(string="Sequence", default=10)
     skill_id = fields.Many2one('skill_development.skill_record', 'Skill', readonly=True)
@@ -105,7 +105,7 @@ class SkillPlan(models.Model):
 
     def _compute_goal_count(self):
         for record in self:
-            record.goal_count = self.env['skill_development.goal_project'].search_count(
+            record.goal_count = self.env['skill_development.goal'].search_count(
                 [('skill_id', '=', record.skill_id.id)])
 
     def goals_button(self):
@@ -113,7 +113,7 @@ class SkillPlan(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'My Goals',
-            'res_model': 'skill_development.goal_project',
+            'res_model': 'skill_development.goal',
             'view_mode': 'kanban,form',
             'target': 'self',
             'domain': [('skill_id', '=', self.skill_id.id)],

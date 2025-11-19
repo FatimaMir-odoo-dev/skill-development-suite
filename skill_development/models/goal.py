@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Goal(models.Model):
-    _name = "skill_development.goal_project"
+    _name = "skill_development.goal"
     _description = 'Skill'
 
     # Connects to the learner profile for security and filter? (why do we need it?)
@@ -210,7 +210,7 @@ class GoalStage(models.Model):
     legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
 
     # task_id
-    goal_id = fields.Many2one('skill_development.goal_project')
+    goal_id = fields.Many2one('skill_development.goal')
 
 class GoalTask(models.Model):
     _name = "skill_development.goal_task"
@@ -219,7 +219,7 @@ class GoalTask(models.Model):
     name = fields.Char('Task')
     # learner_id
     # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
-    goal_id = fields.Many2one('skill_development.goal_project', string='Goal', ondelete='cascade')
+    goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
 
     is_goal_complete = fields.Boolean(string="Skill Acquired", related = "goal_id.is_complete")
     stage_id = fields.Many2one(
@@ -265,7 +265,7 @@ class GoalTask(models.Model):
         _logger.info("goal_id=%s", goal_id)
 
         if goal_id:
-            goal = self.env['skill_development.goal_project'].browse(goal_id)
+            goal = self.env['skill_development.goal'].browse(goal_id)
             _logger.info("goal found: %s, is_complete=%s", goal, goal.is_complete)
 
             if goal and goal.is_complete:
@@ -334,7 +334,7 @@ class GoalResult(models.Model):
     _description = 'Goal Results'
     _auto = True
 
-    goal_id = fields.Many2one('skill_development.goal_project', 'Goal')
+    goal_id = fields.Many2one('skill_development.goal', 'Goal')
     result = fields.Text(string="Expected Results")
     is_done = fields.Boolean("Achieved")
     is_not_done = fields.Boolean("Not Achieved", compute='_compute_is_not_done', inverse='_inverse_is_not_done')
@@ -355,7 +355,7 @@ class LessonBank(models.Model):
 
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
     skill_id = fields.Many2one('skill_development.skill_record', string="Skill")
-    goal_id = fields.Many2one('skill_development.goal_project', 'Goal', readonly=True)
+    goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')
 
@@ -409,7 +409,7 @@ class GoalTags(models.Model):
     name = fields.Char('Name', required=True, unique=True)  # Unique name field
     color = fields.Integer(string='Color', default=_get_default_color, help="Color for the tag")
 
-    goal_ids = fields.Many2many('skill_development.goal_project', 'goal_project_tags_rel', string='Projects')
+    goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
     tag_ids = fields.Many2many(
         'skill_development.goal_lesson_bank',
