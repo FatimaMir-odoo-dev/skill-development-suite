@@ -672,9 +672,9 @@
             </field>
         </record>
 
-        <record id="goal_task_view_kanban_unlocked" model="ir.ui.view">
+        <record id="task_view_kanban_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
-            <field name="model">skill_development.goal_task</field>
+            <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
                     <templates>
@@ -727,9 +727,9 @@
             </field>
         </record>
 
-        <record id="goal_task_view_kanban_locked" model="ir.ui.view">
+        <record id="task_view_kanban_locked" model="ir.ui.view">
             <field name="name">My Tasks locked</field>
-            <field name="model">skill_development.goal_task</field>
+            <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
                         records_draggable="False" group_create="False">
@@ -783,9 +783,9 @@
             </field>
         </record>
 
-        <record id="goal_task_view_form_unlocked" model="ir.ui.view">
+        <record id="task_view_form_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
-            <field name="model">skill_development.goal_task</field>
+            <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <form>
                     <sheet>
@@ -840,9 +840,9 @@
             </field>
         </record>
 
-        <record id="goal_task_view_form_locked" model="ir.ui.view">
+        <record id="task_view_form_locked" model="ir.ui.view">
             <field name="name">My Tasks(Locked)</field>
-            <field name="model">skill_development.goal_task</field>
+            <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <form edit="0">
                     <sheet>
@@ -919,26 +919,26 @@
                 </form>
             </field>
         </record>
-        <record id="action_goal_task_lock" model="ir.actions.act_window">
+        <record id="action_task_lock" model="ir.actions.act_window">
             <field name="name">Tasks (Complete Goal)</field>
-            <field name="res_model">skill_development.goal_task</field>
+            <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
             <field name="view_ids" eval="[
             (5, 0, 0),
-        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_locked')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_locked')})
+        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_locked')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_locked')})
     ]"/>
         </record>
 
 
-        <record id="action_goal_task_unlock" model="ir.actions.act_window">
+        <record id="action_task_unlock" model="ir.actions.act_window">
             <field name="name">Tasks (Incomplete Goal)</field>
-            <field name="res_model">skill_development.goal_task</field>
+            <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
             <field name="view_ids" eval="[
             (5, 0, 0),
-        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.goal_task_view_kanban_unlocked')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.goal_task_view_form_unlocked')})
+        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_unlocked')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_unlocked')})
     ]"/>
         </record>
     </data>

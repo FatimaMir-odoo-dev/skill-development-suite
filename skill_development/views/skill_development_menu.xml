@@ -45,7 +45,7 @@
         <!--        </record>-->
         <record id="action_priority_task" model="ir.actions.act_window">
             <field name="name">Priority Tasks</field>
-            <field name="res_model">skill_development.goal_task</field>
+            <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
             <field name="domain">[('priority', '=', 1)]</field>
             <field name="context">{'group_by': 'goal_id',

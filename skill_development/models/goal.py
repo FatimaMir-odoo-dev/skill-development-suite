@@ -46,7 +46,7 @@ class Goal(models.Model):
         string='Status', default='normal')
 
     result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
-    task_ids = fields.One2many('skill_development.goal_task', 'goal_id', string='Tasks')
+    task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
     tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
     lesson_id = fields.One2many('skill_development.goal_lesson_bank', 'goal_id')
 
@@ -128,9 +128,9 @@ class Goal(models.Model):
         self.ensure_one()
 
         if self.is_complete or self.is_acquired:
-            action_ref = 'skill_development.action_goal_task_lock'
+            action_ref = 'skill_development.action_task_lock'
         else:
-            action_ref = 'skill_development.action_goal_task_unlock'
+            action_ref = 'skill_development.action_task_unlock'
 
         action = self.env.ref(action_ref).sudo().read()[0]
 
@@ -166,7 +166,7 @@ class Goal(models.Model):
 
     def _compute_task_count(self):
         for record in self:
-            record.task_count = self.env['skill_development.goal_task'].search_count(
+            record.task_count = self.env['skill_development.task'].search_count(
                 [('goal_id', '=', record.id)])
 
     def _compute_lesson_count(self):
@@ -213,7 +213,7 @@ class GoalStage(models.Model):
     goal_id = fields.Many2one('skill_development.goal')
 
 class GoalTask(models.Model):
-    _name = "skill_development.goal_task"
+    _name = "skill_development.task"
     _description = 'Skill'
 
     name = fields.Char('Task')
@@ -308,7 +308,7 @@ class GoalResource(models.Model):
 
     file = fields.Binary('Upload File')
     url = fields.Char('External URL')
-    task_id = fields.Many2one('skill_development.goal_task', string='Related Task', ondelete="cascade")
+    task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
     # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_ids.is_acquired", string="Skill Acquired" , store=False)
     description = fields.Text('Description')
     video = fields.Binary(string='Video', attachment=True)
@@ -410,7 +410,7 @@ class GoalTags(models.Model):
     color = fields.Integer(string='Color', default=_get_default_color, help="Color for the tag")
 
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
-    task_ids = fields.Many2many('skill_development.goal_task', string='Tasks')
+    task_ids = fields.Many2many('skill_development.task', string='Tasks')
     tag_ids = fields.Many2many(
         'skill_development.goal_lesson_bank',
         relation='tag_lesson_rel',
