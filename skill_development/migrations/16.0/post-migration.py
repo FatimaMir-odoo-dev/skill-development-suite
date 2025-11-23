@@ -1,8 +1,8 @@
 def migrate(cr, version):
-    old_table = 'skill_development_goal_task'
-    new_table = 'skill_development_task'
-    old_model = 'skill_development.goal_task'
-    new_model = 'skill_development.task'
+    old_table = 'skill_development_goal_task_stage'
+    new_table = 'skill_development_task_stage'
+    old_model = 'skill_development.goal_task_stage'
+    new_model = 'skill_development.task.stage'
 
     # 1. Rename the table
     cr.execute(f"""

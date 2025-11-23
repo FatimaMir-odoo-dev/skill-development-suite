@@ -193,7 +193,7 @@ class Goal(models.Model):
 
 
 class GoalStage(models.Model):
-    _name = 'skill_development.goal_task_stage'
+    _name = 'skill_development.task.stage'
     _description = 'Task Stage'
     _order = 'sequence, id'
 
@@ -223,7 +223,7 @@ class GoalTask(models.Model):
 
     is_goal_complete = fields.Boolean(string="Skill Acquired", related = "goal_id.is_complete")
     stage_id = fields.Many2one(
-        'skill_development.goal_task_stage',
+        'skill_development.task.stage',
         string='Stage',
         domain="[('learner_id', '=', uid)]",
         ondelete='restrict',
