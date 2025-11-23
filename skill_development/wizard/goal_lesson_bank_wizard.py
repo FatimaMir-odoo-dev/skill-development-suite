@@ -15,7 +15,7 @@ class SkillPlanWizard(models.TransientModel):
         ('1', 'High')],
         default='0', index=True, string="Priority")
     tag_ids = fields.Many2many(
-        'skill_development.goal.tag',
+        'skill_development.tag',
         relation='wizard_tag_lesson_rel',
         column1='tag_id',
         column2='lesson_id',

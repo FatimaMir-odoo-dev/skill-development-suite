@@ -1,9 +1,9 @@
 def migrate(cr, version):
     # pass
-    old_table = 'skill_development_goal_lesson_bank_wizard'
-    new_table = 'skill_development_lesson_bank_wizard'
-    old_model = 'skill_development.goal_lesson_bank_wizard'
-    new_model = 'skill_development.lesson_bank_wizard'
+    old_table = 'skill_development_goal_tag'
+    new_table = 'skill_development_tag'
+    old_model = 'skill_development.goal.tag'
+    new_model = 'skill_development.tag'
 
     # Check if old table exists
     cr.execute("""
@@ -36,6 +36,22 @@ def migrate(cr, version):
             ALTER SEQUENCE IF EXISTS public.{old_table}_id_seq
             RENAME TO {new_table}_id_seq;
         """)
+
+        # IMPORTANT: Rename columns in many-to-many relation tables
+        cr.execute("""
+                    SELECT table_name, column_name
+                    FROM information_schema.columns
+                    WHERE table_schema = 'public'
+                        AND table_name LIKE 'skill_development%'
+                        AND column_name = 'skill_development_goal_tag_id';
+                """)
+
+        relation_tables = cr.fetchall()
+        for table_name, column_name in relation_tables:
+            cr.execute(f"""
+                        ALTER TABLE {table_name}
+                        RENAME COLUMN skill_development_goal_tag_id TO skill_development_tag_id;
+                    """)
 
     # Get old model ID if it exists
     cr.execute("SELECT id FROM ir_model WHERE model = %s", (old_model,))
