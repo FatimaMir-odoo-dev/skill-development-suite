@@ -48,7 +48,7 @@ class Goal(models.Model):
     result_ids = fields.One2many('skill_development.goal.result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
     tag_ids = fields.Many2many('skill_development.goal.tag', string="Tags")
-    lesson_id = fields.One2many('skill_development.goal_lesson_bank', 'goal_id')
+    lesson_id = fields.One2many('skill_development.lesson_bank', 'goal_id')
 
     is_complete = fields.Boolean(string="Goal Complete", default= False)
 
@@ -114,7 +114,7 @@ class Goal(models.Model):
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
-            'res_model': 'skill_development.goal_lesson_bank_wizard',
+            'res_model': 'skill_development.lesson_bank_wizard',
             'view_mode': 'form',
             'name': 'My Reflection',
             'target': 'new',
@@ -158,7 +158,7 @@ class Goal(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Lesson',
-            'res_model': 'skill_development.goal_lesson_bank',
+            'res_model': 'skill_development.lesson_bank',
             'view_mode': 'tree,form',
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
@@ -171,7 +171,7 @@ class Goal(models.Model):
 
     def _compute_lesson_count(self):
         for record in self:
-            record.lesson_count = self.env['skill_development.goal_lesson_bank'].search_count(
+            record.lesson_count = self.env['skill_development.lesson_bank'].search_count(
                 [('goal_id', '=', record.id)])
 
     def name_get(self):
@@ -350,7 +350,7 @@ class GoalResult(models.Model):
 
 
 class LessonBank(models.Model):
-    _name = 'skill_development.goal_lesson_bank'
+    _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
 
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
@@ -412,7 +412,7 @@ class GoalTags(models.Model):
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.task', string='Tasks')
     tag_ids = fields.Many2many(
-        'skill_development.goal_lesson_bank',
+        'skill_development.lesson_bank',
         relation='tag_lesson_rel',
         column1='tag_id',
         column2='lesson_id',
