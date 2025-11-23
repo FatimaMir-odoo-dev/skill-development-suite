@@ -45,7 +45,7 @@ class Goal(models.Model):
         ('blocked', 'Canceled')],
         string='Status', default='normal')
 
-    result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
+    result_ids = fields.One2many('skill_development.goal.result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
     tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
     lesson_id = fields.One2many('skill_development.goal_lesson_bank', 'goal_id')
@@ -295,7 +295,6 @@ class GoalTask(models.Model):
 
 class GoalResource(models.Model):
     _name = 'skill_development.task.resource'
-    # _old_name = 'skill_development.goal_task_resource'
     _description = 'Resource for Tasks'
 
     name = fields.Char('Name', required=True)
@@ -331,7 +330,7 @@ class GoalResource(models.Model):
 
 
 class GoalResult(models.Model):
-    _name = 'skill_development.goal_result'
+    _name = 'skill_development.goal.result'
     _description = 'Goal Results'
     _auto = True
 
