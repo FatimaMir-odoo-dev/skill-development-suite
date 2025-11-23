@@ -90,7 +90,7 @@
 
         <record id="action_resource_form" model="ir.actions.act_window">
             <field name="name">Resources</field>
-            <field name="res_model">skill_development.goal_task_resource</field>
+            <field name="res_model">skill_development.task.resource</field>
             <field name="view_mode">tree,form</field>
         </record>
 

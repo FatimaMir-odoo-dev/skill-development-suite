@@ -897,9 +897,9 @@
             </field>
         </record>
 
-        <record id="goal_task_resource_view_tree" model="ir.ui.view">
+        <record id="task_resource_view_tree" model="ir.ui.view">
             <field name="name">My Tasks</field>
-            <field name="model">skill_development.goal_task_resource</field>
+            <field name="model">skill_development.task.resource</field>
             <field name="arch" type="xml">
                 <form string="Resource">
                     <sheet>

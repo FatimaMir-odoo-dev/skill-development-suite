@@ -246,7 +246,7 @@ class GoalTask(models.Model):
         ('done', 'Ready'),
         ('blocked', 'Blocked')],
         string='Status',default='normal')
-    resource_ids = fields.One2many('skill_development.goal_task_resource', 'task_id', string='Resources')
+    resource_ids = fields.One2many('skill_development.task.resource', 'task_id', string='Resources')
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
 
     # @api.model
@@ -275,7 +275,7 @@ class GoalTask(models.Model):
 
     def _compute_resource_count(self):
         for record in self:
-            record.resource_count = self.env['skill_development.goal_task_resource'].search_count(
+            record.resource_count = self.env['skill_development.task.resource'].search_count(
                 [('task_id', '=', record.id)])
 
     # def action_open_resource_form(self):
@@ -294,7 +294,8 @@ class GoalTask(models.Model):
 
 
 class GoalResource(models.Model):
-    _name = 'skill_development.goal_task_resource'
+    _name = 'skill_development.task.resource'
+    # _old_name = 'skill_development.goal_task_resource'
     _description = 'Resource for Tasks'
 
     name = fields.Char('Name', required=True)
