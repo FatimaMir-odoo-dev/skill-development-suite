@@ -47,7 +47,7 @@ class Goal(models.Model):
 
     result_ids = fields.One2many('skill_development.goal.result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
-    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
+    tag_ids = fields.Many2many('skill_development.goal.tag', string="Tags")
     lesson_id = fields.One2many('skill_development.goal_lesson_bank', 'goal_id')
 
     is_complete = fields.Boolean(string="Goal Complete", default= False)
@@ -229,7 +229,7 @@ class GoalTask(models.Model):
         ondelete='restrict',
         required=True
     )
-    tag_ids = fields.Many2many('skill_development.goal_tag', string="Tags")
+    tag_ids = fields.Many2many('skill_development.goal.tag', string="Tags")
     description = fields.Html(string='Description', anitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
@@ -370,7 +370,7 @@ class LessonBank(models.Model):
         default='0', index=True, string="Priority")
     lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
     tag_ids = fields.Many2many(
-        'skill_development.goal_tag',
+        'skill_development.goal.tag',
         relation='goal_tag_rel',
         column1='goal_id',
         column2='tag_id',
@@ -400,7 +400,7 @@ class LessonBank(models.Model):
 
 
 class GoalTags(models.Model):
-    _name = "skill_development.goal_tag"
+    _name = "skill_development.goal.tag"
     _description = "Goal Tags"
 
     def _get_default_color(self):
