@@ -4,9 +4,9 @@
 
 <odoo>
     <data>
-        <record id="skill_record_view_kanban" model="ir.ui.view">
-            <field name="name">skill_record.kanban</field>
-            <field name="model">skill_development.skill_record</field>
+        <record id="skill_view_kanban" model="ir.ui.view">
+            <field name="name">skill.kanban</field>
+            <field name="model">skill_development.skill</field>
             <field name="arch" type="xml">
                 <kanban>
                     <templates>
@@ -54,9 +54,9 @@
             </field>
         </record>
 
-        <record id="skill_record_view_form" model="ir.ui.view">
-            <field name="name">skill_record.form</field>
-            <field name="model">skill_development.skill_record</field>
+        <record id="skill_view_form" model="ir.ui.view">
+            <field name="name">skill.form</field>
+            <field name="model">skill_development.skill</field>
             <field name="arch" type="xml">
                 <form>
                     <header>

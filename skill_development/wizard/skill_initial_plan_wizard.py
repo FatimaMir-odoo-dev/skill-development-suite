@@ -11,7 +11,7 @@ class SkillPlanWizard(models.TransientModel):
     learner_id = fields.Many2one('res.users', string='Learner', required=True)
 
 # form fields
-    skill_id = fields.Many2one('skill_development.skill_record','Skill', readonly=True)
+    skill_id = fields.Many2one('skill_development.skill','Skill', readonly=True)
     motivation = fields.Text('My Motivation', required=True)
     endpoint = fields.Date('Preferred Endpoint')
     msg_2self = fields.Text('Message to Myself')

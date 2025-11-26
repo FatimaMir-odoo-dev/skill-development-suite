@@ -21,7 +21,7 @@ class Goal(models.Model):
     # for goal, task , result, resources lock
     is_acquired = fields.Boolean(string="Skill Acquired", related="learner_plan_ids.is_acquired")
     # why do we need to connect with the original skill??
-    skill_id = fields.Many2one('skill_development.skill_record', string="Main Skill", readonly=True)
+    skill_id = fields.Many2one('skill_development.skill', string="Main Skill", readonly=True)
     #goal info
     category = fields.Selection([
         ('knowledge', 'Knowledge'),
@@ -354,7 +354,7 @@ class LessonBank(models.Model):
     _description = 'Lesson Bank'
 
     learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
-    skill_id = fields.Many2one('skill_development.skill_record', string="Skill")
+    skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')

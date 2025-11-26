@@ -6,7 +6,7 @@ from random import randint
 
 
 class SkillRecord(models.Model):
-    _name = "skill_development.skill_record"
+    _name = "skill_development.skill"
     _description = 'Skill'
 
 
@@ -43,14 +43,14 @@ class SkillRecord(models.Model):
                                        column2='career_id',
                                        string='Job roles for this skill')
 
-    related_skill_ids = fields.Many2many('skill_development.skill_record',  relation='skill_related_rel',
+    related_skill_ids = fields.Many2many('skill_development.skill',  relation='skill_related_rel',
                                        column1='skill_id',
                                        column2='related_id',
                                        string='Related Skills',
                                        domain="[('id', '!=', id)]")
 
     pre_requisites = fields.Text(string="Pre-Requisites")
-    prereq_skill_ids = fields.Many2many('skill_development.skill_record',  relation='skill_prereq_rel',
+    prereq_skill_ids = fields.Many2many('skill_development.skill',  relation='skill_prereq_rel',
                                            column1='skill_id',
                                            column2='rprereq_id',
                                            string='Consider Learning First',
@@ -189,7 +189,7 @@ class Rating(models.Model):
     _name = "skill_development.rating"
     _description = "Skill Rating"
 
-    skill_id = fields.Many2one('skill_development.skill_record',
+    skill_id = fields.Many2one('skill_development.skill',
                                string="Skill",
                                ondelete='cascade',
                                readonly=True,

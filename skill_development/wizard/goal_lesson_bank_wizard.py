@@ -9,7 +9,7 @@ class SkillPlanWizard(models.TransientModel):
     _description = 'Lesson Bank Pop-up Form'
 
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True, required=True,)
-    skill_id = fields.Many2one('skill_development.skill_record', string="Skill", readonly=True)
+    skill_id = fields.Many2one('skill_development.skill', string="Skill", readonly=True)
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],

@@ -20,7 +20,7 @@ class SkillPlan(models.Model):
     goal_ids = fields.One2many('skill_development.goal', 'learner_plan_ids', string='Goal')
 
     sequence = fields.Integer(string="Sequence", default=10)
-    skill_id = fields.Many2one('skill_development.skill_record', 'Skill', readonly=True)
+    skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short", sanitize_attributes=False)
