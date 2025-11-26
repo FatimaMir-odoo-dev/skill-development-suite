@@ -171,7 +171,7 @@ class SkillPlan(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': 'Skill Rating',
-            'res_model': 'skill_development.rating',
+            'res_model': 'skill_development.skill_rating',
             'view_mode': 'form',
             'target': 'new',
             'domain': [('learner_plan_record_ids', '=', self.id)],

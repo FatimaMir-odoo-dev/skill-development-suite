@@ -101,7 +101,7 @@
 
         <record id="skill_rating_view_form" model="ir.ui.view">
             <field name="name">skill_rating.form</field>
-            <field name="model">skill_development.rating</field>
+            <field name="model">skill_development.skill_rating</field>
             <field name="arch" type="xml">
                 <form string="Skill Evaluation">
                     <sheet>

@@ -14,7 +14,7 @@ class SkillRecord(models.Model):
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     # learn = fields.Char(string="")
-    rating_ids = fields.One2many('skill_development.rating', 'skill_id', stirng="Rating")
+    rating_ids = fields.One2many('skill_development.skill_rating', 'skill_id', stirng="Rating")
     avg_overall_rating = fields.Float('Overall Rating Calculation', compute='_compute_avg_ratings', store=True)
     star_avg_rating = fields.Selection([
         ('0', 'Not Recommended'),
@@ -186,7 +186,7 @@ class Industry(models.Model):
     # career_ids = fields.Many2many('skill_development.skill_career', string="")
 
 class Rating(models.Model):
-    _name = "skill_development.rating"
+    _name = "skill_development.skill_rating"
     _description = "Skill Rating"
 
     skill_id = fields.Many2one('skill_development.skill',
