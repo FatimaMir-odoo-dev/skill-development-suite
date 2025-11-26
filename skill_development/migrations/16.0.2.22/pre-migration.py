@@ -1,9 +1,9 @@
 def migrate(cr, version):
     # pass
-    old_table = 'skill_development_skill_record'
-    new_table = 'skill_development_skill'
-    old_model = 'skill_development.skill_record'
-    new_model = 'skill_development.skill'
+    old_table = 'skill_development_career_path'
+    new_table = 'skill_development_skill_career'
+    old_model = 'skill_development.career_path'
+    new_model = 'skill_development.skill.career'
 
     # Check if old table exists
     cr.execute("""
