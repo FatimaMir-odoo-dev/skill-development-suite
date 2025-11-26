@@ -12,7 +12,7 @@ _logger = logging.getLogger(__name__)
 
 
 class SkillPlan(models.Model):
-    _name = 'skill_development.initial_plan_record'
+    _name = 'skill_development.growth_tracker'
     _description = 'A Record For The Learner Skill Plan'
 
     # Record content
@@ -243,7 +243,7 @@ class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
 
     message = fields.Html(string='Help Message', readonly=True)
     tips = fields.Html(string='Tips', readonly=True)
-    skill_plan_id = fields.Many2one('skill_development.initial_plan_record', string="Plan")
+    skill_plan_id = fields.Many2one('skill_development.growth_tracker', string="Plan")
     title = fields.Selection([
         ('seeker', 'Seeker'),
         ('learner', 'Learner'),
@@ -424,7 +424,7 @@ class LearnerProfile(models.Model):
     _inherit = "res.users"
 
 
-    plan_skill_ids = fields.One2many('skill_development.initial_plan_record', 'plan_owner_id', string='Skill Plans')
+    plan_skill_ids = fields.One2many('skill_development.growth_tracker', 'plan_owner_id', string='Skill Plans')
 
     # # Connect the learner to his volunteering record
     #     volunteer_record_id = fields.Many2one('volunteer_request.record', string="Volunteering Record ID")

@@ -17,7 +17,7 @@ class Goal(models.Model):
     # Connects to the learner profile for security and filter? (why do we need it?)
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
     # Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
-    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan", ondelete='cascade')
+    learner_plan_ids = fields.Many2one('skill_development.growth_tracker', string="Plan", ondelete='cascade')
     # for goal, task , result, resources lock
     is_acquired = fields.Boolean(string="Skill Acquired", related="learner_plan_ids.is_acquired")
     # why do we need to connect with the original skill??
@@ -353,7 +353,7 @@ class LessonBank(models.Model):
     _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
 
-    learner_plan_ids = fields.Many2one('skill_development.initial_plan_record', string="Plan" , ondelete='cascade')
+    learner_plan_ids = fields.Many2one('skill_development.growth_tracker', string="Plan" , ondelete='cascade')
     skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")

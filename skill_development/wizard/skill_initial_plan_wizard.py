@@ -31,7 +31,7 @@ class SkillPlanWizard(models.TransientModel):
 
     # create a new record in model skill_plan.record with all the data from the wizard
     def button_create_plan(self):
-        self.env['skill_development.initial_plan_record'].create({
+        self.env['skill_development.growth_tracker'].create({
             'plan_owner_id': self.learner_id.id,
             'skill_id': self.skill_id.id,
             'motivation': self.motivation,

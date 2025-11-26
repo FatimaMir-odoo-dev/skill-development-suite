@@ -3,7 +3,7 @@
 
 {
     'name': 'Skill Development',
-    'version': '16.0.2.23',
+    'version': '16.0.2.24',
     'summary': 'Personalized learning plans for skill development.',
     'description': """
         It's the core of the Skill Development Suite. 

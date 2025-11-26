@@ -5,7 +5,7 @@ class ConfirmDeleteSkill(models.TransientModel):
     _name = 'skill_development.delete.confirm.wizard'
     _description = 'Confirm Skill Deletion Wizard'
 
-    plan_id = fields.Many2one('skill_development.initial_plan_record', string='Plan to Delete')
+    plan_id = fields.Many2one('skill_development.growth_tracker', string='Plan to Delete')
 
     def confirm_delete(self):
         self.ensure_one()
