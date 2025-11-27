@@ -3,7 +3,7 @@
 
 from odoo import models, fields, api
 
-class SkillPlanWizard(models.TransientModel):
+class CreateInitialPlan(models.TransientModel):
     _name = 'skill_development.create_initial_plan'
     _description = 'Skill Planning Pop-up Form'
 

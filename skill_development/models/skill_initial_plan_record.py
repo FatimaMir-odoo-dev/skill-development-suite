@@ -11,7 +11,7 @@ from sass import and_join
 _logger = logging.getLogger(__name__)
 
 
-class SkillPlan(models.Model):
+class GrowthTracker(models.Model):
     _name = 'skill_development.growth_tracker'
     _description = 'A Record For The Learner Skill Plan'
 

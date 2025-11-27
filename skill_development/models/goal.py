@@ -4,7 +4,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 from random import randint
-from ..services.skill_growth_logic_helper import GoalLogicHelper
+from ..services.progress_logic_helper import ProgressLogicHelper
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -85,7 +85,7 @@ class Goal(models.Model):
                  'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
     def _compute_goal_progress(self):
         for goal in self:
-            goal.goal_progress = GoalLogicHelper.calculate_progress(goal)
+            goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
 
     @api.model
@@ -192,7 +192,7 @@ class Goal(models.Model):
     #     }
 
 
-class GoalStage(models.Model):
+class TaskStage(models.Model):
     _name = 'skill_development.task_stage'
     _description = 'Task Stage'
     _order = 'sequence, id'
@@ -212,7 +212,7 @@ class GoalStage(models.Model):
     # task_id
     goal_id = fields.Many2one('skill_development.goal')
 
-class GoalTask(models.Model):
+class Task(models.Model):
     _name = "skill_development.task"
     _description = 'Skill'
 
@@ -293,7 +293,7 @@ class GoalTask(models.Model):
     #     }
 
 
-class GoalResource(models.Model):
+class TaskResource(models.Model):
     _name = 'skill_development.task_resource'
     _description = 'Resource for Tasks'
 
@@ -399,7 +399,7 @@ class LessonBank(models.Model):
         return lesson
 
 
-class GoalTags(models.Model):
+class Tag(models.Model):
     _name = "skill_development.tag"
     _description = "Goal Tags"
 

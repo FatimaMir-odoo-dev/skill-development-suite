@@ -3,7 +3,7 @@
 
 from odoo import models, fields, api
 
-class PopupHelp(models.TransientModel):  # use TransientModel for wizards/popups
+class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/popups
     _name = 'skill_development.progress_guide'
     _description = 'Help'
 

@@ -5,7 +5,7 @@ from odoo import models, fields, api, exceptions
 from random import randint
 
 
-class SkillRecord(models.Model):
+class Skill(models.Model):
     _name = "skill_development.skill"
     _description = 'Skill'
 
@@ -151,7 +151,7 @@ class SkillRecord(models.Model):
             result.append((record.id, name))
         return result
 
-class CareerPath(models.Model):
+class SkillCareer(models.Model):
     _name = "skill_development.skill_career"
     _description = "Skill Career Paths"
 
@@ -173,7 +173,7 @@ class CareerPath(models.Model):
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
         return super(CareerPath, self).unlink()
 
-class Industry(models.Model):
+class CareerIndustry(models.Model):
     _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
 
@@ -185,7 +185,7 @@ class Industry(models.Model):
 
     # career_ids = fields.Many2many('skill_development.skill_career', string="")
 
-class Rating(models.Model):
+class SkillRating(models.Model):
     _name = "skill_development.skill_rating"
     _description = "Skill Rating"
 

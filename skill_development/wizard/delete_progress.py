@@ -1,7 +1,7 @@
 
 from odoo import models, fields, api, _
 
-class ConfirmDeleteSkill(models.TransientModel):
+class DeleteProgress(models.TransientModel):
     _name = 'skill_development.delete_progress'
     _description = 'Confirm Skill Deletion Wizard'
 

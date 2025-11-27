@@ -3,7 +3,7 @@
 import logging
 _logger = logging.getLogger(__name__)
 
-class GoalLogicHelper:
+class ProgressLogicHelper:
     @staticmethod
     def calculate_progress(goal):
         _logger.info("Calculating progress for Goal ID: %s", goal.id)
@@ -12,10 +12,10 @@ class GoalLogicHelper:
             _logger.info("Goal status is not complete: %s", goal.goal_status)
             return 0.0
 
-        full_goal_mark = GoalLogicHelper._calculate_full_goal_mark(goal)
-        smart_bonus = GoalLogicHelper._smart_criteria_bonus(goal)
-        reflection_bonus = GoalLogicHelper._lesson_bonus(goal)
-        penalty = GoalLogicHelper._incomplete_result_penalty(goal)
+        full_goal_mark = ProgressLogicHelper._calculate_full_goal_mark(goal)
+        smart_bonus = ProgressLogicHelper._smart_criteria_bonus(goal)
+        reflection_bonus = ProgressLogicHelper._lesson_bonus(goal)
+        penalty = ProgressLogicHelper._incomplete_result_penalty(goal)
 
         _logger.info("Full mark: %s, SMART bonus: %s, Reflection bonus: %s, Penalty: %s",
                      full_goal_mark, smart_bonus, reflection_bonus, penalty)
@@ -26,7 +26,7 @@ class GoalLogicHelper:
     #
     @staticmethod
     def _calculate_full_goal_mark(goal):
-        goal_index = GoalLogicHelper._get_goal_position_in_category(goal)
+        goal_index = ProgressLogicHelper._get_goal_position_in_category(goal)
         base = 20
         return max(0, base - 2 * (goal_index - 1))
 

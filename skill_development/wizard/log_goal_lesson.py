@@ -4,7 +4,7 @@
 from odoo import models, fields, api
 
 
-class SkillPlanWizard(models.TransientModel):
+class LogGoalLesson(models.TransientModel):
     _name = 'skill_development.log_goal_lesson'
     _description = 'Lesson Bank Pop-up Form'
 
