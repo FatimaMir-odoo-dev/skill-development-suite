@@ -37,7 +37,7 @@ class SkillRecord(models.Model):
     avg_difficulty = fields.Float("Average Difficulty", compute='_compute_avg_ratings', store=True)
 
 
-    career_path_ids = fields.Many2many('skill_development.skill.career',
+    career_path_ids = fields.Many2many('skill_development.skill_career',
                                        relation='skill_career_rel',
                                        column1='skill_id',
                                        column2='career_id',
@@ -152,7 +152,7 @@ class SkillRecord(models.Model):
         return result
 
 class CareerPath(models.Model):
-    _name = "skill_development.skill.career"
+    _name = "skill_development.skill_career"
     _description = "Skill Career Paths"
 
     def _get_default_color(self):

@@ -45,7 +45,7 @@ class Goal(models.Model):
         ('blocked', 'Canceled')],
         string='Status', default='normal')
 
-    result_ids = fields.One2many('skill_development.goal.result', 'goal_id', string=' ')
+    result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
     task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
     lesson_id = fields.One2many('skill_development.lesson_bank', 'goal_id')
@@ -193,7 +193,7 @@ class Goal(models.Model):
 
 
 class GoalStage(models.Model):
-    _name = 'skill_development.task.stage'
+    _name = 'skill_development.task_stage'
     _description = 'Task Stage'
     _order = 'sequence, id'
 
@@ -223,7 +223,7 @@ class GoalTask(models.Model):
 
     is_goal_complete = fields.Boolean(string="Skill Acquired", related = "goal_id.is_complete")
     stage_id = fields.Many2one(
-        'skill_development.task.stage',
+        'skill_development.task_stage',
         string='Stage',
         domain="[('learner_id', '=', uid)]",
         ondelete='restrict',
@@ -246,7 +246,7 @@ class GoalTask(models.Model):
         ('done', 'Ready'),
         ('blocked', 'Blocked')],
         string='Status',default='normal')
-    resource_ids = fields.One2many('skill_development.task.resource', 'task_id', string='Resources')
+    resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
 
     # @api.model
@@ -275,7 +275,7 @@ class GoalTask(models.Model):
 
     def _compute_resource_count(self):
         for record in self:
-            record.resource_count = self.env['skill_development.task.resource'].search_count(
+            record.resource_count = self.env['skill_development.task_resource'].search_count(
                 [('task_id', '=', record.id)])
 
     # def action_open_resource_form(self):
@@ -294,7 +294,7 @@ class GoalTask(models.Model):
 
 
 class GoalResource(models.Model):
-    _name = 'skill_development.task.resource'
+    _name = 'skill_development.task_resource'
     _description = 'Resource for Tasks'
 
     name = fields.Char('Name', required=True)
@@ -330,7 +330,7 @@ class GoalResource(models.Model):
 
 
 class GoalResult(models.Model):
-    _name = 'skill_development.goal.result'
+    _name = 'skill_development.goal_result'
     _description = 'Goal Results'
     _auto = True
 
