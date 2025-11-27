@@ -155,7 +155,7 @@ class SkillPlan(models.Model):
         return {
             'type': 'ir.actions.act_window',
             'name': _('Confirm Deletion'),
-            'res_model': 'skill_development.delete.confirm.wizard',
+            'res_model': 'skill_development.delete_progress',
             'view_mode': 'form',
             'target': 'new',
             'context': {

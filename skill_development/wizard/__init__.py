@@ -3,5 +3,5 @@
 
 from . import skill_initial_plan_wizard
 from . import goal_lesson_bank_wizard
-from . import delete_confirm_wizard
+from . import delete_progress
 from . import progress_guide

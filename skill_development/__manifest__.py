@@ -3,7 +3,7 @@
 
 {
     'name': 'Skill Development',
-    'version': '16.0.2.30',
+    'version': '16.0.2.31',
     'summary': 'Personalized learning plans for skill development.',
     'description': """
         It's the core of the Skill Development Suite. 
@@ -25,7 +25,7 @@
         'views/skill_development_menu.xml',
         'views/goal_views.xml',
         'wizard/goal_lesson_bank_wizard_views.xml',
-        'wizard/delete_confirm_wizard_views.xml',
+        'wizard/delete_progress_view.xml',
         'wizard/progress_guide_views.xml',
     ],
     # 'demo': ['demo/demo.xml'],
