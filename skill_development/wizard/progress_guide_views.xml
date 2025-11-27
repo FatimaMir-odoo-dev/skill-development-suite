@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="help_view_form_popup" model="ir.ui.view">
+            <field name="name">skill.help.popup</field>
+            <field name="model">skill_development.progress_guide</field>
+            <field name="arch" type="xml">
+                <form string="Skill Progress Help" create="false" edit="false">
+                    <sheet>
+                        <field name="step" invisible="1"/>
+                        <group>
+                            <group style="width: 66%; display: inline-block; vertical-align: top;">
+                                <field name="message" widget="html" readonly="1" nolable="1"/>
+                            </group>
+                            <group style="width: 33%; display: inline-block; " col="1">
+                                <field name="maximum_progress" invisible="1"/>
+                                <field name="overall_progress"
+                                       style="font-size: 30px; font-weight: bold"
+                                       widget="gauge"
+                                       options="{'max_field': 'maximum_progress'}"
+                                       nolabel="1"
+                                       attrs="{'invisible':[('step', '=', 'page2')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="tips" widget="html" readonly="1" nolable="1"/>
+                            </group>
+                            <group attrs="{'invisible':[('step', '=', 'page1')]}">
+                                <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
+                                    <field name="title"/>
+                                </h1>
+                            </group>
+                        </group>
+
+
+                        <footer>
+                            <button name="go_to_page1" string="Back" type="object"
+                                    class="btn-secondary"
+                                    attrs="{'invisible': [('step', '=', 'page1')]}"/>
+                            <button name="go_to_page2" string="Next" type="object"
+                                    class="btn-primary"
+                                    attrs="{'invisible': [('step', '=', 'page2')]}"/>
+                            <button string="Close" class="btn-secondary" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>
