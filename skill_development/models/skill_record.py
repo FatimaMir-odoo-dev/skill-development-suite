@@ -160,7 +160,7 @@ class CareerPath(models.Model):
 
     name = fields.Char(string="Career", required=True)
     description = fields.Text(string="")
-    industry_ids = fields.Many2many('skill_development.industry',
+    industry_ids = fields.Many2many('skill_development.career_industry',
                                     relation='career_industry_rel',
                                     column1='career_id',
                                     column2='industry_id',
@@ -174,7 +174,7 @@ class CareerPath(models.Model):
         return super(CareerPath, self).unlink()
 
 class Industry(models.Model):
-    _name = "skill_development.industry"
+    _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
 
     def _get_default_color(self):
