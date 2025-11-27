@@ -5,7 +5,7 @@ from odoo import models, fields, api
 
 
 class SkillPlanWizard(models.TransientModel):
-    _name = 'skill_development.lesson_bank_wizard'
+    _name = 'skill_development.log_goal_lesson'
     _description = 'Lesson Bank Pop-up Form'
 
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True, required=True,)

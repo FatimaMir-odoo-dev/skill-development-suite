@@ -114,7 +114,7 @@ class Goal(models.Model):
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
-            'res_model': 'skill_development.lesson_bank_wizard',
+            'res_model': 'skill_development.log_goal_lesson',
             'view_mode': 'form',
             'name': 'My Reflection',
             'target': 'new',
