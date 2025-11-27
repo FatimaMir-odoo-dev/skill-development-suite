@@ -134,7 +134,7 @@ class SkillRecord(models.Model):
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
-            'res_model': 'skill_development.initial_plan_wizard',
+            'res_model': 'skill_development.create_initial_plan',
             'view_mode': 'form',
             'name': 'My Skill Plan',
             'target': 'new',

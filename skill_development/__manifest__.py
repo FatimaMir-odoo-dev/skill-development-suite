@@ -3,7 +3,7 @@
 
 {
     'name': 'Skill Development',
-    'version': '16.0.2.31',
+    'version': '16.0.2.32',
     'summary': 'Personalized learning plans for skill development.',
     'description': """
         It's the core of the Skill Development Suite. 
@@ -20,13 +20,13 @@
         'security/ir.model.access.csv',
         'security/security_groups.xml',
         'views/skill_record_views.xml',
-        'wizard/skill_initial_plan_wizard_views.xml',
+        'wizard/create_initial_plan_view.xml',
         'views/skill_growth_record_views.xml',
         'views/skill_development_menu.xml',
         'views/goal_views.xml',
         'wizard/goal_lesson_bank_wizard_views.xml',
         'wizard/delete_progress_view.xml',
-        'wizard/progress_guide_views.xml',
+        'wizard/progress_guide_view.xml',
     ],
     # 'demo': ['demo/demo.xml'],
     'installable': True,

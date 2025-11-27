@@ -4,7 +4,7 @@
 from odoo import models, fields, api
 
 class SkillPlanWizard(models.TransientModel):
-    _name = 'skill_development.initial_plan_wizard'
+    _name = 'skill_development.create_initial_plan'
     _description = 'Skill Planning Pop-up Form'
 
 # learner_id used in default get form to get the current user id

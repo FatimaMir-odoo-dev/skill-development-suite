@@ -1,7 +1,7 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from . import skill_initial_plan_wizard
+from . import create_initial_plan
 from . import goal_lesson_bank_wizard
 from . import delete_progress
 from . import progress_guide
