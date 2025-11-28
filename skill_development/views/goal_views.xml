@@ -503,7 +503,7 @@
         </record>
 
         <record id="open_create_goal_form_view" model="ir.actions.act_window">
-            <field name="name">Create a Project</field>
+            <field name="name">Create a Goal</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="goal_view_form_popup"/>
