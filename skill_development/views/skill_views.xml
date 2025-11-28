@@ -5,7 +5,7 @@
 <odoo>
     <data>
         <record id="skill_view_kanban" model="ir.ui.view">
-            <field name="name">skill.kanban</field>
+            <field name="name">skill.view.kanban</field>
             <field name="model">skill_development.skill</field>
             <field name="arch" type="xml">
                 <kanban>
@@ -55,7 +55,7 @@
         </record>
 
         <record id="skill_view_form" model="ir.ui.view">
-            <field name="name">skill.form</field>
+            <field name="name">skill.view.form</field>
             <field name="model">skill_development.skill</field>
             <field name="arch" type="xml">
                 <form>
@@ -100,7 +100,7 @@
         </record>
 
         <record id="skill_rating_view_form" model="ir.ui.view">
-            <field name="name">skill_rating.form</field>
+            <field name="name">skill.rating.view.form</field>
             <field name="model">skill_development.skill_rating</field>
             <field name="arch" type="xml">
                 <form string="Skill Evaluation">

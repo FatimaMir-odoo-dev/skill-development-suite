@@ -3,7 +3,7 @@
     <data>
 
         <record id="log_goal_lesson_wizard_view_form" model="ir.ui.view">
-            <field name="name">My Reflection</field>
+            <field name="name">log.goal.lesson.wizard.view.form</field>
             <field name="model">skill_development.log_goal_lesson</field>
             <field name="arch" type="xml">
                 <form string="Reflection">

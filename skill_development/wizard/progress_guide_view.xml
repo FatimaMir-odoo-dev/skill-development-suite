@@ -3,7 +3,7 @@
     <data>
 
         <record id="progress_guide_wizard_view_form" model="ir.ui.view">
-            <field name="name">skill.help.popup</field>
+            <field name="name">progress.guide.wizard.view.form</field>
             <field name="model">skill_development.progress_guide</field>
             <field name="arch" type="xml">
                 <form string="Skill Progress Help" create="false" edit="false">

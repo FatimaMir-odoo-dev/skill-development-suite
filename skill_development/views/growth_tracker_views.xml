@@ -6,7 +6,7 @@
     <data>
 
         <record id="growth_tracker_view_tree" model="ir.ui.view">
-            <field name="name">My Skill Growth</field>
+            <field name="name">growth.tracker.view.tree</field>
             <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
                 <tree string="My Skill Growth" create="false">
@@ -25,7 +25,7 @@
         </record>
 
         <record id="growth_tracker_view_form" model="ir.ui.view">
-            <field name="name">My Skill Growth</field>
+            <field name="name">growth.tracker.view.form</field>
             <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
                 <form create="false">

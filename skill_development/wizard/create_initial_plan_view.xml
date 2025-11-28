@@ -6,7 +6,7 @@
     <data>
 
         <record id="create_initial_plan_wizard_view_form" model="ir.ui.view">
-            <field name="name">My Skill Plan</field>
+            <field name="name">create.initial.plan.wizard.view.form</field>
             <field name="model">skill_development.create_initial_plan</field>
             <field name="arch" type="xml">
                 <form string="Skill Plan">

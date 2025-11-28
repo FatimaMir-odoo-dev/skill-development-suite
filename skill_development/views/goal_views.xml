@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="goal_view_kanban" model="ir.ui.view">
-            <field name="name">My Goals</field>
+            <field name="name">goal.view.kanban</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
                 <kanban on_create="skill_development.open_create_goal_form_view">
@@ -194,7 +194,7 @@
         <!--        </record>-->
 
         <record id="goal_view_form" model="ir.ui.view">
-            <field name="name">My Goals</field>
+            <field name="name">goal.view.form</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
                 <form>
@@ -377,7 +377,7 @@
         </record>
 <!--DOCUMENT HERE: The fact that you use the same view and why-->
         <record id="goal_view_form_popup" model="ir.ui.view">
-            <field name="name">My Goals</field>
+            <field name="name">goal.view.form.popup</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
                 <form>
@@ -513,7 +513,7 @@
 
 
         <record id="lesson_bank_view_tree" model="ir.ui.view">
-            <field name="name">Lesson Bank</field>
+            <field name="name">lesson.bank.view.tree</field>
             <field name="model">skill_development.lesson_bank</field>
             <field name="arch" type="xml">
                 <tree>
@@ -527,7 +527,7 @@
         </record>
         <!--        -->
         <record id="lesson_bank_view_form" model="ir.ui.view">
-            <field name="name">Lesson Bank</field>
+            <field name="name">lesson.bank.view.form</field>
             <field name="model">skill_development.lesson_bank</field>
             <field name="arch" type="xml">
                 <form>
@@ -605,7 +605,7 @@
         </record>
 <!--DOCUMENT HERE ALSO-->
         <record id="lesson_bank_view_form_popup" model="ir.ui.view">
-            <field name="name">Lesson Bank</field>
+            <field name="name">lesson.bank.view.form.popup</field>
             <field name="model">skill_development.lesson_bank</field>
             <field name="arch" type="xml">
                 <form>
@@ -673,7 +673,7 @@
         </record>
 <!--DOCUMENT HERE-->
         <record id="task_view_kanban_unlocked" model="ir.ui.view">
-            <field name="name">My Tasks</field>
+            <field name="name">task.view.kanban.unlocked</field>
             <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id">
@@ -728,7 +728,7 @@
         </record>
 <!--AND DOCUMENT HERE-->
         <record id="task_view_kanban_locked" model="ir.ui.view">
-            <field name="name">My Tasks locked</field>
+            <field name="name">task.view.kanban.locked</field>
             <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
@@ -784,7 +784,7 @@
         </record>
 <!--DOCUMENT HERE-->
         <record id="task_view_form_unlocked" model="ir.ui.view">
-            <field name="name">My Tasks</field>
+            <field name="name">task.view.form.unlocked</field>
             <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <form>
@@ -841,7 +841,7 @@
         </record>
 <!--DOCUMENT HERE ALSO-->
         <record id="task_view_form_locked" model="ir.ui.view">
-            <field name="name">My Tasks(Locked)</field>
+            <field name="name">task.view.form.locked</field>
             <field name="model">skill_development.task</field>
             <field name="arch" type="xml">
                 <form edit="0">
@@ -898,7 +898,7 @@
         </record>
 
         <record id="task_resource_view_tree" model="ir.ui.view">
-            <field name="name">My Tasks</field>
+            <field name="name">task.resource.view.tree</field>
             <field name="model">skill_development.task_resource</field>
             <field name="arch" type="xml">
                 <form string="Resource">

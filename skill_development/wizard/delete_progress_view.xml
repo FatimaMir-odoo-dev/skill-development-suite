@@ -3,7 +3,7 @@
     <data>
 
         <record id="delete_progress_wizard_view_form" model="ir.ui.view">
-            <field name="name">confirm.delete.skill.wizard</field>
+            <field name="name">delete.progress.wizard.view.form</field>
             <field name="model">skill_development.delete_progress</field>
             <field name="arch" type="xml">
                 <form string="Confirm Deletion">
