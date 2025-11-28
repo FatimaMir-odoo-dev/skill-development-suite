@@ -19,22 +19,22 @@
                                 <!--Didn't Start: You haven't begun working on this goal yet."/>-->
                                 <!--                                </div>-->
                                 <t t-if="record.goal_status.raw_value == 'draft'">
-    <div style="position: absolute; top: 0; right: 0;
+                                    <div style="position: absolute; top: 0; right: 0;
                 background: #ffb31a; color: white; padding: 2px 8px;
                 font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
                 box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
-        Draft
-    </div>
-</t>
+                                        Draft
+                                    </div>
+                                </t>
 
-<t t-if="record.goal_status.raw_value == 'complete'">
-    <div style="position: absolute; top: 0; right: 0;
+                                <t t-if="record.goal_status.raw_value == 'complete'">
+                                    <div style="position: absolute; top: 0; right: 0;
                 background: #00cc00; color: white; padding: 2px 8px;
                 font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
                 box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
-        Done
-    </div>
-</t>
+                                        Done
+                                    </div>
+                                </t>
 
 
                                 <!-- Title -->
@@ -375,7 +375,7 @@
             <field name="view_id" ref="goal_view_form"/>
             <field name="context">{}</field>
         </record>
-
+<!--DOCUMENT HERE: The fact that you use the same view and why-->
         <record id="goal_view_form_popup" model="ir.ui.view">
             <field name="name">My Goals</field>
             <field name="model">skill_development.goal</field>
@@ -603,7 +603,7 @@
 
             </field>
         </record>
-
+<!--DOCUMENT HERE ALSO-->
         <record id="lesson_bank_view_form_popup" model="ir.ui.view">
             <field name="name">Lesson Bank</field>
             <field name="model">skill_development.lesson_bank</field>
@@ -671,7 +671,7 @@
                 </form>
             </field>
         </record>
-
+<!--DOCUMENT HERE-->
         <record id="task_view_kanban_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.task</field>
@@ -726,7 +726,7 @@
 
             </field>
         </record>
-
+<!--AND DOCUMENT HERE-->
         <record id="task_view_kanban_locked" model="ir.ui.view">
             <field name="name">My Tasks locked</field>
             <field name="model">skill_development.task</field>
@@ -782,7 +782,7 @@
 
             </field>
         </record>
-
+<!--DOCUMENT HERE-->
         <record id="task_view_form_unlocked" model="ir.ui.view">
             <field name="name">My Tasks</field>
             <field name="model">skill_development.task</field>
@@ -839,7 +839,7 @@
                 </form>
             </field>
         </record>
-
+<!--DOCUMENT HERE ALSO-->
         <record id="task_view_form_locked" model="ir.ui.view">
             <field name="name">My Tasks(Locked)</field>
             <field name="model">skill_development.task</field>

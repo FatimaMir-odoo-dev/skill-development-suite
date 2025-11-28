@@ -5,7 +5,7 @@
 <odoo>
     <data>
 
-        <record id="skill_growth_view_tree" model="ir.ui.view">
+        <record id="growth_tracker_view_tree" model="ir.ui.view">
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
@@ -24,7 +24,7 @@
             </field>
         </record>
 
-        <record id="skill_growth_view_form" model="ir.ui.view">
+        <record id="growth_tracker_view_form" model="ir.ui.view">
             <field name="name">My Skill Growth</field>
             <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
@@ -32,7 +32,7 @@
                     <sheet>
                         <field name="is_acquired" invisible="1"/>
                         <div attrs="{'invisible': [('is_acquired', '!=', True)]}"
-     style="
+                             style="
         position: absolute;
         top: 0;
         right: 0;
@@ -42,7 +42,7 @@
         pointer-events: none;
         z-index: 10;">
 
-    <div style="
+                            <div style="
         position: absolute;
         top: 90px;
         right: -80px;
@@ -59,9 +59,9 @@
         font-size: 16px;
         padding: 10px 0;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);">
-        Skill Acquired
-    </div>
-</div>
+                                Skill Acquired
+                            </div>
+                        </div>
 
                         <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
                             <!-- Title as Badge -->
@@ -154,7 +154,6 @@
                 </form>
             </field>
         </record>
-
 
 
     </data>

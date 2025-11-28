@@ -223,7 +223,7 @@ class GrowthTracker(models.Model):
     @api.model
     def create(self, vals):
         vals.setdefault('plan_owner_id', self.env.user.id)
-        return super(SkillPlan, self).create(vals)
+        return super(GrowthTracker, self).create(vals)
 
     # For the Smart Goal wizard where a learner can select one of the
     # skills saved in this record to connect the goal to
