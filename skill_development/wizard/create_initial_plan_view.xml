@@ -4,13 +4,14 @@
 
 <odoo>
     <data>
-        <record id="skill_plan_view" model="ir.ui.view">
+
+        <record id="create_initial_plan_wizard_view_form" model="ir.ui.view">
             <field name="name">My Skill Plan</field>
             <field name="model">skill_development.create_initial_plan</field>
             <field name="arch" type="xml">
                 <form string="Skill Plan">
 
-                                    <!--form content-->
+                    <!--form content-->
                     <sheet>
                         <group string="Create your own success story, one step at a time!"
                                style="color: #5b84d7; text-transform: none;">
@@ -28,7 +29,7 @@
                         </group>
                     </sheet>
 
-<!--                form buttons-->
+                    <!--                form buttons-->
                     <footer>
                         <button name="button_create_plan"
                                 string="Create Learning Plan"
@@ -42,5 +43,6 @@
                 </form>
             </field>
         </record>
+
     </data>
 </odoo>

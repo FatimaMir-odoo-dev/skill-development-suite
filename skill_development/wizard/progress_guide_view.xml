@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-        <record id="help_view_form_popup" model="ir.ui.view">
+        <record id="progress_guide_wizard_view_form" model="ir.ui.view">
             <field name="name">skill.help.popup</field>
             <field name="model">skill_development.progress_guide</field>
             <field name="arch" type="xml">
@@ -48,6 +48,7 @@
                 </form>
             </field>
         </record>
+
 
     </data>
 </odoo>

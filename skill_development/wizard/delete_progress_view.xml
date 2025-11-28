@@ -2,7 +2,7 @@
 <odoo>
     <data>
 
-        <record id="view_confirm_delete_skill_wizard" model="ir.ui.view">
+        <record id="delete_progress_wizard_view_form" model="ir.ui.view">
             <field name="name">confirm.delete.skill.wizard</field>
             <field name="model">skill_development.delete_progress</field>
             <field name="arch" type="xml">
@@ -21,5 +21,7 @@
                 </form>
             </field>
         </record>
+
+
     </data>
 </odoo>
