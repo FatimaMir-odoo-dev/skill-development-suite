@@ -130,7 +130,7 @@ class Goal(models.Model):
         if self.is_complete or self.is_acquired:
             action_ref = 'skill_development.action_task_lock'
         else:
-            action_ref = 'skill_development.action_task_unlock'
+            action_ref = 'skill_development.task_unlock_action'
 
         action = self.env.ref(action_ref).sudo().read()[0]
 

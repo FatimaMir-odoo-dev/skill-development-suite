@@ -5,7 +5,7 @@
             <field name="name">goal.view.kanban</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
-                <kanban on_create="skill_development.open_create_goal_form_view">
+                <kanban on_create="skill_development.new_goal_action">
                     <field name="goal_status" invisible="1"/>
                     <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
@@ -368,7 +368,7 @@
             </field>
         </record>
 
-        <record id="open_goal_form_view" model="ir.actions.act_window">
+        <record id="skill_development.goal_form_action" model="ir.actions.act_window">
             <field name="name">Goal</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">form</field>
@@ -502,7 +502,7 @@
             </field>
         </record>
 
-        <record id="open_create_goal_form_view" model="ir.actions.act_window">
+        <record id="skill_development.new_goal_action" model="ir.actions.act_window">
             <field name="name">Create a Goal</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">form</field>
@@ -919,7 +919,7 @@
                 </form>
             </field>
         </record>
-        <record id="action_task_lock" model="ir.actions.act_window">
+        <record id="skill_development.task_lock_action" model="ir.actions.act_window">
             <field name="name">Tasks (Complete Goal)</field>
             <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
@@ -931,7 +931,7 @@
         </record>
 
 
-        <record id="action_task_unlock" model="ir.actions.act_window">
+        <record id="skill_development.task_unlock_action" model="ir.actions.act_window">
             <field name="name">Tasks (Incomplete Goal)</field>
             <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
