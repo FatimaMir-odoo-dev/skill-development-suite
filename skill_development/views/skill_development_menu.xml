@@ -15,12 +15,14 @@
             <field name="view_mode">kanban,form</field>
             <!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
         </record>
-        <menuitem id="menu_skill"
+        <menuitem id="skill_menu"
                   name="Skill Catalog"
                   action="skill_development.skill_action"
                   sequence="10"
                   web_icon="skill_development,static/description/icon1.png"
                   groups="skill_development_group_learner"/>
+
+
 
         <record id="skill_development.growth_tracker_action" model="ir.actions.act_window">
             <field name="name">My Skill Growth</field>
@@ -30,7 +32,8 @@
             <field name="view_id" ref="growth_tracker_view_tree"/>
             <!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
         </record>
-        <menuitem id="menu_skill_growth_record"
+
+        <menuitem id="growth_tracker_menu"
                   name="Skill Growth"
                   action="skill_development.growth_tracker_action"
                   sequence="20"/>
@@ -53,9 +56,9 @@
                 'create': False}</field>
         </record>
 
-        <menuitem id="menu_priority_task"
+        <menuitem id="growth_tracker_menu_priority_tasks"
                   name="Priority Tasks"
-                  parent="menu_skill_growth_record"
+                  parent="growth_tracker_menu"
                   action="action_priority_task"
                   sequence="5"/>
 
@@ -66,9 +69,9 @@
             <field name="context">{'create': False}</field>
         </record>
 
-        <menuitem id="menu_goal"
+        <menuitem id="growth_tracker_menu_goals"
                   name="My Goals"
-                  parent="menu_skill_growth_record"
+                  parent="growth_tracker_menu"
                   action="action_goal"
                   sequence="6"/>
 
@@ -82,10 +85,10 @@
             <!--            <field name="view_id" ref="skill_growth_view_tree"/>-->
             <!--            <field name="view_id" ref="skill_record_view_kanban"/>-->
         </record>
-        <menuitem id="menu_lesson_bank"
+        <menuitem id="growth_tracker_menu_lesson_bank"
                   name="Lesson Bank"
                   action="skill_development.lesson_bank_action"
-                  parent="menu_skill_growth_record"
+                  parent="growth_tracker_menu"
                   sequence="10"/>
 
         <record id="action_resource_form" model="ir.actions.act_window">
@@ -93,6 +96,7 @@
             <field name="res_model">skill_development.task_resource</field>
             <field name="view_mode">tree,form</field>
         </record>
+
 
     </data>
 </odoo>
