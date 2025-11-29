@@ -9,21 +9,65 @@ class Skill(models.Model):
     _name = "skill_development.skill"
     _description = 'Skill'
 
-
-    # Skill Record Details:
+    # 1. BASIC FIELDS (IDENTITY + DESCRIPTION)
+# ________________________________________
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
-    # learn = fields.Char(string="")
-    rating_ids = fields.One2many('skill_development.skill_rating', 'skill_id', string="Rating")
-    avg_overall_rating = fields.Float('Overall Rating Calculation', compute='_compute_avg_ratings', store=True)
+    pre_requisites = fields.Text(string="Pre-Requisites")
+# ________________________________________
+
+    # 2. RELATIONAL FIELDS
+# ________________________________________
+    rating_ids = fields.One2many('skill_development.skill_rating',
+        'skill_id',
+        string="Ratings")
+
+    career_path_ids = fields.Many2many('skill_development.skill_career',
+        relation='skill_career_rel',
+        column1='skill_id',
+        column2='career_id',
+        string='Job Roles for this Skill')
+
+    related_skill_ids = fields.Many2many('skill_development.skill',
+        relation='skill_related_rel',
+        column1='skill_id',
+        column2='related_id',
+        string='Related Skills',
+        domain="[('id', '!=', id)]")
+
+    prereq_skill_ids = fields.Many2many('skill_development.skill',
+        relation='skill_prereq_rel',
+        column1='skill_id',
+        column2='rprereq_id',
+        string='Consider Learning First',
+        domain="[('id', '!=', id)]")
+# ________________________________________
+
+    # 3. COMPUTED METRICS
+# ________________________________________
+    avg_overall_rating = fields.Float(
+        'Overall Rating Calculation',
+        compute='_compute_avg_ratings',
+        store=True)
+
+    avg_difficulty = fields.Float(
+        "Average Difficulty",
+        compute='_compute_avg_ratings',
+        store=True)
+    # ________________________________________
+
+    # 4. STAR RATING FIELDS (READONLY OUTPUTS)
+# ________________________________________
     star_avg_rating = fields.Selection([
         ('0', 'Not Recommended'),
         ('1', 'Poor'),
         ('2', 'Fair'),
         ('3', 'Good'),
         ('4', 'Very Good'),
-        ('5', 'Excellent'),
-    ], store=True, string="Overall Rating", readonly=True)
+        ('5', 'Excellent'),],
+        store=True,
+        string="Overall Rating",
+        readonly=True)
 
     star_avg_difficulty = fields.Selection([
         ('0', 'Impossible'),
@@ -31,32 +75,16 @@ class Skill(models.Model):
         ('2', 'Challenging'),
         ('3', 'Manageable'),
         ('4', 'Easy'),
-        ('5', 'Effortless'),
-    ], store=True, string="Overall Difficulty Rating", readonly=True)
+        ('5', 'Effortless'),],
+        store=True,
+        string="Overall Difficulty Rating",
+        readonly=True)
+# ________________________________________
 
-    avg_difficulty = fields.Float("Average Difficulty", compute='_compute_avg_ratings', store=True)
-
-
-    career_path_ids = fields.Many2many('skill_development.skill_career',
-                                       relation='skill_career_rel',
-                                       column1='skill_id',
-                                       column2='career_id',
-                                       string='Job roles for this skill')
-
-    related_skill_ids = fields.Many2many('skill_development.skill',  relation='skill_related_rel',
-                                       column1='skill_id',
-                                       column2='related_id',
-                                       string='Related Skills',
-                                       domain="[('id', '!=', id)]")
-
-    pre_requisites = fields.Text(string="Pre-Requisites")
-    prereq_skill_ids = fields.Many2many('skill_development.skill',  relation='skill_prereq_rel',
-                                           column1='skill_id',
-                                           column2='rprereq_id',
-                                           string='Consider Learning First',
-                                           domain="[('id', '!=', id)]")
-
+    # 5. FLAGS
+# ________________________________________
     is_transferable = fields.Boolean(string="This Skill is Transferable")
+
 
     @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
