@@ -1,5 +1,5 @@
 <odoo>
-    <record id="growth_tracker_rule_user_own_and_skills" model="ir.rule">
+    <record id="growth_tracker_rule_user_own_skills" model="ir.rule">
         <field name="name">User Skill Profiles</field>
         <field name="model_id" ref="skill_development.model_skill_development_growth_tracker"/>
          <field name="groups" eval="[(4, ref('skill_development.skill_development_group_general_admin')),

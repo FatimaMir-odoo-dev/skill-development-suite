@@ -59,7 +59,8 @@ class ProgressLogicHelper:
     def _get_goal_position_in_category(goal):
         same_category_goals = goal.search([
             ("category", "=", goal.category),
-            ("skill_id", "=", goal.skill_id.id)
+            ("skill_id", "=", goal.skill_id.id),
+            # ("learner_id", "=", goal.learner_id.id) #ADDED
         ], order="id")
 
         goal_ids = list(same_category_goals.ids)

@@ -22,10 +22,10 @@ class LogGoalLesson(models.TransientModel):
         string='Tags'
     )
     lesson_title = fields.Char('Lesson')
-    lesson_worked = fields.Html(String='What Worked', sanitize_attributes=False)
-    lesson_change = fields.Html(String='What to Change', sanitize_attributes=False)
-    lesson_learned = fields.Html(String='What Was Learned', sanitize_attributes=False)
-    extra_thoughts = fields.Html(String='Extra Thoughts', sanitize_attributes=False)
+    lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
+    lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
+    lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
+    extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
 
     def button_save_lesson(self):
         self.env['skill_development.lesson_bank'].create({

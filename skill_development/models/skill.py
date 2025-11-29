@@ -14,7 +14,7 @@ class Skill(models.Model):
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     # learn = fields.Char(string="")
-    rating_ids = fields.One2many('skill_development.skill_rating', 'skill_id', stirng="Rating")
+    rating_ids = fields.One2many('skill_development.skill_rating', 'skill_id', string="Rating")
     avg_overall_rating = fields.Float('Overall Rating Calculation', compute='_compute_avg_ratings', store=True)
     star_avg_rating = fields.Selection([
         ('0', 'Not Recommended'),
@@ -109,7 +109,7 @@ class Skill(models.Model):
     def unlink(self):
         for record in self:
             record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
-        return super(SkillRecord, self).unlink()
+        return super(Skill, self).unlink()
 
 
 
@@ -171,7 +171,7 @@ class SkillCareer(models.Model):
     def unlink(self):
         for record in self:
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
-        return super(CareerPath, self).unlink()
+        return super(SkillCareer, self).unlink()
 
 class CareerIndustry(models.Model):
     _name = "skill_development.career_industry"

@@ -14,58 +14,101 @@ class Goal(models.Model):
     _name = "skill_development.goal"
     _description = 'Skill'
 
-    # Connects to the learner profile for security and filter? (why do we need it?)
-    learner_id = fields.Many2one('res.users', string="Created by", required=True)
-    # Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
-    learner_plan_ids = fields.Many2one('skill_development.growth_tracker', string="Plan", ondelete='cascade')
-    # for goal, task , result, resources lock
-    is_acquired = fields.Boolean(string="Skill Acquired", related="learner_plan_ids.is_acquired")
-    # why do we need to connect with the original skill??
-    skill_id = fields.Many2one('skill_development.skill', string="Main Skill", readonly=True)
-    #goal info
-    category = fields.Selection([
-        ('knowledge', 'Knowledge'),
-        ('practice', 'Practice'),
-        ('creation', 'Creation & Contribution')
-    ], required=True)
-    date_start = fields.Date(string='Start Date')
-    date = fields.Date(string='Expiration Date', index=True, tracking=True)
-    goal_status = fields.Selection(
-        [
-            ('draft', 'Draft'),
-            ('finalized', 'Finalized'),
-            ('complete', 'Complete')
-        ], default='draft', string='Status', readonly=True)
-    goal_progress = fields.Float(string="Goal Contribution", compute='_compute_goal_progress', store=True)
-    task_count = fields.Integer(string=' ', compute='_compute_task_count')
-    lesson_count = fields.Integer(string=' ', compute='_compute_lesson_count')
+    # 1. RELATIONAL FIELDS
+# ________________________________________
+# Connects to the learner profile for security and filter? (why do we need it?)
+    learner_id = fields.Many2one('res.users',string="Created by",required=True)
+
+# Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
+    learner_plan_ids = fields.Many2one('skill_development.growth_tracker',
+        string="Plan",
+        ondelete='cascade')
+
+# why do we need to connect with the original skill??
+    skill_id = fields.Many2one('skill_development.skill',
+        string="Main Skill",
+        readonly=True)
+
+    result_ids = fields.One2many('skill_development.goal_result',
+        'goal_id',
+        string='Results')
+
+    task_ids = fields.One2many('skill_development.task',
+        'goal_id',
+        string='Tasks')
+
+    lesson_id = fields.One2many('skill_development.lesson_bank',
+        'goal_id',
+        string=" ")
+
+    tag_ids = fields.Many2many('skill_development.tag',string="Tags")
+# ________________________________________
+
+    # 2. STATUS FIELDS
+# ________________________________________
+# for goal, task , result, resources lock
+    is_acquired = fields.Boolean(
+        string="Skill Acquired",
+        related="learner_plan_ids.is_acquired",
+        store=True,
+        readonly=True)
+
+    goal_status = fields.Selection([
+        ('draft', 'Draft'),
+        ('finalized', 'Finalized'),
+        ('complete', 'Complete')],
+        default='draft',
+        string='Status',
+        readonly=True)
+
     kanban_state = fields.Selection([
         ('normal', 'On Hold'),
         ('done', 'In Progress'),
         ('blocked', 'Canceled')],
-        string='Status', default='normal')
+        string='Status',
+        default='normal')
 
-    result_ids = fields.One2many('skill_development.goal_result', 'goal_id', string=' ')
-    task_ids = fields.One2many('skill_development.task', 'goal_id', string='Tasks')
-    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
-    lesson_id = fields.One2many('skill_development.lesson_bank', 'goal_id')
+    date_start = fields.Date(string='Start Date')
+    date = fields.Date(string='Expiration Date', index=True, tracking=True)
+# ________________________________________
 
-    is_complete = fields.Boolean(string="Goal Complete", default= False)
+    # 3. METRICS (COMPUTED)
+# ________________________________________
+    goal_progress = fields.Float(
+        string="Goal Contribution",
+        compute='_compute_goal_progress',
+        store=True)
 
+    task_count = fields.Integer(string=" ", compute='_compute_task_count')
 
+    lesson_count = fields.Integer(
+        string='Lessons Count',
+        compute='_compute_lesson_count')
+# ________________________________________
 
-    # is_smart = fields.Boolean(string='SMART Compliant')
-    # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
-
-    # Contents of SMART Goal record
+    # 4. SMART GOAL FIELDS
+# ________________________________________
+    category = fields.Selection([
+        ('knowledge', 'Knowledge'),
+        ('practice', 'Practice'),
+        ('creation', 'Creation & Contribution')],
+        required=True)
     specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
-    measurable_goal = fields.Text("Measurable: [How do you know if you're progress is good?]")
-    achievable_goal = fields.Text('Achievable: [what makes you sure you can do it?]')
-    relevant_goal = fields.Text('Relevant: [Why is it important to you? (think of your motivation)]')
+    measurable_goal = fields.Text("Measurable: [How do you know if your progress is good?]")
+    achievable_goal = fields.Text('Achievable: [What makes you sure you can do it?]')
+    relevant_goal = fields.Text('Relevant: [Why is it important to you?]')
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
     goal_name = fields.Text('Complete Goal Statement')
+# ________________________________________
 
+    # 5. FLAGS
+# ________________________________________
+    #For locking goals, tasks, and resources
+    is_complete = fields.Boolean(string="Goal Complete", default=False)
 
+#====================================================================================================================
+    # is_smart = fields.Boolean(string='SMART Compliant')
+    # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
 
     # @api.constrains('goal_name')
     # def _check_SMART_fields(self):
@@ -87,6 +130,16 @@ class Goal(models.Model):
         for goal in self:
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
+    def _compute_task_count(self):
+        for record in self:
+            record.task_count = self.env['skill_development.task'].search_count(
+                [('goal_id', '=', record.id)])
+
+    def _compute_lesson_count(self):
+        for record in self:
+            record.lesson_count = self.env['skill_development.lesson_bank'].search_count(
+                [('goal_id', '=', record.id)])
+
 
     @api.model
     def create(self, vals):
@@ -107,9 +160,6 @@ class Goal(models.Model):
             rec.goal_status = 'complete'
             rec.is_complete = True
             # rec._compute_goal_progress()
-#DO WE NEED THIS LINE???
-        learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
-        learner_id = learner.id if learner else False
 
         return {
             'type': 'ir.actions.act_window',
@@ -128,7 +178,7 @@ class Goal(models.Model):
         self.ensure_one()
 
         if self.is_complete or self.is_acquired:
-            action_ref = 'skill_development.action_task_lock'
+            action_ref = 'skill_development.task_lock_action'
         else:
             action_ref = 'skill_development.task_unlock_action'
 
@@ -154,6 +204,7 @@ class Goal(models.Model):
     #                     },
     #     }
 
+
     def action_view_lesson(self):
         return {
             'type': 'ir.actions.act_window',
@@ -163,16 +214,6 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
-
-    def _compute_task_count(self):
-        for record in self:
-            record.task_count = self.env['skill_development.task'].search_count(
-                [('goal_id', '=', record.id)])
-
-    def _compute_lesson_count(self):
-        for record in self:
-            record.lesson_count = self.env['skill_development.lesson_bank'].search_count(
-                [('goal_id', '=', record.id)])
 
     def name_get(self):
         result = []
@@ -230,7 +271,7 @@ class Task(models.Model):
         required=True
     )
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
-    description = fields.Html(string='Description', anitize_attributes=False)
+    description = fields.Html(string='Description', sanitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
@@ -259,6 +300,11 @@ class Task(models.Model):
     #         vals['stage_id'] = first_stage.id if first_stage else False
     #     return super(GoalTask, self).create(vals)
 
+    def _compute_resource_count(self):
+        for record in self:
+            record.resource_count = self.env['skill_development.task_resource'].search_count(
+                [('task_id', '=', record.id)])
+
     @api.model
     def create(self, vals):
         goal_id = vals.get('goal_id') or self.env.context.get('default_goal_id')
@@ -273,10 +319,6 @@ class Task(models.Model):
 
         return super().create(vals)
 
-    def _compute_resource_count(self):
-        for record in self:
-            record.resource_count = self.env['skill_development.task_resource'].search_count(
-                [('task_id', '=', record.id)])
 
     # def action_open_resource_form(self):
     #     return {

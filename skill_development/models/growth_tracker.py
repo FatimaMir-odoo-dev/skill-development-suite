@@ -27,7 +27,7 @@ class GrowthTracker(models.Model):
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
 
-    scribble_note = fields.Html(String='Scribbles', anitize_attributes=False)
+    scribble_note = fields.Html(string='Scribbles', sanitize_attributes=False)
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
 
     progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
@@ -40,7 +40,7 @@ class GrowthTracker(models.Model):
                                     digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
 
-    is_acquired = fields.Boolean(string="Skill Acquired", stor=True)
+    is_acquired = fields.Boolean(string="Skill Acquired", store=True)
 
     skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
     active = fields.Boolean(default=True)
