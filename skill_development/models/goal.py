@@ -239,66 +239,54 @@ class TaskStage(models.Model):
     _order = 'sequence, id'
 
     name = fields.Char(string='Stage Name', required=True)
-    learner_id = fields.Many2one('res.users', string='Owner', required=True, default=lambda self: self.env.user,
-                              index=True)
+
+    learner_id = fields.Many2one('res.users', string='Owner', required=True,
+                default=lambda self: self.env.user,
+                index=True)
+    goal_id = fields.Many2one('skill_development.goal')
+
     sequence = fields.Integer(string='Sequence', default=1)
     fold = fields.Boolean(string='Folded in Kanban',
                            help='If enabled, this stage will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
 
-    legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
-    legend_done = fields.Char('Done Label', default='Ready', required=True)
-    legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
-
-    # task_id
-    goal_id = fields.Many2one('skill_development.goal')
+    # legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
+    # legend_done = fields.Char('Done Label', default='Ready', required=True)
+    # legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
 
 class Task(models.Model):
     _name = "skill_development.task"
-    _description = 'Skill'
+    _description = 'Task'
 
     name = fields.Char('Task')
-    # learner_id
-    # learner_plan_record_ids = fields.Many2one('skill_development.initial_plan_record', string="Skill", required=True,)
-    goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
-
-    is_goal_complete = fields.Boolean(string="Skill Acquired", related = "goal_id.is_complete")
-    stage_id = fields.Many2one(
-        'skill_development.task_stage',
-        string='Stage',
-        domain="[('learner_id', '=', uid)]",
-        ondelete='restrict',
-        required=True
-    )
-    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
     description = fields.Html(string='Description', sanitize_attributes=False)
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority", tracking=True)
-    # create_date = fields.Datetime("Created On", readonly=True)
-    # write_date = fields.Datetime("Last Updated On", readonly=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
+
+    # learner_id
+    # learner_skill_id = fields.Many2One('skill_development.growth_tracker', string="Skill", required=True,)
+    goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
+    stage_id = fields.Many2one('skill_development.task_stage',
+        string='Stage',
+        domain="[('learner_id', '=', uid)]",
+        ondelete='restrict',
+        required=True)
+    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
+    is_goal_complete = fields.Boolean(string="Skill Acquired", related="goal_id.is_complete")
+    resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
+
+    resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
     resource_url = fields.Char(string="Quick Access URL",
-                               help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task."
-                               )
+            help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task.")
+
     kanban_state = fields.Selection([
         ('normal', 'In Progress'),
         ('done', 'Ready'),
         ('blocked', 'Blocked')],
         string='Status',default='normal')
-    resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
-    resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
-
-    # @api.model
-    # def create(self, vals):
-    #     if not vals.get('stage_id') and vals.get('goal_id'):
-    #         goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
-    #         first_stage = self.env['skill_development.goal_task_stage'].search([
-    #             ('goal_id', '=', goal.id)
-    #         ], order='sequence', limit=1)
-    #         vals['stage_id'] = first_stage.id if first_stage else False
-    #     return super(GoalTask, self).create(vals)
 
     def _compute_resource_count(self):
         for record in self:
@@ -319,20 +307,15 @@ class Task(models.Model):
 
         return super().create(vals)
 
-
-    # def action_open_resource_form(self):
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'name': 'Add Resource',
-    #         'res_model': 'skill_development.goal_task_resource',
-    #         'view_mode': 'form',
-    #         'target': 'new',  # or 'current' for full-page
-    #         'context': {
-    #             'default_name': 'Default Resource Name',
-    #             'default_resource_type': 'document',
-    #             # you can pass more defaults here
-    #         }
-    #     }
+    # @api.model
+    # def create(self, vals):
+    #     if not vals.get('stage_id') and vals.get('goal_id'):
+    #         goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
+    #         first_stage = self.env['skill_development.goal_task_stage'].search([
+    #             ('goal_id', '=', goal.id)
+    #         ], order='sequence', limit=1)
+    #         vals['stage_id'] = first_stage.id if first_stage else False
+    #     return super(Task, self).create(vals)
 
 
 class TaskResource(models.Model):
@@ -463,8 +446,7 @@ class Tag(models.Model):
     color = fields.Integer(
         string='Color',
         default=lambda self: randint(1, 11),
-        help="Color used in Kanban or labels."
-    )
+        help="Color used in Kanban or labels.")
 
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.task', string='Tasks')

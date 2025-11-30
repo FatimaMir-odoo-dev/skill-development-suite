@@ -10,17 +10,17 @@ class LogGoalLesson(models.TransientModel):
 
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True, required=True,)
     skill_id = fields.Many2one('skill_development.skill', string="Skill", readonly=True)
+    tag_ids = fields.Many2many('skill_development.tag',
+                               relation='wizard_tag_lesson_rel',
+                               column1='tag_id',
+                               column2='lesson_id',
+                               string='Tags')
+
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
-    tag_ids = fields.Many2many(
-        'skill_development.tag',
-        relation='wizard_tag_lesson_rel',
-        column1='tag_id',
-        column2='lesson_id',
-        string='Tags'
-    )
+
     lesson_title = fields.Char('Lesson')
     lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
     lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)

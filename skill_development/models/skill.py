@@ -179,21 +179,23 @@ class Skill(models.Model):
             result.append((record.id, name))
         return result
 
+
+
 class SkillCareer(models.Model):
     _name = "skill_development.skill_career"
     _description = "Skill Career Paths"
 
-    def _get_default_color(self):
-        return randint(1, 11)
-
     name = fields.Char(string="Career", required=True)
     description = fields.Text(string="")
+    color = fields.Integer(
+        string='Color',
+        default=lambda self: randint(1, 11),
+        help="Color used in Kanban or labels.")
     industry_ids = fields.Many2many('skill_development.career_industry',
                                     relation='career_industry_rel',
                                     column1='career_id',
                                     column2='industry_id',
                                     string="Industries")
-    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the career tag")
 
     @api.model
     def unlink(self):
@@ -201,17 +203,20 @@ class SkillCareer(models.Model):
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
         return super(SkillCareer, self).unlink()
 
+
+
 class CareerIndustry(models.Model):
     _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
 
-    def _get_default_color(self):
-        return randint(1, 11)
-
     name = fields.Char('Industry Name', required=True, unique=True)  # Unique name field
-    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the Industry tag")
+    color = fields.Integer(
+        string='Color',
+        default=lambda self: randint(1, 11),
+        help="Color for the Industry tag")
 
     # career_ids = fields.Many2many('skill_development.skill_career', string="")
+
 
 class SkillRating(models.Model):
     _name = "skill_development.skill_rating"
@@ -229,24 +234,23 @@ class SkillRating(models.Model):
         ('2', 'Basic'),
         ('3', 'Moderate'),
         ('4', 'High'),
-        ('5', 'Essential'),
-    ],
+        ('5', 'Essential'),],
         default='0', index=True, string="Usefulness", tracking=True)
+
     fun2learn = fields.Selection([
         ('0', 'Dreadful'),
         ('1', 'Unpleasant'),
         ('2', 'Neutral'),
         ('3', 'Engaging'),
         ('4', 'Fun'),
-        ('5', 'Exciting'),
-    ],
+        ('5', 'Exciting'),],
         default='0', index=True, string="Fun", tracking=True)
+
     difficulty = fields.Selection([
         ('0', 'Impossible'),
         ('1', 'Demanding'),
         ('2', 'Challenging'),
         ('3', 'Manageable'),
         ('4', 'Easy'),
-        ('5', 'Effortless'),
-    ],
+        ('5', 'Effortless'),],
         default='0', index=True, string="Difficulty", tracking=True)

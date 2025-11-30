@@ -5,16 +5,17 @@ from odoo import models, fields, api
 
 class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/popups
     _name = 'skill_development.progress_guide'
-    _description = 'Help'
+    _description = 'Help / Skill Growth Guide'
 
     step = fields.Selection([
         ('page1', 'Overview'),
         ('page2', 'Details')
     ], default='page1', store=True)
 
+    skill_plan_id = fields.Many2one('skill_development.growth_tracker', string="Plan")
+
     message = fields.Html(string='Help Message', readonly=True)
     tips = fields.Html(string='Tips', readonly=True)
-    skill_plan_id = fields.Many2one('skill_development.growth_tracker', string="Plan")
     title = fields.Selection([
         ('seeker', 'Seeker'),
         ('learner', 'Learner'),
@@ -32,6 +33,8 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         res['tips'] = self._get_page1_tips()
         return res
 
+    # 6. NAVIGATION METHODS
+# ---------------------------------------------------------
     def go_to_page2(self):
         self.write({
             'step': 'page2',
@@ -60,6 +63,8 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
             'target': 'new',
         }
 
+    # 6. HELP CONTENT METHODS
+# ---------------------------------------------------------
     def _get_page1_content(self):
         return """
     <div class="container">
