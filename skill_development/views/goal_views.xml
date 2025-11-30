@@ -275,8 +275,8 @@
                                            attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                         <tree editable="bottom">
                                             <field name="result" width="300"/>
-                                            <field name="is_done" width="30" widget="boolean_toggle"/>
-                                            <field name="is_not_done" width="30" widget="boolean_toggle"/>
+                                            <field name="is_done" width="20" widget="boolean_toggle"/>
+<!--                                            <field name="is_not_done" width="30" widget="boolean_toggle"/>-->
                                         </tree>
                                     </field>
                                 </group>

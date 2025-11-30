@@ -340,6 +340,8 @@ class TaskResource(models.Model):
     _description = 'Resource for Tasks'
 
     name = fields.Char('Name', required=True)
+    description = fields.Text('Description')
+
     resource_type = fields.Selection([
         ('document', 'Document'),
         ('link', 'External Link'),
@@ -348,13 +350,14 @@ class TaskResource(models.Model):
         ('image', 'Image'),
     ], string='Type', required=True)
 
-    file = fields.Binary('Upload File')
-    url = fields.Char('External URL')
-    task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
-    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_ids.is_acquired", string="Skill Acquired" , store=False)
-    description = fields.Text('Description')
     video = fields.Binary(string='Video', attachment=True)
     image = fields.Binary(string='Image', attachment=True)
+    file = fields.Binary('Upload File', attachment=True)
+    url = fields.Char('External URL')
+
+    task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
+    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_ids.is_acquired", string="Skill Acquired" , store=False)
+
     # image_preview = fields.Binary(string='Image Preview')
     # video_preview = fields.(
     #     string='Video Preview',
@@ -378,46 +381,53 @@ class GoalResult(models.Model):
 
     goal_id = fields.Many2one('skill_development.goal', 'Goal')
     result = fields.Text(string="Expected Results")
-    is_done = fields.Boolean("Achieved")
-    is_not_done = fields.Boolean("Not Achieved", compute='_compute_is_not_done', inverse='_inverse_is_not_done')
+    is_done = fields.Boolean(string="Achieved")
 
-    @api.depends('is_done')
-    def _compute_is_not_done(self):
-        for rec in self:
-            rec.is_not_done = not rec.is_done
-
-    def _inverse_is_not_done(self):
-        for rec in self:
-            rec.is_done = not rec.is_not_done
+    # Computed flag, not stored, not editable
+    # is_not_done = fields.Boolean(
+    #     string="Not Achieved",
+    #     compute='_compute_is_not_done'
+    # )
+    #
+    # @api.depends('is_done')
+    # def _compute_is_not_done(self):
+    #     for rec in self:
+    #         rec.is_not_done = not rec.is_done
 
 
 class LessonBank(models.Model):
     _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
 
-    learner_plan_ids = fields.Many2one('skill_development.growth_tracker', string="Plan" , ondelete='cascade')
+    learner_plan_ids = fields.Many2one(
+        'skill_development.growth_tracker',
+        string="Plan",
+        ondelete='cascade')
+
     skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
+
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')
+    tag_ids = fields.Many2many('skill_development.tag',
+        relation='goal_tag_rel',
+        column1='goal_id',
+        column2='tag_id',
+        string="Tags"
+    )
 
     lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
     lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
     lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
     extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
+
     sequence = fields.Integer(string="Sequence", default=10)
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
     lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
-    tag_ids = fields.Many2many(
-        'skill_development.tag',
-        relation='goal_tag_rel',
-        column1='goal_id',
-        column2='tag_id',
-        string="Tags"
-    )
+
 
     @api.depends('lesson_worked')
     def _compute_lesson_short(self):
@@ -435,7 +445,7 @@ class LessonBank(models.Model):
     def name_get(self):
         lesson = []
         for record in self:
-            # Return the skill_name as the display name in the learner_skill_id dropdown
+            # Return the skill_name as the display name
             name = record.lesson_title or "Unnamed Lesson"
             lesson.append((record.id, name))
         return lesson
@@ -445,11 +455,16 @@ class Tag(models.Model):
     _name = "skill_development.tag"
     _description = "Goal Tags"
 
-    def _get_default_color(self):
-        return randint(1, 11)
+    _sql_constraints = [
+        ('tag_name_unique', 'unique(name)', 'A tag with this name already exists.')
+    ]
 
-    name = fields.Char('Name', required=True, unique=True)  # Unique name field
-    color = fields.Integer(string='Color', default=_get_default_color, help="Color for the tag")
+    name = fields.Char('Name', required=True)  # Unique name field
+    color = fields.Integer(
+        string='Color',
+        default=lambda self: randint(1, 11),
+        help="Color used in Kanban or labels."
+    )
 
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
     task_ids = fields.Many2many('skill_development.task', string='Tasks')
