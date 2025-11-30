@@ -17,19 +17,22 @@ class GrowthTracker(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
-    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_ids', string='Goal')
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal')
 
-    sequence = fields.Integer(string="Sequence", default=10)
+    goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
+    sequence = fields.Integer(string="Sequence", default=10) 
+
+#PLAN CONTENTS
     skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
-    motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short", sanitize_attributes=False)
+    motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short",
+                                   sanitize_attributes=False)
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
-
     scribble_note = fields.Html(string='Scribbles', sanitize_attributes=False)
-    goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
 
+# PROGRESS FIELDS
     progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
                                       help="Knowledge category is about increasing your understanding of the skill, with reading articles, watching videos, taking courses, and studying relevant materials.")
     progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True,
@@ -39,11 +42,19 @@ class GrowthTracker(models.Model):
     overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True,
                                     digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
+    title = fields.Selection([
+        ('seeker', 'Seeker'),
+        ('learner', 'Learner'),
+        ('skilled', 'Skilled'),
+        ('proficient', 'Proficient'),
+        ('master', 'Master')
+    ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
 
+# FLAGS
     is_acquired = fields.Boolean(string="Skill Acquired", store=True)
-
     skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
     active = fields.Boolean(default=True)
+
 
     @api.depends('motivation')
     def _compute_motivation_short(self):
@@ -81,14 +92,6 @@ class GrowthTracker(models.Model):
                     learner.progress_contribute * 0.50
             )
 
-    title = fields.Selection([
-        ('seeker', 'Seeker'),
-        ('learner', 'Learner'),
-        ('skilled', 'Skilled'),
-        ('proficient', 'Proficient'),
-        ('master', 'Master')
-    ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
-
     @api.depends('overall_progress')
     def _compute_title(self):
         for rec in self:
@@ -108,6 +111,28 @@ class GrowthTracker(models.Model):
             record.goal_count = self.env['skill_development.goal'].search_count(
                 [('skill_id', '=', record.skill_id.id)])
 
+
+    # Python constraint to get a unique skill name (the user must create only one plan per skill)
+    @api.constrains('skill_id')
+    def _check_unique_skill_id(self):
+        for record in self:
+            # Ensure that the skill name is unique for the current user (record_learner_id)
+            if self.search_count([
+                ('skill_id', '=', record.skill_id.id),
+                ('plan_owner_id', '=', record.plan_owner_id.id)
+            ]) > 1:
+                raise ValidationError(
+                    f"The skill '{record.skill_name}' already exists for this user.\n"
+                    f"You can update it by going to your profile and editing the plan record."
+                )
+
+    # Ensures plan_owner_id is automatically set to the current user
+    @api.model
+    def create(self, vals):
+        vals.setdefault('plan_owner_id', self.env.user.id)
+        return super(GrowthTracker, self).create(vals)
+    
+
     def goals_button(self):
         _logger.info("plan_owner_id %s: current user id = %s", self.plan_owner_id, self._uid)
         return {
@@ -118,7 +143,7 @@ class GrowthTracker(models.Model):
             'target': 'self',
             'domain': [('skill_id', '=', self.skill_id.id)],
             'context': {'default_skill_id': self.skill_id.id,
-                        'default_learner_plan_ids': self.id,
+                        'default_learner_plan_id': self.id,
                         'create': not self.is_acquired, },
         }
 
@@ -133,6 +158,20 @@ class GrowthTracker(models.Model):
                         'default_overall_progress': self.overall_progress,
                         'default_title': self.title, },
         }
+    def skill_acquired_button(self):
+
+        for rec in self:
+            rec.is_acquired = True
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Skill Rating',
+            'res_model': 'skill_development.skill_rating',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('learner_plan_record_ids', '=', self.id)],
+            'context': {'default_skill_id': self.skill_id.id},
+        }
 
     def action_archive_plan(self):
         self.active = False
@@ -141,7 +180,8 @@ class GrowthTracker(models.Model):
             'tag': 'display_notification',
             'params': {
                 'title': _('Plan Archived'),
-                'message': _('The skill "%s" has been archived, view by filtering with (Active is No).' % self.skill_id.skill_name),
+                'message': _(
+                    'The skill "%s" has been archived, view by filtering with (Active is No).' % self.skill_id.skill_name),
                 'type': 'warning',
                 'sticky': False,
             }
@@ -163,54 +203,6 @@ class GrowthTracker(models.Model):
             },
         }
 
-    def skill_acquired_button(self):
-
-        for rec in self:
-            rec.is_acquired = True
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Skill Rating',
-            'res_model': 'skill_development.skill_rating',
-            'view_mode': 'form',
-            'target': 'new',
-            'domain': [('learner_plan_record_ids', '=', self.id)],
-            'context': {'default_skill_id': self.skill_id.id},
-        }
-
-    # @api.model
-    # def open_wizard_form(self, context=None):
-    #
-    #     # get the Learner ID to pass it tp the wizard form in context
-    #     employee = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
-    #     learner_id = employee.id if employee else False
-    #
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         # this refers to the wizard form
-    #         'res_model': 'skill_plan.form',
-    #         'view_mode': 'form',
-    #         'name': 'My Skill Plan',
-    #         'target': 'new',
-    #         'context': {
-    #             'default_learner_id': learner_id},  # Pass the learner ID to the wizard form
-    #         'default_skill_name': self.skill_name,  # Pass the skill name to the wizard form
-    #     }
-
-    # Python constraint to get a unique skill name (the user must create only one plan per skill)
-    @api.constrains('skill_id')
-    def _check_unique_skill_id(self):
-        for record in self:
-            # Ensure that the skill name is unique for the current user (record_learner_id)
-            if self.search_count([
-                ('skill_id', '=', record.skill_id.id),
-                ('plan_owner_id', '=', record.plan_owner_id.id)
-            ]) > 1:
-                raise ValidationError(
-                    f"The skill '{record.skill_name}' already exists for this user.\n"
-                    f"You can update it by going to your profile and editing the plan record."
-                )
-
     def name_get(self):
         result = []
         for record in self:
@@ -219,26 +211,16 @@ class GrowthTracker(models.Model):
             result.append((record.id, name))
         return result
 
-    # Ensures plan_owner_id is automatically set to the current user
-    @api.model
-    def create(self, vals):
-        vals.setdefault('plan_owner_id', self.env.user.id)
-        return super(GrowthTracker, self).create(vals)
+
 
     # For the Smart Goal wizard where a learner can select one of the
     # skills saved in this record to connect the goal to
-
-#
-# from odoo import models, fields, api
-
-
 
 
 class LearnerProfile(models.Model):
     _inherit = "res.users"
 
-
-    plan_skill_ids = fields.One2many('skill_development.growth_tracker', 'plan_owner_id', string='Skill Plans')
+    # plan_skill_ids: object = fields.One2many('skill_development.growth_tracker', 'plan_owner_id', string='Skill Plans')
 
     # # Connect the learner to his volunteering record
     #     volunteer_record_id = fields.Many2one('volunteer_request.record', string="Volunteering Record ID")

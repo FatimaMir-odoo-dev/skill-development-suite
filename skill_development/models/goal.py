@@ -20,7 +20,7 @@ class Goal(models.Model):
     learner_id = fields.Many2one('res.users',string="Created by",required=True)
 
 # Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
-    learner_plan_ids = fields.Many2one('skill_development.growth_tracker',
+    learner_plan_id = fields.Many2one('skill_development.growth_tracker',
         string="Plan",
         ondelete='cascade')
 
@@ -49,7 +49,7 @@ class Goal(models.Model):
 # for goal, task , result, resources lock
     is_acquired = fields.Boolean(
         string="Skill Acquired",
-        related="learner_plan_ids.is_acquired",
+        related="learner_plan_id.is_acquired",
         store=True,
         readonly=True)
 
@@ -82,7 +82,7 @@ class Goal(models.Model):
     task_count = fields.Integer(string=" ", compute='_compute_task_count')
 
     lesson_count = fields.Integer(
-        string='Lessons Count',
+        string=' ',
         compute='_compute_lesson_count')
 # ________________________________________
 
@@ -171,7 +171,7 @@ class Goal(models.Model):
             'context': {  # Pass the learner ID to the wizard form
                 'default_goal_id': self.id,
                 'default_skill_id': self.skill_id.id,
-                'default_learner_plan_ids':self.learner_plan_ids.id},  # Pass the skill name to the wizard form
+                'default_learner_plan_id':self.learner_plan_id.id},  # Pass the skill name to the wizard form
         }
 
     def action_view_tasks(self):
@@ -339,7 +339,7 @@ class TaskResource(models.Model):
     url = fields.Char('External URL')
 
     task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
-    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_ids.is_acquired", string="Skill Acquired" , store=False)
+    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_id.is_acquired", string="Skill Acquired" , store=False)
 
     # image_preview = fields.Binary(string='Image Preview')
     # video_preview = fields.(
@@ -382,7 +382,7 @@ class LessonBank(models.Model):
     _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
 
-    learner_plan_ids = fields.Many2one(
+    learner_plan_id = fields.Many2one(
         'skill_development.growth_tracker',
         string="Plan",
         ondelete='cascade')
@@ -420,10 +420,10 @@ class LessonBank(models.Model):
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
-        if self.goal_id and self.goal_id.learner_plan_ids:
-            self.learner_plan_ids = self.goal_id.learner_plan_ids
+        if self.goal_id and self.goal_id.learner_plan_id:
+            self.learner_plan_id = self.goal_id.learner_plan_id
         else:
-            self.learner_plan_ids = False
+            self.learner_plan_id = False
 
     def name_get(self):
         lesson = []

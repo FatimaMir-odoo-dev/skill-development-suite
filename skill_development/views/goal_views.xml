@@ -623,7 +623,7 @@
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="fw-bold" style="font-size: 1em;">
                                     <span>Skill:</span>
-                                    <field name="learner_plan_ids" widget="badge" class="ms-2"/>
+                                    <field name="learner_plan_id" widget="badge" class="ms-2"/>
                                 </div>
                                 <field name="priority" widget="priority" class="me-3"/>
                             </div>
