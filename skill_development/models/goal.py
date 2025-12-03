@@ -12,14 +12,15 @@ _logger = logging.getLogger(__name__)
 
 class Goal(models.Model):
     _name = "skill_development.goal"
-    _description = 'Skill'
+    _description = 'Goal'
+    _inherit = 'count.mixin'
 
     # 1. RELATIONAL FIELDS
 # ________________________________________
 # Connects to the learner profile for security and filter? (why do we need it?)
     learner_id = fields.Many2one('res.users',string="Created by",required=True)
 
-# Connect to the learner's initial plan records to get all their skills (why do we need to connect it?)
+# Connect to the learner's growth records to get all their skills (why do we need to connect it?)
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
         string="Plan",
         ondelete='cascade')
@@ -126,14 +127,18 @@ class Goal(models.Model):
                  'specific_goal', 'measurable_goal', 'achievable_goal',
                  'relevant_goal', 'timed_goal',
                  'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
+
     def _compute_goal_progress(self):
         for goal in self:
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
     def _compute_task_count(self):
-        for record in self:
-            record.task_count = self.env['skill_development.task'].search_count(
-                [('goal_id', '=', record.id)])
+        """Count tasks associated with each goal."""
+        self._compute_count(
+            count_field='task_count',
+            counted_model='skill_development.task',
+            related_field='goal_id'
+        )
 
     def _compute_lesson_count(self):
         for record in self:
