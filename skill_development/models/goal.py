@@ -269,6 +269,7 @@ class TaskStage(models.Model):
 class Task(models.Model):
     _name = "skill_development.task"
     _description = 'Task'
+    _inherit = 'count.mixin'
 
     name = fields.Char('Task')
     description = fields.Html(string='Description', sanitize_attributes=False)
@@ -301,9 +302,13 @@ class Task(models.Model):
         string='Status',default='normal')
 
     def _compute_resource_count(self):
-        for record in self:
-            record.resource_count = self.env['skill_development.task_resource'].search_count(
-                [('task_id', '=', record.id)])
+        """Count goals associated with each skill growth tracker."""
+
+        self._compute_count(
+            count_field='resource_count',
+            counted_model='skill_development.task_resource',
+            related_field='task_id'
+        )
 
     @api.model
     def create(self, vals):
