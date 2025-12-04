@@ -82,9 +82,7 @@ class Goal(models.Model):
 
     task_count = fields.Integer(string=" ", compute='_compute_task_count')
 
-    lesson_count = fields.Integer(
-        string=' ',
-        compute='_compute_lesson_count')
+    lesson_count = fields.Integer(string=" ",compute='_compute_lesson_count')
 # ________________________________________
 
     # 4. SMART GOAL FIELDS
@@ -133,7 +131,7 @@ class Goal(models.Model):
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
     def _compute_task_count(self):
-        """Count tasks associated with each goal."""
+        """Using the count_mixin to count tasks associated with each goal."""
         self._compute_count(
             count_field='task_count',
             counted_model='skill_development.task',
@@ -141,9 +139,12 @@ class Goal(models.Model):
         )
 
     def _compute_lesson_count(self):
-        for record in self:
-            record.lesson_count = self.env['skill_development.lesson_bank'].search_count(
-                [('goal_id', '=', record.id)])
+        """Using the count_mixin to count lessons associated with each goal."""
+        self._compute_count(
+            count_field='lesson_count',
+            counted_model='skill_development.lesson_bank',
+            related_field='goal_id'
+        )
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -302,7 +303,7 @@ class Task(models.Model):
         string='Status',default='normal')
 
     def _compute_resource_count(self):
-        """Count goals associated with each skill growth tracker."""
+        """Using the count_mixin to count resources associated with each task."""
 
         self._compute_count(
             count_field='resource_count',

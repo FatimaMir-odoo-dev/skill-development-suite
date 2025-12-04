@@ -109,7 +109,7 @@ class GrowthTracker(models.Model):
 
     # @api.depends('goal_id')
     def _compute_goal_count(self):
-        """Count goals associated with each skill growth tracker."""
+        """Using the count_mixin to count goals associated with each skill growth tracker."""
 
         self._compute_count(
             count_field='goal_count',
