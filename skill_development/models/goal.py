@@ -145,12 +145,19 @@ class Goal(models.Model):
             record.lesson_count = self.env['skill_development.lesson_bank'].search_count(
                 [('goal_id', '=', record.id)])
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Set default learner_id and learner_plan_id if not provided."""
+        for vals in vals_list:
+            # Set learner_id to current user if not provided
+            if 'learner_id' not in vals:
+                vals['learner_id'] = self.env.user.id
 
-    @api.model
-    def create(self, vals):
-        if 'learner_id' not in vals:
-            vals['learner_id'] = self.env.user.id
-        return super(Goal, self).create(vals)
+            # Set learner_plan_id from context if not provided
+            if not vals.get('learner_plan_id') and self.env.context.get('default_learner_plan_id'):
+                vals['learner_plan_id'] = self.env.context.get('default_learner_plan_id')
+
+        return super(Goal, self).create(vals_list)
 
     def action_create_goal_draft(self):
         for rec in self:

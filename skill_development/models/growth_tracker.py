@@ -14,6 +14,7 @@ _logger = logging.getLogger(__name__)
 class GrowthTracker(models.Model):
     _name = 'skill_development.growth_tracker'
     _description = 'A Record For The Learner Skill Plan'
+    _inherit = 'count.mixin'
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
@@ -106,10 +107,15 @@ class GrowthTracker(models.Model):
             else:
                 rec.title = 'seeker'
 
+    # @api.depends('goal_id')
     def _compute_goal_count(self):
-        for record in self:
-            record.goal_count = self.env['skill_development.goal'].search_count(
-                [('skill_id', '=', record.skill_id.id)])
+        """Count goals associated with each skill growth tracker."""
+
+        self._compute_count(
+            count_field='goal_count',
+            counted_model='skill_development.goal',
+            related_field='learner_plan_id'
+        )
 
 
     # Python constraint to get a unique skill name (the user must create only one plan per skill)
@@ -158,8 +164,8 @@ class GrowthTracker(models.Model):
                         'default_overall_progress': self.overall_progress,
                         'default_title': self.title, },
         }
-    def skill_acquired_button(self):
 
+    def skill_acquired_button(self):
         for rec in self:
             rec.is_acquired = True
 
