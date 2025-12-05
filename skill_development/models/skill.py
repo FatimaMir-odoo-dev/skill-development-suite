@@ -8,7 +8,7 @@ from random import randint
 class Skill(models.Model):
     _name = "skill_development.skill"
     _description = 'Skill'
-    # _rec_name = 'skill_name'
+    _rec_name = 'skill_name'
 
     # 1. BASIC FIELDS (IDENTITY + DESCRIPTION)
 # ________________________________________
@@ -171,14 +171,6 @@ class Skill(models.Model):
                 'default_learner_id': self.env.uid,  # Pass the learner ID to the wizard form
                 'default_skill_id': self.id,},  # Pass the skill name to the wizard form
         }
-
-# Get the Skill Name to be used by other records
-    def name_get(self):
-        result = []
-        for record in self:
-            name = record.skill_name  # Only use skill_name, without the ID or extra Info
-            result.append((record.id, name))
-        return result
 
 
 

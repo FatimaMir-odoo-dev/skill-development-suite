@@ -14,6 +14,7 @@ class Goal(models.Model):
     _name = "skill_development.goal"
     _description = 'Goal'
     _inherit = 'count.mixin'
+    _rec_name = 'goal_name'
 
     # 1. RELATIONAL FIELDS
 # ________________________________________
@@ -230,13 +231,6 @@ class Goal(models.Model):
             'context': {'default_goal_id': self.id},
         }
 
-    def name_get(self):
-        result = []
-        for record in self:
-            # Return the skill_name as the display name in the learner_skill_id dropdown
-            name = record.goal_name or "Unnamed Goal"
-            result.append((record.id, name))
-        return result
 
     # def action_open_goal_popup(self):
     #     return {
@@ -394,6 +388,8 @@ class GoalResult(models.Model):
 class LessonBank(models.Model):
     _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
+    _rec_name = 'lesson_title'
+
 
     learner_plan_id = fields.Many2one(
         'skill_development.growth_tracker',
@@ -424,7 +420,6 @@ class LessonBank(models.Model):
         default='0', index=True, string="Priority")
     lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
 
-
     @api.depends('lesson_worked')
     def _compute_lesson_short(self):
         for record in self:
@@ -437,14 +432,6 @@ class LessonBank(models.Model):
             self.learner_plan_id = self.goal_id.learner_plan_id
         else:
             self.learner_plan_id = False
-
-    def name_get(self):
-        lesson = []
-        for record in self:
-            # Return the skill_name as the display name
-            name = record.lesson_title or "Unnamed Lesson"
-            lesson.append((record.id, name))
-        return lesson
 
 
 class Tag(models.Model):

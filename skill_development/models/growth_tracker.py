@@ -15,6 +15,7 @@ class GrowthTracker(models.Model):
     _name = 'skill_development.growth_tracker'
     _description = 'A Record For The Learner Skill Plan'
     _inherit = 'count.mixin'
+    _rec_name = 'skill_name'
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
@@ -209,13 +210,6 @@ class GrowthTracker(models.Model):
             },
         }
 
-    def name_get(self):
-        result = []
-        for record in self:
-            # Return the skill_name as the display name in the learner_skill_id dropdown
-            name = record.skill_name or "Unnamed Skill"
-            result.append((record.id, name))
-        return result
 
 
 
