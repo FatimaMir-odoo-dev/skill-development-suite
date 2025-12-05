@@ -8,6 +8,7 @@ from random import randint
 class Skill(models.Model):
     _name = "skill_development.skill"
     _description = 'Skill'
+    # _rec_name = 'skill_name'
 
     # 1. BASIC FIELDS (IDENTITY + DESCRIPTION)
 # ________________________________________
@@ -133,11 +134,11 @@ class Skill(models.Model):
             skill.star_avg_rating = to_star(avg_rating)
             skill.star_avg_difficulty = to_star(avg_difficulty)
 
-    @api.model
-    def unlink(self):
-        for record in self:
-            record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
-        return super(Skill, self).unlink()
+    # @api.model
+    # def unlink(self):
+    #     for record in self:
+    #         record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
+    #     return super(Skill, self).unlink()
 
 
 

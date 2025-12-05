@@ -686,9 +686,6 @@
                                 <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                                     <!-- Left: Priority -->
                                     <field name="priority" widget="priority"/>
-
-                                    <!-- Right: Kanban State -->
-                                    <field name="kanban_state" widget="state_selection"/>
                                 </header>
 
                                 <!-- Title -->
@@ -743,8 +740,6 @@
                                     <!-- Left: Priority -->
                                     <field name="priority" widget="priority"/>
 
-                                    <!-- Right: Kanban State -->
-                                    <field name="kanban_state" widget="state_selection"/>
                                 </header>
 
                                 <!-- Title -->
@@ -797,9 +792,6 @@
                                     <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
                                            placeholder="Task Title..."
                                            />
-                                </div>
-                                <div class="d-flex flex-column align-items-start ms-0">
-                                    <field name="kanban_state" widget="state_selection" class="ms-0"/>
                                 </div>
                             </h1>
                         </div>
@@ -854,9 +846,6 @@
                                     <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
                                            placeholder="Task Title..."
                                            />
-                                </div>
-                                <div class="d-flex flex-column align-items-start ms-0">
-                                    <field name="kanban_state" widget="state_selection" class="ms-0"/>
                                 </div>
                             </h1>
                         </div>

@@ -130,6 +130,7 @@ class Goal(models.Model):
         for goal in self:
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
+    @api.depends('task_ids')
     def _compute_task_count(self):
         """Using the count_mixin to count tasks associated with each goal."""
         self._compute_count(
@@ -138,6 +139,7 @@ class Goal(models.Model):
             related_field='goal_id'
         )
 
+    @api.depends('lesson_id')
     def _compute_lesson_count(self):
         """Using the count_mixin to count lessons associated with each goal."""
         self._compute_count(
@@ -197,11 +199,11 @@ class Goal(models.Model):
 
         action = self.env.ref(action_ref).sudo().read()[0]
 
-        # Inject your domain and context dynamically
-        action['domain'] = [('goal_id', '=', self.id)]
-        action['context'] = {
-            'default_goal_id': self.id,
-        }
+        # Inject domain and context dynamically
+        action.update({
+            'domain': [('goal_id', '=', self.id)],
+            'context': {'default_goal_id': self.id}
+        })
 
         return action
 
@@ -285,7 +287,7 @@ class Task(models.Model):
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one('skill_development.task_stage',
         string='Stage',
-        domain="[('learner_id', '=', uid)]",
+        domain="[('learner_id', '=', user_id)]",
         ondelete='restrict',
         required=True)
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
@@ -296,12 +298,7 @@ class Task(models.Model):
     resource_url = fields.Char(string="Quick Access URL",
             help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task.")
 
-    kanban_state = fields.Selection([
-        ('normal', 'In Progress'),
-        ('done', 'Ready'),
-        ('blocked', 'Blocked')],
-        string='Status',default='normal')
-
+    @api.depends('resource_ids')
     def _compute_resource_count(self):
         """Using the count_mixin to count resources associated with each task."""
 
@@ -314,13 +311,11 @@ class Task(models.Model):
     @api.model
     def create(self, vals):
         goal_id = vals.get('goal_id') or self.env.context.get('default_goal_id')
-        _logger.info("goal_id=%s", goal_id)
 
         if goal_id:
             goal = self.env['skill_development.goal'].browse(goal_id)
-            _logger.info("goal found: %s, is_complete=%s", goal, goal.is_complete)
 
-            if goal and goal.is_complete:
+            if goal.exists() and goal.is_complete:
                 raise ValidationError("Cannot add a task to a completed goal.")
 
         return super().create(vals)
