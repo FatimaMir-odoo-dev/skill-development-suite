@@ -134,7 +134,7 @@ class Skill(models.Model):
             skill.star_avg_rating = to_star(avg_rating)
             skill.star_avg_difficulty = to_star(avg_difficulty)
 
-    # @api.model
+
     # def unlink(self):
     #     for record in self:
     #         record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
@@ -154,12 +154,8 @@ class Skill(models.Model):
     # Opens the wizard form for the skill's initial plan.
     # Activated upon clicking the Button: Start Learning
 
-    def action_open_initial_plan_wizard(self, context=None):
-
-        # get the Learner ID to pass it tp the wizard form in context
-        # learner = self.env['res.users'].search([('id', '=', self.env.uid)], limit=1)
-        # learner_id = learner.id if learner else False
-
+    def action_open_initial_plan_wizard(self):
+        #DOC HERE
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
@@ -168,7 +164,7 @@ class Skill(models.Model):
             'name': 'My Skill Plan',
             'target': 'new',
             'context': {
-                'default_learner_id': self.env.uid,  # Pass the learner ID to the wizard form
+                'default_learner_id': self.env.user.id,  # Pass the learner ID to the wizard form
                 'default_skill_id': self.id,},  # Pass the skill name to the wizard form
         }
 
@@ -190,7 +186,7 @@ class SkillCareer(models.Model):
                                     column2='industry_id',
                                     string="Industries")
 
-    @api.model
+
     def unlink(self):
         for record in self:
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
