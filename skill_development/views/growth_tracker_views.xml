@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (C) 2024 FatimaMir-odoo-dev-->
 <!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
 
 <odoo>
-    <data>
-
         <record id="growth_tracker_view_tree" model="ir.ui.view">
             <field name="name">growth.tracker.view.tree</field>
             <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
-                <tree string="My Skill Growth" create="false">
+                <tree create="false">
                     <field name="is_acquired" invisible="1"/>
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
@@ -154,7 +152,4 @@
                 </form>
             </field>
         </record>
-
-
-    </data>
 </odoo>

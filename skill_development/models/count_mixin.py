@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import api, fields, models  # noqa: F401
+
 
 class CountMixin(models.AbstractModel):
     _name = 'count.mixin'
@@ -9,8 +10,9 @@ class CountMixin(models.AbstractModel):
                 Generic method to count related records.
 
                 :param count_field: str - name of the computed field to update (e.g., 'task_count')
-                :param counted_model: str - model name of the related records to be counted (e.g., 'skill_development.task')
-                :param related_field: str - field name on related model that links back (e.g., 'goal_id') NAH BETTER DESC
+                :param counted_model: str - model name of the related records to be counted
+                    (e.g., 'skill_development.task')
+                :param related_field: str - field name on related model that links back (e.g., 'goal_id') NAH BETTER DESC # noqa: E501
                 """
 
         # Early return if no records to process

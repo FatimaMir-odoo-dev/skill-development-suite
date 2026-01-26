@@ -1,5 +1,6 @@
 
-from odoo import models, fields, api, _
+from odoo import _, api, fields, models  # noqa: F401
+
 
 class DeleteProgress(models.TransientModel):
     _name = 'skill_development.delete_progress'

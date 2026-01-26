@@ -1,7 +1,8 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models
+
 
 class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/popups
     _name = 'skill_development.progress_guide'
@@ -83,7 +84,7 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         <ul class="list-disc ml-6 mb-6 text-gray-700">
             <li><strong class="highlight">Knowledge (15%):</strong> What you learn (e.g., reading, courses).</li>
             <li><strong class="highlight">Practice (35%):</strong> What you do (e.g., exercises, projects).</li>
-            <li><strong class="highlight">Connect &amp; Contribute (50%):</strong> What you share and teach (e.g., helping others, collaborating).</li>
+            <li><strong class="highlight">Connect &amp; Contribute (50%):</strong> What you share and teach (e.g., helping others, collaborating).</li> # noqa: E501
         </ul>
 
         <p class="text-gray-700 mb-4">
@@ -97,7 +98,7 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         </div>
 
         <p class="text-gray-700">
-            As you can see, <strong class="highlight">Practice</strong> and <strong class="highlight">Connect &amp; Contribute</strong> are worth more, because applying and sharing your skills is the best way to learn!
+            As you can see, <strong class="highlight">Practice</strong> and <strong class="highlight">Connect &amp; Contribute</strong> are worth more, because applying and sharing your skills is the best way to learn! # noqa: E501
         </p>
     </div>
 
@@ -172,12 +173,13 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         </div>
         """
 
+    # flake8: noqa: E501
     def _get_page2_content(self):
         return """
             <h2 class="text-3xl font-semibold text-gray-800 mb-4">Understanding Your Progress</h2>
 
         <p class="text-lg text-gray-700 mb-8">
-            This page explains how progress is calculated in each category and how your overall progress translates into skill titles.
+            This page explains how progress is calculated in each category and how your overall progress translates into skill titles. # noqa: E501
         </p>
 
         <h2 class="text-3xl font-semibold text-gray-800 mb-4">Progress by Category</h2>
@@ -187,10 +189,10 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         </p>
 
         <ul class="list-disc ml-6 mb-6 text-gray-700">
-            <li><strong class="highlight">Base Value:</strong> Your first goal = 20% progress. Each following goal adds 2% less (e.g., 2nd goal = 18%, 3rd goal = 16%, and so on).</li>
-            <li><strong class="highlight">SMART Goal Bonus:</strong> Get up to +5% extra progress if your goal is <strong class="highlight">S</strong>pecific, <strong class="highlight">M</strong>easurable, <strong class="highlight">A</strong>chievable, <strong class="highlight">R</strong>elevant, and <strong class="highlight">T</strong>ime-bound.</li>
-            <li><strong class="highlight">Reflection Bonus:</strong> Get +5% extra progress if you answer all 3 reflection questions when you complete a goal.</li>
-            <li><strong class="highlight">"Done" Requirement Penalty:</strong> Lose -1% if you mark fewer than 2 expected results as "Done" for a goal.</li>
-            <li><strong class="highlight">Category Limit:</strong> You can earn a maximum of 100% progress in each of the **Knowledge**, **Practice**, and **Connect &amp; Contribute** categories.</li>
+            <li><strong class="highlight">Base Value:</strong> Your first goal = 20% progress. Each following goal adds 2% less (e.g., 2nd goal = 18%, 3rd goal = 16%, and so on).</li> # noqa: E501
+            <li><strong class="highlight">SMART Goal Bonus:</strong> Get up to +5% extra progress if your goal is <strong class="highlight">S</strong>pecific, <strong class="highlight">M</strong>easurable, <strong class="highlight">A</strong>chievable, <strong class="highlight">R</strong>elevant, and <strong class="highlight">T</strong>ime-bound.</li> # noqa: E501
+            <li><strong class="highlight">Reflection Bonus:</strong> Get +5% extra progress if you answer all 3 reflection questions when you complete a goal.</li> # noqa: E501
+            <li><strong class="highlight">"Done" Requirement Penalty:</strong> Lose -1% if you mark fewer than 2 expected results as "Done" for a goal.</li> # noqa: E501
+            <li><strong class="highlight">Category Limit:</strong> You can earn a maximum of 100% progress in each of the **Knowledge**, **Practice**, and **Connect &amp; Contribute** categories.</li> # noqa: E501
         </ul>
         """

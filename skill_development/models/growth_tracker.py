@@ -1,12 +1,9 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
-from email.policy import default
-
-from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError, UserError
 import logging
 
-from sass import and_join
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -22,9 +19,9 @@ class GrowthTracker(models.Model):
     goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal')
 
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
-    sequence = fields.Integer(string="Sequence", default=10) 
+    sequence = fields.Integer(string="Sequence", default=10)
 
-#PLAN CONTENTS
+    # PLAN CONTENTS
     skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
@@ -34,13 +31,19 @@ class GrowthTracker(models.Model):
     msg_2self = fields.Text(string="Message to Myself")
     scribble_note = fields.Html(string='Scribbles', sanitize_attributes=False)
 
-# PROGRESS FIELDS
+    # PROGRESS FIELDS
     progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
-                                      help="Knowledge category is about increasing your understanding of the skill, with reading articles, watching videos, taking courses, and studying relevant materials.")
+                                      help='''Knowledge category is about increasing your understanding of the skill,
+                                           with reading articles, watching videos, taking courses,
+                                            and studying relevant materials.''')
     progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True,
-                                     help="The Practice category involves applying the skill through hands-on activities, such as exercises, personal projects, simulations, and practical application.")
+                                     help='''The Practice category involves applying the skill through hands-on
+                                           activities, such as exercises, personal projects, simulations,
+                                           and practical application.''')
     progress_contribute = fields.Float('Creation & Contribution', compute="_compute_category_progress", store=True,
-                                       help="Creation & Contribution involves sharing and benefiting from your knowledge: teaching, mentoring, working for return and publishing projects.")
+                                       help='''Creation & Contribution involves sharing and benefiting from your
+                                            knowledge: teaching, mentoring,
+                                            working for return and publishing projects.''')
     overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True,
                                     digits=(6, 2))
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
@@ -52,11 +55,10 @@ class GrowthTracker(models.Model):
         ('master', 'Master')
     ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
 
-# FLAGS
+    # FLAGS
     is_acquired = fields.Boolean(string="Skill Acquired", store=True)
     skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
     active = fields.Boolean(default=True)
-
 
     @api.depends('motivation')
     def _compute_motivation_short(self):
@@ -118,11 +120,11 @@ class GrowthTracker(models.Model):
             related_field='learner_plan_id'
         )
 
-
-    # Python constraint to get a unique skill name (the user must create only one plan per skill)
+    # Python constraint to get a unique skill name (User must create only one plan per skill)
     @api.constrains('skill_id')
     def _check_unique_skill_id(self):
         for record in self:
+
             # Ensure that the skill name is unique for the current user (record_learner_id)
             if self.search_count([
                 ('skill_id', '=', record.skill_id.id),
@@ -138,7 +140,6 @@ class GrowthTracker(models.Model):
     def create(self, vals):
         vals.setdefault('plan_owner_id', self.env.user.id)
         return super(GrowthTracker, self).create(vals)
-    
 
     def goals_button(self):
         _logger.info("plan_owner_id %s: current user id = %s", self.plan_owner_id, self._uid)
@@ -188,7 +189,8 @@ class GrowthTracker(models.Model):
             'params': {
                 'title': _('Plan Archived'),
                 'message': _(
-                    'The skill "%s" has been archived, view by filtering with (Active is No).' % self.skill_id.skill_name),
+                    'The skill "%s" has been archived, '
+                    'view by filtering with (Active is No).' % self.skill_id.skill_name),
                 'type': 'warning',
                 'sticky': False,
             }
@@ -210,9 +212,6 @@ class GrowthTracker(models.Model):
             },
         }
 
-
-
-
     # For the Smart Goal wizard where a learner can select one of the
     # skills saved in this record to connect the goal to
 
@@ -220,7 +219,8 @@ class GrowthTracker(models.Model):
 class LearnerProfile(models.Model):
     _inherit = "res.users"
 
-    # plan_skill_ids: object = fields.One2many('skill_development.growth_tracker', 'plan_owner_id', string='Skill Plans')
+    # plan_skill_ids: object = fields.One2many('skill_development.growth_tracker',
+    #                          'plan_owner_id', string='Skill Plans')
 
     # # Connect the learner to his volunteering record
     #     volunteer_record_id = fields.Many2one('volunteer_request.record', string="Volunteering Record ID")

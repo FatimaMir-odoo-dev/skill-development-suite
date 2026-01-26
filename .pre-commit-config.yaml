@@ -1,0 +1,49 @@
+repos:
+# General Python Hooks
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0 # Check the latest stable revision
+  hooks:
+    - id: trailing-whitespace
+    - id: end-of-file-fixer
+    - id: check-yaml
+    - id: check-json
+    - id: debug-statements
+    - id: check-added-large-files
+
+# Code Formatters (auto-fix styling before linting)
+- repo: https://github.com/pycqa/isort
+  rev: 7.0.0
+  hooks:
+    - id: isort
+      args: ["--profile", "black", "--line-length", "120"]
+
+# Flake8 Hook (check code after formatting)
+- repo: https://github.com/PyCQA/flake8
+  rev: 7.3.0
+  hooks:
+    - id: flake8
+      args:
+        - --max-line-length=120
+        - --extend-ignore=E203,W503
+
+# Bandit Security Linter Hook
+- repo: https://github.com/PyCQA/bandit
+  rev: 1.9.3
+  hooks:
+    - id: bandit
+      args: ["-r", "-lll"]
+      exclude: tests
+
+# Odoo Addon Structure
+- repo: https://github.com/OCA/odoo-pre-commit-hooks
+  rev: v0.0.24
+  hooks:
+    - id: oca-checks-odoo-module
+    - id: oca-checks-po
+      args: ["--fix"]
+
+- repo: https://github.com/OCA/pylint-odoo
+  rev: v8.0.19
+  hooks:
+    - id: pylint_odoo
+      args: ["--exit-zero"]

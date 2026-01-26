@@ -6,7 +6,7 @@
     'version': '16.0.2.33',
     'summary': 'Personalized learning plans for skill development.',
     'description': """
-        It's the core of the Skill Development Suite. 
+        It's the core of the Skill Development Suite.
         It enables learners to create personalized skill growth plans using SMART goals, tasks and resources.
         Originally developed for the IEEE Student Branch at Al-Neelain University,
         it is fully adaptable for any learning-focused organization.

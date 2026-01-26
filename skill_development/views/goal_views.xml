@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
         <record id="goal_view_kanban" model="ir.ui.view">
             <field name="name">goal.view.kanban</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
-                <kanban on_create="skill_development.new_goal_action">
+                <kanban on_create="new_goal_action">
                     <field name="goal_status" invisible="1"/>
                     <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>
@@ -368,7 +367,7 @@
             </field>
         </record>
 
-        <record id="skill_development.goal_form_action" model="ir.actions.act_window">
+        <record id="goal_form_action" model="ir.actions.act_window">
             <field name="name">Goal</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">form</field>
@@ -502,7 +501,7 @@
             </field>
         </record>
 
-        <record id="skill_development.new_goal_action" model="ir.actions.act_window">
+        <record id="new_goal_action" model="ir.actions.act_window">
             <field name="name">Create a Goal</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">form</field>
@@ -908,7 +907,7 @@
                 </form>
             </field>
         </record>
-        <record id="skill_development.task_lock_action" model="ir.actions.act_window">
+        <record id="task_lock_action" model="ir.actions.act_window">
             <field name="name">Tasks (Complete Goal)</field>
             <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
@@ -920,7 +919,7 @@
         </record>
 
 
-        <record id="skill_development.task_unlock_action" model="ir.actions.act_window">
+        <record id="task_unlock_action" model="ir.actions.act_window">
             <field name="name">Tasks (Incomplete Goal)</field>
             <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
@@ -930,5 +929,4 @@
         (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_unlocked')})
     ]"/>
         </record>
-    </data>
 </odoo>

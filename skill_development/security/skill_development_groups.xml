@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (C) 2024 FatimaMir-odoo-dev-->
 <!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
 <odoo>
-    <data>
         <record id="skill_development_access" model="ir.module.category">
         <field name="name">Skill Development</field>
     </record>
@@ -18,5 +17,4 @@
         <field name="category_id" ref="skill_development_access"/>
 <!--        <field name="implied_ids" eval="[(4, ref('base.group_users'))]"/>-->
     </record>
-    </data>
 </odoo>

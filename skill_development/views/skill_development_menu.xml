@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (C) 2024 FatimaMir-odoo-dev-->
 <!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
 
 <odoo>
-    <data>
 <!--        <menuitem id="menu_skill_development"-->
 <!--                  name="Skills"/>-->
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
 
-        <record id="skill_development.skills_action" model="ir.actions.act_window">
+        <record id="skills_action" model="ir.actions.act_window">
             <field name="name">Skills</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">skill_development.skill</field>
@@ -17,14 +16,14 @@
         </record>
         <menuitem id="skill_menu"
                   name="Skill Catalog"
-                  action="skill_development.skills_action"
+                  action="skills_action"
                   sequence="10"
                   web_icon="skill_development,static/description/icon1.png"
                   groups="skill_development_group_learner"/>
 
 
 
-        <record id="skill_development.growth_tracker_action" model="ir.actions.act_window">
+        <record id="growth_tracker_action" model="ir.actions.act_window">
             <field name="name">My Skill Growth</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">skill_development.growth_tracker</field>
@@ -35,7 +34,7 @@
 
         <menuitem id="growth_tracker_menu"
                   name="Skill Growth"
-                  action="skill_development.growth_tracker_action"
+                  action="growth_tracker_action"
                   sequence="20"/>
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
         <!--                  web_icon="skill_development,static/description/icon1.png"/>-->
@@ -46,7 +45,7 @@
         <!--            <field name="view_mode">form</field>-->
         <!--            <field name="target">new</field> &lt;!&ndash; Modal popup &ndash;&gt;-->
         <!--        </record>-->
-        <record id="skill_development.priority_tasks_action" model="ir.actions.act_window">
+        <record id="priority_tasks_action" model="ir.actions.act_window">
             <field name="name">Priority Tasks</field>
             <field name="res_model">skill_development.task</field>
             <field name="view_mode">kanban,form</field>
@@ -59,10 +58,10 @@
         <menuitem id="growth_tracker_menu_priority_tasks"
                   name="Priority Tasks"
                   parent="growth_tracker_menu"
-                  action="skill_development.priority_tasks_action"
+                  action="priority_tasks_action"
                   sequence="5"/>
 
-        <record id="skill_development.goals_action" model="ir.actions.act_window">
+        <record id="goals_action" model="ir.actions.act_window">
             <field name="name">My Goals</field>
             <field name="res_model">skill_development.goal</field>
             <field name="view_mode">kanban,form</field>
@@ -72,11 +71,11 @@
         <menuitem id="growth_tracker_menu_goals"
                   name="My Goals"
                   parent="growth_tracker_menu"
-                  action="skill_development.goals_action"
+                  action="goals_action"
                   sequence="6"/>
 
 
-        <record id="skill_development.lesson_bank_action" model="ir.actions.act_window">
+        <record id="lesson_bank_action" model="ir.actions.act_window">
             <field name="name">Lesson Bank</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">skill_development.lesson_bank</field>
@@ -87,16 +86,14 @@
         </record>
         <menuitem id="growth_tracker_menu_lesson_bank"
                   name="Lesson Bank"
-                  action="skill_development.lesson_bank_action"
+                  action="lesson_bank_action"
                   parent="growth_tracker_menu"
                   sequence="10"/>
 
-        <record id="skill_development.resources_action" model="ir.actions.act_window">
+        <record id="resources_action" model="ir.actions.act_window">
             <field name="name">Resources</field>
             <field name="res_model">skill_development.task_resource</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-
-    </data>
 </odoo>

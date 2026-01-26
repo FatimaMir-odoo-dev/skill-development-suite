@@ -1,8 +1,9 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import models, fields, api, exceptions
 from random import randint
+
+from odoo import api, exceptions, fields, models
 
 
 class Skill(models.Model):
@@ -11,41 +12,41 @@ class Skill(models.Model):
     _rec_name = 'skill_name'
 
     # 1. BASIC FIELDS (IDENTITY + DESCRIPTION)
-# ________________________________________
+    # ________________________________________
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     pre_requisites = fields.Text(string="Pre-Requisites")
-# ________________________________________
+    # ________________________________________
 
     # 2. RELATIONAL FIELDS
-# ________________________________________
+    # ________________________________________
     rating_ids = fields.One2many('skill_development.skill_rating',
-        'skill_id',
-        string="Ratings")
+                                 'skill_id',
+                                 string="Ratings")
 
     career_path_ids = fields.Many2many('skill_development.skill_career',
-        relation='skill_career_rel',
-        column1='skill_id',
-        column2='career_id',
-        string='Job Roles for this Skill')
+                                       relation='skill_career_rel',
+                                       column1='skill_id',
+                                       column2='career_id',
+                                       string='Job Roles for this Skill')
 
     related_skill_ids = fields.Many2many('skill_development.skill',
-        relation='skill_related_rel',
-        column1='skill_id',
-        column2='related_id',
-        string='Related Skills',
-        domain="[('id', '!=', id)]")
+                                         relation='skill_related_rel',
+                                         column1='skill_id',
+                                         column2='related_id',
+                                         string='Related Skills',
+                                         domain="[('id', '!=', id)]")
 
     prereq_skill_ids = fields.Many2many('skill_development.skill',
-        relation='skill_prereq_rel',
-        column1='skill_id',
-        column2='rprereq_id',
-        string='Consider Learning First',
-        domain="[('id', '!=', id)]")
-# ________________________________________
+                                        relation='skill_prereq_rel',
+                                        column1='skill_id',
+                                        column2='rprereq_id',
+                                        string='Consider Learning First',
+                                        domain="[('id', '!=', id)]")
+    # ________________________________________
 
     # 3. COMPUTED METRICS
-# ________________________________________
+    # ________________________________________
     avg_overall_rating = fields.Float(
         'Overall Rating Calculation',
         compute='_compute_avg_ratings',
@@ -58,14 +59,14 @@ class Skill(models.Model):
     # ________________________________________
 
     # 4. STAR RATING FIELDS (READONLY OUTPUTS)
-# ________________________________________
+    # ________________________________________
     star_avg_rating = fields.Selection([
         ('0', 'Not Recommended'),
         ('1', 'Poor'),
         ('2', 'Fair'),
         ('3', 'Good'),
         ('4', 'Very Good'),
-        ('5', 'Excellent'),],
+        ('5', 'Excellent'), ],
         store=True,
         string="Overall Rating",
         readonly=True)
@@ -76,16 +77,15 @@ class Skill(models.Model):
         ('2', 'Challenging'),
         ('3', 'Manageable'),
         ('4', 'Easy'),
-        ('5', 'Effortless'),],
+        ('5', 'Effortless'), ],
         store=True,
         string="Overall Difficulty Rating",
         readonly=True)
-# ________________________________________
+    # ________________________________________
 
     # 5. FLAGS
-# ________________________________________
+    # ________________________________________
     is_transferable = fields.Boolean(string="This Skill is Transferable")
-
 
     @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
@@ -134,13 +134,10 @@ class Skill(models.Model):
             skill.star_avg_rating = to_star(avg_rating)
             skill.star_avg_difficulty = to_star(avg_difficulty)
 
-
     # def unlink(self):
     #     for record in self:
     #         record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
     #     return super(Skill, self).unlink()
-
-
 
     # Check if the Skill Name is unique to prevent duplicated skill creation
     @api.constrains('skill_name')
@@ -155,7 +152,7 @@ class Skill(models.Model):
     # Activated upon clicking the Button: Start Learning
 
     def action_open_initial_plan_wizard(self):
-        #DOC HERE
+        # DOC HERE
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
@@ -165,9 +162,8 @@ class Skill(models.Model):
             'target': 'new',
             'context': {
                 'default_learner_id': self.env.user.id,  # Pass the learner ID to the wizard form
-                'default_skill_id': self.id,},  # Pass the skill name to the wizard form
+                'default_skill_id': self.id, },  # Pass the skill name to the wizard form
         }
-
 
 
 class SkillCareer(models.Model):
@@ -186,12 +182,10 @@ class SkillCareer(models.Model):
                                     column2='industry_id',
                                     string="Industries")
 
-
     def unlink(self):
         for record in self:
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
         return super(SkillCareer, self).unlink()
-
 
 
 class CareerIndustry(models.Model):
@@ -223,7 +217,7 @@ class SkillRating(models.Model):
         ('2', 'Basic'),
         ('3', 'Moderate'),
         ('4', 'High'),
-        ('5', 'Essential'),],
+        ('5', 'Essential'), ],
         default='0', index=True, string="Usefulness", tracking=True)
 
     fun2learn = fields.Selection([
@@ -232,7 +226,7 @@ class SkillRating(models.Model):
         ('2', 'Neutral'),
         ('3', 'Engaging'),
         ('4', 'Fun'),
-        ('5', 'Exciting'),],
+        ('5', 'Exciting'), ],
         default='0', index=True, string="Fun", tracking=True)
 
     difficulty = fields.Selection([
@@ -241,5 +235,5 @@ class SkillRating(models.Model):
         ('2', 'Challenging'),
         ('3', 'Manageable'),
         ('4', 'Easy'),
-        ('5', 'Effortless'),],
+        ('5', 'Effortless'), ],
         default='0', index=True, string="Difficulty", tracking=True)

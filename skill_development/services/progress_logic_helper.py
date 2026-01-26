@@ -1,7 +1,9 @@
 # from odoo import models
 
 import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class ProgressLogicHelper:
     @staticmethod
@@ -23,6 +25,7 @@ class ProgressLogicHelper:
         final_score = max(0.0, full_goal_mark + smart_bonus + reflection_bonus - penalty)
         _logger.info("Final calculated progress: %s", final_score)
         return final_score
+
     #
     @staticmethod
     def _calculate_full_goal_mark(goal):

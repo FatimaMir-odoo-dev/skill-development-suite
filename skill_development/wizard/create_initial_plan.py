@@ -1,7 +1,8 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import models, fields, api
+from odoo import api, fields, models  # noqa: F401
+
 
 class CreateInitialPlan(models.TransientModel):
     _name = 'skill_development.create_initial_plan'
@@ -11,7 +12,7 @@ class CreateInitialPlan(models.TransientModel):
     learner_id = fields.Many2one('res.users', string='Learner', required=True)
 
 # form fields
-    skill_id = fields.Many2one('skill_development.skill','Skill', readonly=True)
+    skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
     motivation = fields.Text('My Motivation', required=True)
     endpoint = fields.Date('Preferred Endpoint')
     msg_2self = fields.Text('Message to Myself')

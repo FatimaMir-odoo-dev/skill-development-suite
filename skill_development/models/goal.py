@@ -1,13 +1,15 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
-from odoo import models, fields, api
-from odoo.exceptions import ValidationError
-from random import randint
-from ..services.progress_logic_helper import ProgressLogicHelper
 import logging
-_logger = logging.getLogger(__name__)
+from random import randint
 
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
+from ..services.progress_logic_helper import ProgressLogicHelper
+
+_logger = logging.getLogger(__name__)
 
 
 class Goal(models.Model):
@@ -17,38 +19,38 @@ class Goal(models.Model):
     _rec_name = 'goal_name'
 
     # 1. RELATIONAL FIELDS
-# ________________________________________
-# Connects to the learner profile for security and filter? (why do we need it?)
-    learner_id = fields.Many2one('res.users',string="Created by",required=True)
+    # ________________________________________
+    # Connects to the learner profile for security and filter? (why do we need it?)
+    learner_id = fields.Many2one('res.users', string="Created by", required=True)
 
-# Connect to the learner's growth records to get all their skills (why do we need to connect it?)
+    # Connect to the learner's growth records to get all their skills (why do we need to connect it?)
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
-        string="Plan",
-        ondelete='cascade')
+                                      string="Plan",
+                                      ondelete='cascade')
 
-# why do we need to connect with the original skill??
+    # why do we need to connect with the original skill??
     skill_id = fields.Many2one('skill_development.skill',
-        string="Main Skill",
-        readonly=True)
+                               string="Main Skill",
+                               readonly=True)
 
     result_ids = fields.One2many('skill_development.goal_result',
-        'goal_id',
-        string='Results')
+                                 'goal_id',
+                                 string='Results')
 
     task_ids = fields.One2many('skill_development.task',
-        'goal_id',
-        string='Tasks')
+                               'goal_id',
+                               string='Tasks')
 
     lesson_id = fields.One2many('skill_development.lesson_bank',
-        'goal_id',
-        string=" ")
+                                'goal_id',
+                                string=" ")
 
-    tag_ids = fields.Many2many('skill_development.tag',string="Tags")
-# ________________________________________
+    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
+    # ________________________________________
 
     # 2. STATUS FIELDS
-# ________________________________________
-# for goal, task , result, resources lock
+    # ________________________________________
+    # for goal, task , result, resources lock
     is_acquired = fields.Boolean(
         string="Skill Acquired",
         related="learner_plan_id.is_acquired",
@@ -72,10 +74,10 @@ class Goal(models.Model):
 
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
-# ________________________________________
+    # ________________________________________
 
     # 3. METRICS (COMPUTED)
-# ________________________________________
+    # ________________________________________
     goal_progress = fields.Float(
         string="Goal Contribution",
         compute='_compute_goal_progress',
@@ -83,11 +85,12 @@ class Goal(models.Model):
 
     task_count = fields.Integer(string=" ", compute='_compute_task_count')
 
-    lesson_count = fields.Integer(string=" ",compute='_compute_lesson_count')
-# ________________________________________
+    lesson_count = fields.Integer(string=" ",
+                                  compute='_compute_lesson_count')
+    # ________________________________________
 
     # 4. SMART GOAL FIELDS
-# ________________________________________
+    # ________________________________________
     category = fields.Selection([
         ('knowledge', 'Knowledge'),
         ('practice', 'Practice'),
@@ -99,34 +102,21 @@ class Goal(models.Model):
     relevant_goal = fields.Text('Relevant: [Why is it important to you?]')
     timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
     goal_name = fields.Text('Complete Goal Statement')
-# ________________________________________
+    # ________________________________________
 
     # 5. FLAGS
-# ________________________________________
-    #For locking goals, tasks, and resources
+    # ________________________________________
+    # For locking goals, tasks, and resources
     is_complete = fields.Boolean(string="Goal Complete", default=False)
 
-#====================================================================================================================
+    # ====================================================================================================================
     # is_smart = fields.Boolean(string='SMART Compliant')
     # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
-
-    # @api.constrains('goal_name')
-    # def _check_SMART_fields(self):
-    #     for record in self:
-    #         if record.name:
-    #             # Check if all the other fields are filled before allowing `name` field
-    #             if not (
-    #                     record.specific_goal and record.measurable_goal and record.achievable_goal and record.relevant_goal and record.timed_goal):
-    #                 raise ValidationError(
-    #                     "To make your goal really effective, please make sure all SMART fields are filled out accurately."
-    #                     " before entering the final goal statement.\n"
-    #                     "Take your time and think about each guideline carefully for the best results.")
 
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
                  'relevant_goal', 'timed_goal',
                  'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
-
     def _compute_goal_progress(self):
         for goal in self:
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
@@ -187,7 +177,7 @@ class Goal(models.Model):
             'context': {  # Pass the learner ID to the wizard form
                 'default_goal_id': self.id,
                 'default_skill_id': self.skill_id.id,
-                'default_learner_plan_id':self.learner_plan_id.id},  # Pass the skill name to the wizard form
+                'default_learner_plan_id': self.learner_plan_id.id},  # Pass the skill name to the wizard form
         }
 
     def action_view_tasks(self):
@@ -220,7 +210,6 @@ class Goal(models.Model):
     #                     },
     #     }
 
-
     def action_view_lesson(self):
         return {
             'type': 'ir.actions.act_window',
@@ -230,7 +219,6 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
-
 
     # def action_open_goal_popup(self):
     #     return {
@@ -250,18 +238,19 @@ class TaskStage(models.Model):
     name = fields.Char(string='Stage Name', required=True)
 
     learner_id = fields.Many2one('res.users', string='Owner', required=True,
-                default=lambda self: self.env.user,
-                index=True)
+                                 default=lambda self: self.env.user,
+                                 index=True)
     goal_id = fields.Many2one('skill_development.goal')
 
     sequence = fields.Integer(string='Sequence', default=1)
     fold = fields.Boolean(string='Folded in Kanban',
-                           help='If enabled, this stage will be shown as folded in the Kanban view.')
+                          help='If enabled, this stage will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
 
     # legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
     # legend_done = fields.Char('Done Label', default='Ready', required=True)
     # legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
+
 
 class Task(models.Model):
     _name = "skill_development.task"
@@ -280,17 +269,17 @@ class Task(models.Model):
     # learner_skill_id = fields.Many2One('skill_development.growth_tracker', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one('skill_development.task_stage',
-        string='Stage',
-        domain="[('learner_id', '=', user_id)]",
-        ondelete='restrict',
-        required=True)
+                               string='Stage',
+                               domain="[('learner_id', '=', user_id)]",
+                               ondelete='restrict',
+                               required=True)
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
     is_goal_complete = fields.Boolean(string="Skill Acquired", related="goal_id.is_complete")
     resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
 
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
     resource_url = fields.Char(string="Quick Access URL",
-            help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task.")
+                               help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task.")  # noqa: E501
 
     @api.depends('resource_ids')
     def _compute_resource_count(self):
@@ -346,7 +335,8 @@ class TaskResource(models.Model):
     url = fields.Char('External URL')
 
     task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
-    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_id.is_acquired", string="Skill Acquired" , store=False)
+    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_id.is_acquired",
+    #                              string="Skill Acquired" , store=False)
 
     # image_preview = fields.Binary(string='Image Preview')
     # video_preview = fields.(
@@ -390,7 +380,6 @@ class LessonBank(models.Model):
     _description = 'Lesson Bank'
     _rec_name = 'lesson_title'
 
-
     learner_plan_id = fields.Many2one(
         'skill_development.growth_tracker',
         string="Plan",
@@ -402,11 +391,11 @@ class LessonBank(models.Model):
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')
     tag_ids = fields.Many2many('skill_development.tag',
-        relation='goal_tag_rel',
-        column1='goal_id',
-        column2='tag_id',
-        string="Tags"
-    )
+                               relation='goal_tag_rel',
+                               column1='goal_id',
+                               column2='tag_id',
+                               string="Tags"
+                               )
 
     lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
     lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
