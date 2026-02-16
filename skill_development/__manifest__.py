@@ -1,6 +1,7 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
+# pylint: disable=pointless-statement,missing-module-docstring
 {
     'name': 'Skill Development',
     'version': '16.0.2.33',

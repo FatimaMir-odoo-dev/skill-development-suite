@@ -3,6 +3,10 @@ from odoo import _, api, fields, models  # noqa: F401
 
 
 class DeleteProgress(models.TransientModel):
+    """
+    Confirmation wizard for deleting a skill growth plan.
+    """
+
     _name = 'skill_development.delete_progress'
     _description = 'Confirm Skill Deletion Wizard'
 

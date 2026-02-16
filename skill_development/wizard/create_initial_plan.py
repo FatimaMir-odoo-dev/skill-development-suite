@@ -5,6 +5,11 @@ from odoo import api, fields, models  # noqa: F401
 
 
 class CreateInitialPlan(models.TransientModel):
+    """
+    Initial Skill Plan Wizard.
+    Collects learner input and creates a corresponding growth tracker record.
+    """
+
     _name = 'skill_development.create_initial_plan'
     _description = 'Skill Planning Pop-up Form'
 
@@ -32,6 +37,11 @@ class CreateInitialPlan(models.TransientModel):
 
     # create a new record in model skill_plan.record with all the data from the wizard
     def button_create_plan(self):
+        """
+        Transfers the entered values to a skill growth tracker record
+        and closes the wizard window.
+        """
+
         self.env['skill_development.growth_tracker'].create({
             'plan_owner_id': self.learner_id.id,
             'skill_id': self.skill_id.id,

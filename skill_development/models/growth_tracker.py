@@ -9,6 +9,16 @@ _logger = logging.getLogger(__name__)
 
 
 class GrowthTracker(models.Model):
+    """
+    Skill Growth Tracker.
+
+    Represents a learner’s plan lifecycle for acquiring a specific skill.
+    It keeps holds their motivations, tracks their goals, learning progress, and overall mastery leve.
+    Plams can be acquired, archived, and deleted.
+
+    Each user can have only one plan per skill.
+    """
+
     _name = 'skill_development.growth_tracker'
     _description = 'A Record For The Learner Skill Plan'
     _inherit = 'count.mixin'
@@ -62,33 +72,58 @@ class GrowthTracker(models.Model):
 
     @api.depends('motivation')
     def _compute_motivation_short(self):
+        """
+        Creates a truncated version of the motivation behind learning a skill
+        to be displayed in list view as a summary.
+        """
+
         for record in self:
             record.motivation_short = (record.motivation[:120] + '...') if record.motivation and len(
                 record.motivation) > 50 else record.motivation
 
     @api.depends('is_acquired')
     def _compute_skill_status(self):
+        """
+        Sets the skill status to 'Acquired' when it has been marked as completed.
+        to be displayed as a badge on the growth tracker interface.
+        """
+
         for rec in self:
             rec.skill_status = 'Acquired' if rec.is_acquired else ''
 
     @api.depends('goal_ids.goal_progress', 'goal_ids.category')
     def _compute_category_progress(self):
+        """
+        Calculate the learner’s progress in each of the three skill categories.
+
+        Progress is determined by adding up the percentages of all the
+        goals associated with each category, limiting each category's progress to max 100%.
+        """
+
         for learner in self:
-            knowledge = practice = cc = 0.0
+            knowledge = practice = create_contrib = 0.0
             for goal in learner.goal_ids:
                 if goal.category == 'knowledge':
                     knowledge += goal.goal_progress
                 elif goal.category == 'practice':
                     practice += goal.goal_progress
                 elif goal.category == 'creation':
-                    cc += goal.goal_progress
+                    create_contrib += goal.goal_progress
 
             learner.progress_knowledge = min(knowledge, 100)
             learner.progress_practice = min(practice, 100)
-            learner.progress_contribute = min(cc, 100)
+            learner.progress_contribute = min(create_contrib, 100)
 
     @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
     def _compute_overall_progress(self):
+        """Compute overall progress in a skill across all its mastery categories.
+
+        Calculates the progress using weighted average for each category:
+        - Knowledge: 15%
+        - Practice: 35%
+        - Creation & Contribution: 50%
+        """
+
         for learner in self:
             learner.overall_progress = (
                     learner.progress_knowledge * 0.15 +
@@ -98,6 +133,16 @@ class GrowthTracker(models.Model):
 
     @api.depends('overall_progress')
     def _compute_title(self):
+        """ Compute mastery title based on overall skill progress percentage.
+
+        Assigns title according to progress thresholds:
+        - 80%+: master
+        - 60-79%: proficient
+        - 40-59%: skilled
+        - 5-39%: learner
+        - <5%: seeker
+        """
+
         for rec in self:
             if rec.overall_progress >= 80:
                 rec.title = 'master'
@@ -123,9 +168,14 @@ class GrowthTracker(models.Model):
     # Python constraint to get a unique skill name (User must create only one plan per skill)
     @api.constrains('skill_id')
     def _check_unique_skill_id(self):
-        for record in self:
+        """
+        Enforce uniqueness of skill plans per user.
 
-            # Ensure that the skill name is unique for the current user (record_learner_id)
+        Prevents a user from creating more than one learning plan
+        for the same skill.
+        """
+
+        for record in self:
             if self.search_count([
                 ('skill_id', '=', record.skill_id.id),
                 ('plan_owner_id', '=', record.plan_owner_id.id)
@@ -138,11 +188,20 @@ class GrowthTracker(models.Model):
     # Ensures plan_owner_id is automatically set to the current user
     @api.model
     def create(self, vals):
+        """
+        Automatically assign the current user as the plan owner when creating a new skill plan.
+        """
+
         vals.setdefault('plan_owner_id', self.env.user.id)
         return super(GrowthTracker, self).create(vals)
 
     def goals_button(self):
-        _logger.info("plan_owner_id %s: current user id = %s", self.plan_owner_id, self._uid)
+        """
+        Open the goals linked to this skill plan.
+
+        Displays them in kanban and form views, and disables
+        goal creation if the skill is already acquired.
+        """
         return {
             'type': 'ir.actions.act_window',
             'name': 'My Goals',
@@ -156,6 +215,8 @@ class GrowthTracker(models.Model):
         }
 
     def popup_help_button(self):
+        """ Opens the help guide for the skill progress in a pop-up window. """
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Help',
@@ -168,6 +229,8 @@ class GrowthTracker(models.Model):
         }
 
     def skill_acquired_button(self):
+        """ Marks the skill as acquired and opens the skill rating wizard. """
+
         for rec in self:
             rec.is_acquired = True
 
@@ -182,6 +245,8 @@ class GrowthTracker(models.Model):
         }
 
     def action_archive_plan(self):
+        """ Archive this skill plan and display confirmation notification. """
+
         self.active = False
         return {
             'type': 'ir.actions.client',
@@ -197,6 +262,8 @@ class GrowthTracker(models.Model):
         }
 
     def action_delete_plan(self):
+        """ Opens a confirmation wizard before permanently deleting the skill plan. """
+
         skill = self.browse(self.id)
         if not skill.exists():
             raise UserError(_("The skill you're trying to delete does not exist."))

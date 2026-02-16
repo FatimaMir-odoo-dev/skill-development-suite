@@ -1,7 +1,15 @@
+"""
+Count mixin utilities.
+
+Provides a reusable abstract model with helper logic to compute counts
+of related records using efficient grouped queries.
+"""
+
 from odoo import api, fields, models  # noqa: F401
 
 
 class CountMixin(models.AbstractModel):
+    """Abstract mixin providing generic count computation utilities."""
     _name = 'count.mixin'
     _description = 'Count Mixin'
 

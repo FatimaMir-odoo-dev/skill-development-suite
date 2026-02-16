@@ -1,0 +1,21 @@
+[MESSAGES CONTROL]
+# Disable checks that are too noisy or not relevant for Odoo
+disable=
+    too-few-public-methods,
+    import-error,
+    line-too-long,
+    unused-import,
+    consider-using-f-string,
+    super-with-arguments
+
+[FORMAT]
+# Maximum line length
+max-line-length=120
+
+[BASIC]
+# Good variable names which should always be accepted
+good-names=i,j,k,cr,id,_
+
+[DESIGN]
+# Minimum number of public methods for a class
+min-public-methods=0

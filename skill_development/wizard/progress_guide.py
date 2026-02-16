@@ -4,7 +4,14 @@
 from odoo import api, fields, models
 
 
-class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/popups
+class ProgressGuide(models.TransientModel):
+    """
+    Skill Progress Help Wizard.
+
+    Interactive help dialog that explains how skill progress,
+    categories, and titles are calculated for a skill growth plan.
+    """
+
     _name = 'skill_development.progress_guide'
     _description = 'Help / Skill Growth Guide'
 
@@ -28,7 +35,9 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
     maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
 
     @api.model
-    def default_get(self, fields):
+    def default_get(self, fields):# pylint: disable=redefined-outer-name
+        """Initialize the wizard with the first help page content upon opening it."""
+
         res = super().default_get(fields)
         res['message'] = self._get_page1_content()
         res['tips'] = self._get_page1_tips()
@@ -37,6 +46,8 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
     # 6. NAVIGATION METHODS
 # ---------------------------------------------------------
     def go_to_page2(self):
+        """Switch the wizard to the next page of the help guide."""
+
         self.write({
             'step': 'page2',
             'message': self._get_page2_content(),
@@ -51,6 +62,8 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         }
 
     def go_to_page1(self):
+        """Return the wizard to the first help page."""
+
         self.write({
             'step': 'page1',
             'message': self._get_page1_content(),
@@ -67,6 +80,9 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
     # 6. HELP CONTENT METHODS
 # ---------------------------------------------------------
     def _get_page1_content(self):
+        """ First page contents
+        Explains overall progress and how category weights work. """
+
         return """
     <div class="container">
         <h1 class="text-center text-4xl font-bold text-gray-900 mb-6">Welcome to Your Skill Growth Journey!</h1>
@@ -105,6 +121,9 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         """
 
     def _get_page1_tips(self):
+        """ First page contents
+        Provides learning and goal-setting recommendations."""
+
         return """
         <div class="container">
         <p class="text-lg text-gray-700 mb-8">
@@ -128,6 +147,9 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
         """
 
     def _get_page2_tips(self):
+        """ Second page contents
+        Describes category scoring, bonuses, and limits."""
+
         return """
         <h2 class="text-3xl font-semibold text-gray-800 mb-4">Your Skill Titles</h2>
 
@@ -175,6 +197,9 @@ class ProgressGuide(models.TransientModel):  # use TransientModel for wizards/po
 
     # flake8: noqa: E501
     def _get_page2_content(self):
+        """ Second page content
+        Shows how overall progress maps to learner titles."""
+
         return """
             <h2 class="text-3xl font-semibold text-gray-800 mb-4">Understanding Your Progress</h2>
 

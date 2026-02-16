@@ -7,6 +7,14 @@ from odoo import api, exceptions, fields, models
 
 
 class Skill(models.Model):
+    """ ReDoc
+        Skill definition model.
+
+        Represents a learnable skill with descriptive information,
+        related skills, associated career paths, and aggregated
+        community ratings for usefulness and difficulty.
+        """
+
     _name = "skill_development.skill"
     _description = 'Skill'
     _rec_name = 'skill_name'
@@ -89,6 +97,14 @@ class Skill(models.Model):
 
     @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
+        """
+            Compute average rating and difficulty for the skill.
+
+            Aggregates valid user ratings to calculate:
+            - Overall rating (based on usefulness and fun)
+            - Average difficulty
+            - Star-based values used for UI display
+            """
         for skill in self:
             total_usefulness = total_fun = total_difficulty = count = 0
 
@@ -142,6 +158,10 @@ class Skill(models.Model):
     # Check if the Skill Name is unique to prevent duplicated skill creation
     @api.constrains('skill_name')
     def _check_unique_skill_name(self):
+        """
+        Ensure that each skill name is unique.
+        Prevents duplicate skill records with the same name.
+        """
         for record in self:
             existing_skill = self.search([('skill_name', '=', record.skill_name), ('id', '!=', record.id)])
             if existing_skill:
@@ -152,7 +172,7 @@ class Skill(models.Model):
     # Activated upon clicking the Button: Start Learning
 
     def action_open_initial_plan_wizard(self):
-        # DOC HERE
+        """Opens a pop-up window to create an initial development plan for a new skill."""
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
@@ -167,6 +187,9 @@ class Skill(models.Model):
 
 
 class SkillCareer(models.Model):
+    """ Represents a career or job role that can be associated with multiple skills
+     and categorized by industry."""
+
     _name = "skill_development.skill_career"
     _description = "Skill Career Paths"
 
@@ -183,12 +206,21 @@ class SkillCareer(models.Model):
                                     string="Industries")
 
     def unlink(self):
+        """
+        Delete career records after clearing related industries.
+        Ensures many-to-many relationships are removed before deletion.
+        """
         for record in self:
             record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
         return super(SkillCareer, self).unlink()
 
 
 class CareerIndustry(models.Model):
+    """
+       Represents different industries used to classify
+       different career paths.
+       """
+
     _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
 
@@ -202,6 +234,16 @@ class CareerIndustry(models.Model):
 
 
 class SkillRating(models.Model):
+    """
+       Stores user evaluations of a skill after acquiring it based on:
+       - How useful it was for them.
+       - How much enjoyment they got out of learning it.
+       - Its level of difficulty.
+
+       These ratings are used to compute the overall skill rating metric
+       displayed on the skill record.
+       """
+
     _name = "skill_development.skill_rating"
     _description = "Skill Rating"
 

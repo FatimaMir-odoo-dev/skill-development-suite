@@ -1,5 +1,17 @@
 # Copyright (C) 2024 FatimaMir-odoo-dev
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
+"""
+Skill Development - Personalized learning plans with SMART goals.
+
+Enables learners to set goals, track progress, and reflect on their learning journey.
+
+Main features:
+    - SMART goal framework
+    - Task and resource management
+    - Progress tracking
+    - Lesson bank for reflections
+    - Customizable stages and tags
+"""
 
 import logging
 from random import randint
@@ -13,6 +25,8 @@ _logger = logging.getLogger(__name__)
 
 
 class Goal(models.Model):
+    """SMART Goal model with progress tracking and status management."""
+
     _name = "skill_development.goal"
     _description = 'Goal'
     _inherit = 'count.mixin'
@@ -118,6 +132,15 @@ class Goal(models.Model):
                  'relevant_goal', 'timed_goal',
                  'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
     def _compute_goal_progress(self):
+        """
+        Calculate the goal's percentage within its skill category.
+
+        Progress is determined by each goal's:
+        - Completion of SMART goal components
+        - Achievement of expected results
+        - Logged reflections and lessons learned
+        """
+
         for goal in self:
             goal.goal_progress = ProgressLogicHelper.calculate_progress(goal)
 
@@ -141,7 +164,7 @@ class Goal(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        """Set default learner_id and learner_plan_id if not provided."""
+        """Set default learner_id and learner_plan_id upon goal creation if missing."""
         for vals in vals_list:
             # Set learner_id to current user if not provided
             if 'learner_id' not in vals:
@@ -154,14 +177,21 @@ class Goal(models.Model):
         return super(Goal, self).create(vals_list)
 
     def action_create_goal_draft(self):
+        """Set goal status to draft if planning on it is incomplete."""
         for rec in self:
             rec.goal_status = 'draft'
 
     def action_finalize_goal(self):
+        """Finalize the goal plan when completed."""
         for rec in self:
             rec.goal_status = 'finalized'
 
     def action_complete_goal(self):
+        """
+        Set goal status to 'complete' and mark as complete.
+        And returns an action to open the reflection wizard.
+        """
+
         for rec in self:
             rec.goal_status = 'complete'
             rec.is_complete = True
@@ -181,6 +211,10 @@ class Goal(models.Model):
         }
 
     def action_view_tasks(self):
+        """
+        Opens a view of all tasks related to this goal.
+        Locks tasks if goal is completed or skill is marked as acquired.
+        """
         self.ensure_one()
 
         if self.is_complete or self.is_acquired:
@@ -211,6 +245,8 @@ class Goal(models.Model):
     #     }
 
     def action_view_lesson(self):
+        """ Opens a view of all tasks related to this goal """
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Lesson',
@@ -231,6 +267,8 @@ class Goal(models.Model):
 
 
 class TaskStage(models.Model):
+    """Task stages for organizing tasks in Kanban view within each goal."""
+
     _name = 'skill_development.task_stage'
     _description = 'Task Stage'
     _order = 'sequence, id'
@@ -253,6 +291,12 @@ class TaskStage(models.Model):
 
 
 class Task(models.Model):
+    """Tasks for tracking progress within a goal.
+
+    Each task represents a specific action item that contributes to completing
+    a goal. Tasks can be organized by stages, prioritized, and linked to resources.
+    """
+
     _name = "skill_development.task"
     _description = 'Task'
     _inherit = 'count.mixin'
@@ -293,6 +337,8 @@ class Task(models.Model):
 
     @api.model
     def create(self, vals):
+        """Prevent creating tasks for completed goals."""
+
         goal_id = vals.get('goal_id') or self.env.context.get('default_goal_id')
 
         if goal_id:
@@ -315,6 +361,12 @@ class Task(models.Model):
 
 
 class TaskResource(models.Model):
+    """Resources linked to tasks.
+
+        Stores various types of learning resources (documents, links, pics, etc.)
+        that support task completion.
+        """
+
     _name = 'skill_development.task_resource'
     _description = 'Resource for Tasks'
 
@@ -355,6 +407,12 @@ class TaskResource(models.Model):
 
 
 class GoalResult(models.Model):
+    """Expected results/outcomes for goals.
+
+        Defines results that indicate goal completion.
+        Each result can be marked as achieved to track progress.
+        """
+
     _name = 'skill_development.goal_result'
     _description = 'Goal Results'
     _auto = True
@@ -376,6 +434,11 @@ class GoalResult(models.Model):
 
 
 class LessonBank(models.Model):
+    """Repository of lessons learned after goal completion.
+
+    Captures reflections and insights gained after completing goals for future reference.
+    """
+
     _name = 'skill_development.lesson_bank'
     _description = 'Lesson Bank'
     _rec_name = 'lesson_title'
@@ -411,12 +474,16 @@ class LessonBank(models.Model):
 
     @api.depends('lesson_worked')
     def _compute_lesson_short(self):
+        """Generate a preview of the lesson by truncating the 'What Worked' field."""
+
         for record in self:
             record.lesson_short = (record.lesson_worked[:50] + '...') if record.lesson_worked and len(
                 record.lesson_worked) > 50 else record.lesson_worked
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
+        """Auto-fills the skill related to the goal (referred to as learner_plan_id) when a goal is selected."""
+
         if self.goal_id and self.goal_id.learner_plan_id:
             self.learner_plan_id = self.goal_id.learner_plan_id
         else:
@@ -424,6 +491,13 @@ class LessonBank(models.Model):
 
 
 class Tag(models.Model):
+    """T
+    ags for categorizing goals, tasks, and lessons.
+
+    Provides a flexible labeling system to organize and filter
+    learning activities across the skill development module.
+    """
+
     _name = "skill_development.tag"
     _description = "Goal Tags"
 

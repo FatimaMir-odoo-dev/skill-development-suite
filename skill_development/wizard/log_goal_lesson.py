@@ -5,6 +5,13 @@ from odoo import api, fields, models  # noqa: F401
 
 
 class LogGoalLesson(models.TransientModel):
+    """
+       Goal Lesson Logging Wizard.
+
+       Pop-up form used to record lessons learned after working
+       on a goal and save them to the lesson bank.
+       """
+
     _name = 'skill_development.log_goal_lesson'
     _description = 'Lesson Bank Pop-up Form'
 
@@ -28,6 +35,13 @@ class LogGoalLesson(models.TransientModel):
     extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
 
     def button_save_lesson(self):
+        """
+        Create a lesson bank record from the wizard input.
+
+        Saves the lesson details, related goal and skill, and tags,
+        then closes the wizard window.
+        """
+
         self.env['skill_development.lesson_bank'].create({
             'lesson_title': self.lesson_title,
             'lesson_worked': self.lesson_worked,
