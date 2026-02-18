@@ -307,7 +307,9 @@ class Task(models.Model):
         default='0', index=True, string="Priority", tracking=True)
     date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
 
-    # learner_id
+    learner_id = fields.Many2one('res.users', string='Owner', required=True,
+                                 default=lambda self: self.env.user,
+                                 index=True)
     # learner_skill_id = fields.Many2One('skill_development.growth_tracker', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one('skill_development.task_stage',

@@ -5,7 +5,7 @@
     <record id="growth_tracker_rule_user_own_skills" model="ir.rule">
         <field name="name">User Skill Profiles</field>
         <field name="model_id" ref="skill_development.model_skill_development_growth_tracker"/>
-         <field name="groups" eval="[(4, ref('skill_development.skill_development_group_general_admin')),
+        <field name="groups" eval="[(4, ref('skill_development.skill_development_group_general_admin')),
                                 (4, ref('skill_development.skill_development_group_learner'))]"/>
         <field name="domain_force">[('plan_owner_id', '=', user.id)]</field>
         <field name="perm_read" eval="True"/>
@@ -15,10 +15,17 @@
     </record>
 
     <record id="goal_learner_rule" model="ir.rule">
-    <field name="name">Learner can only see own goals</field>
-    <field name="model_id" ref="model_skill_development_goal"/>
-    <field name="domain_force">[('learner_id', '=', user.id)]</field>
-    <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-</record>
+        <field name="name">Learner can only see own goals</field>
+        <field name="model_id" ref="model_skill_development_goal"/>
+        <field name="domain_force">[('learner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="task_learner_rule" model="ir.rule">
+        <field name="name">Learner can only see own tasks</field>
+        <field name="model_id" ref="model_skill_development_task"/>
+        <field name="domain_force">[('learner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
 
 </odoo>
