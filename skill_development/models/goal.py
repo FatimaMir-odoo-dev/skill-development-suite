@@ -13,15 +13,13 @@ Main features:
     - Customizable stages and tags
 """
 
-import logging
+
 from random import randint
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..services.progress_logic_helper import ProgressLogicHelper
-
-_logger = logging.getLogger(__name__)
 
 
 class Goal(models.Model):

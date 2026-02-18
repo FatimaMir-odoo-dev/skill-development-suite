@@ -4,7 +4,7 @@
             <field name="name">goal.view.kanban</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
-                <kanban on_create="new_goal_action">
+                <kanban on_create="skill_development.new_goal_action">
                     <field name="goal_status" invisible="1"/>
                     <field name="is_acquired" invisible="1" readonly="1"/>
                     <templates>

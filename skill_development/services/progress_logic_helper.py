@@ -1,9 +1,5 @@
 # from odoo import models
 
-import logging
-
-_logger = logging.getLogger(__name__)
-
 
 class ProgressLogicHelper:
     """
@@ -23,22 +19,12 @@ class ProgressLogicHelper:
         and possible penalties for incomplete results.
         """
 
-        _logger.info("Calculating progress for Goal ID: %s", goal.id)
-
-        if goal.goal_status != "complete":
-            _logger.info("Goal status is not complete: %s", goal.goal_status)
-            return 0.0
-
         full_goal_mark = ProgressLogicHelper._calculate_full_goal_mark(goal)
         smart_bonus = ProgressLogicHelper._smart_criteria_bonus(goal)
         reflection_bonus = ProgressLogicHelper._lesson_bonus(goal)
         penalty = ProgressLogicHelper._incomplete_result_penalty(goal)
 
-        _logger.info("Full mark: %s, SMART bonus: %s, Reflection bonus: %s, Penalty: %s",
-                     full_goal_mark, smart_bonus, reflection_bonus, penalty)
-
         final_score = max(0.0, full_goal_mark + smart_bonus + reflection_bonus - penalty)
-        _logger.info("Final calculated progress: %s", final_score)
         return final_score
 
     #
