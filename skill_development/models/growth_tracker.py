@@ -24,7 +24,7 @@ class GrowthTracker(models.Model):
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
-    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal')
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal', ondelete='cascade')
 
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
     sequence = fields.Integer(string="Sequence", default=10)
