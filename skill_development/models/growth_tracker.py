@@ -163,7 +163,6 @@ class GrowthTracker(models.Model):
             related_field='learner_plan_id'
         )
 
-    # Python constraint to get a unique skill name (User must create only one plan per skill)
     @api.constrains('skill_id')
     def _check_unique_skill_id(self):
         """
@@ -180,7 +179,7 @@ class GrowthTracker(models.Model):
             ]) > 1:
                 raise ValidationError(
                     f"The skill '{record.skill_name}' already exists for this user.\n"
-                    f"You can update it by going to your profile and editing the plan record."
+                    f"You can update it by going to skill growth and editing the skill plan from there."
                 )
 
     # Ensures plan_owner_id is automatically set to the current user

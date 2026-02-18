@@ -499,6 +499,7 @@ class Tag(models.Model):
     _name = "skill_development.tag"
     _description = "Goal Tags"
 
+    # Ensures no tag name is repeated for the user to avoid creating clutter
     _sql_constraints = [
         ('tag_name_unique', 'unique(name)', 'A tag with this name already exists.')
     ]

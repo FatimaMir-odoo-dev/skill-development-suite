@@ -3,7 +3,7 @@
 
 from random import randint
 
-from odoo import api, exceptions, fields, models
+from odoo import api, fields, models
 
 
 class Skill(models.Model):
@@ -95,6 +95,13 @@ class Skill(models.Model):
     # ________________________________________
     is_transferable = fields.Boolean(string="This Skill is Transferable")
 
+    # The constraint ensures no duplicate skills are added to the Skill Catalog.
+    # Triggered when creating or updating a new skill record.
+    _sql_constraints = [
+        ('unique_skill_name', 'unique(skill_name)',
+         'A skill with the same name already exists. Please refer back to it or use a different name.')
+    ]
+
     @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
         """
@@ -155,19 +162,6 @@ class Skill(models.Model):
     #         record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
     #     return super(Skill, self).unlink()
 
-    # Check if the Skill Name is unique to prevent duplicated skill creation
-    @api.constrains('skill_name')
-    def _check_unique_skill_name(self):
-        """
-        Ensure that each skill name is unique.
-        Prevents duplicate skill records with the same name.
-        """
-        for record in self:
-            existing_skill = self.search([('skill_name', '=', record.skill_name), ('id', '!=', record.id)])
-            if existing_skill:
-                raise exceptions.ValidationError(
-                    "A skill with the same name already exists. Please refer back to it or use a different name.")
-
     # Opens the wizard form for the skill's initial plan.
     # Activated upon clicking the Button: Start Learning
 
@@ -223,6 +217,11 @@ class CareerIndustry(models.Model):
 
     _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
+
+    # Ensures no industry name is repeated in the Skill Catalog - section: Job Roles for this Skill
+    _sql_constraints = [
+        ('tag_name_unique', 'unique(name)', 'An industry with this name already exists.')
+    ]
 
     name = fields.Char('Industry Name', required=True, unique=True)  # Unique name field
     color = fields.Integer(
