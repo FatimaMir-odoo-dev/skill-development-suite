@@ -243,7 +243,7 @@ class Goal(models.Model):
     #     }
 
     def action_view_lesson(self):
-        """ Opens a view of all tasks related to this goal """
+        """ Opens a view of all lessons associated with this goal """
 
         return {
             'type': 'ir.actions.act_window',
@@ -276,9 +276,9 @@ class TaskStage(models.Model):
     learner_id = fields.Many2one('res.users', string='Owner', required=True,
                                  default=lambda self: self.env.user,
                                  index=True)
-    goal_id = fields.Many2one('skill_development.goal')
+    goal_id = fields.Many2one('skill_development.goal', required=True, ondelete='cascade')
 
-    sequence = fields.Integer(string='Sequence', default=1)
+    sequence = fields.Integer(string='Sequence', default=10)
     fold = fields.Boolean(string='Folded in Kanban',
                           help='If enabled, this stage will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
@@ -314,11 +314,11 @@ class Task(models.Model):
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one('skill_development.task_stage',
                                string='Stage',
-                               domain="[('learner_id', '=', user_id)]",
+                               domain="[('learner_id', '=', learner_id)]",
                                ondelete='restrict',
                                required=True)
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
-    is_goal_complete = fields.Boolean(string="Skill Acquired", related="goal_id.is_complete")
+    is_goal_complete = fields.Boolean(string="Goal Completed", related="goal_id.is_complete")
     resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
 
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
@@ -327,7 +327,7 @@ class Task(models.Model):
 
     @api.depends('resource_ids')
     def _compute_resource_count(self):
-        """Using the count_mixin to count resources associated with each task."""
+        """Counts the number of resources linked to this task."""
 
         self._compute_count(
             count_field='resource_count',
@@ -493,8 +493,7 @@ class LessonBank(models.Model):
 
 
 class Tag(models.Model):
-    """T
-    ags for categorizing goals, tasks, and lessons.
+    """Tags for categorizing goals, tasks, and lessons.
 
     Provides a flexible labeling system to organize and filter
     learning activities across the skill development module.
@@ -508,13 +507,13 @@ class Tag(models.Model):
         ('tag_name_unique', 'unique(name)', 'A tag with this name already exists.')
     ]
 
-    name = fields.Char('Name', required=True)  # Unique name field
+    name = fields.Char('Name', required=True)
     color = fields.Integer(
         string='Color',
         default=lambda self: randint(1, 11),
         help="Color used in Kanban or labels.")
 
-    goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Projects')
+    goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Goals')
     task_ids = fields.Many2many('skill_development.task', string='Tasks')
     tag_ids = fields.Many2many(
         'skill_development.lesson_bank',

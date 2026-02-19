@@ -26,13 +26,18 @@ class LogGoalLesson(models.TransientModel):
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
-        default='0', index=True, string="Priority")
+        default='0', string="Priority")
 
-    lesson_title = fields.Char('Lesson')
+    lesson_title = fields.Char('Lesson', required=True)
     lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
     lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
     lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
     extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
+
+    @api.onchange('goal_id')
+    def _onchange_goal_id(self):
+        if self.goal_id:
+            self.skill_id = self.goal_id.skill_id
 
     def button_save_lesson(self):
         """

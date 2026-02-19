@@ -10,7 +10,10 @@ class DeleteProgress(models.TransientModel):
     _name = 'skill_development.delete_progress'
     _description = 'Confirm Skill Deletion Wizard'
 
-    plan_id = fields.Many2one('skill_development.growth_tracker', string='Plan to Delete')
+    plan_id = fields.Many2one('skill_development.growth_tracker',
+                              string='Plan to Delete',
+                              required=True,
+                              ondelete='cascade')
 
     def confirm_delete(self):
         self.ensure_one()

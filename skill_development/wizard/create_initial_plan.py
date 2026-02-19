@@ -14,7 +14,13 @@ class CreateInitialPlan(models.TransientModel):
     _description = 'Skill Planning Pop-up Form'
 
 # learner_id used in default get form to get the current user id
-    learner_id = fields.Many2one('res.users', string='Learner', required=True)
+    learner_id = fields.Many2one(
+        'res.users',
+        string='Learner',
+        required=True,
+        default=lambda self: self.env.user,
+        help="The learner this plan will be created for."
+    )
 
 # form fields
     skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
