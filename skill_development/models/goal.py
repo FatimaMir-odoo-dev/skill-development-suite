@@ -443,11 +443,13 @@ class LessonBank(models.Model):
     _description = 'Lesson Bank'
     _rec_name = 'lesson_title'
 
+    learner_id = fields.Many2one('res.users', string='Owner', required=True,
+                                 default=lambda self: self.env.user,
+                                 index=True)
     learner_plan_id = fields.Many2one(
         'skill_development.growth_tracker',
         string="Plan",
         ondelete='cascade')
-
     skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
 

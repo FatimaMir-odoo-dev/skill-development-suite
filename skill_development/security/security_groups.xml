@@ -28,4 +28,11 @@
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
     </record>
 
+        <record id="lesson_learner_rule" model="ir.rule">
+        <field name="name">Learner can only see own lessons learned</field>
+        <field name="model_id" ref="model_skill_development_lesson_bank"/>
+        <field name="domain_force">[('learner_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
 </odoo>
