@@ -804,9 +804,9 @@
                         </group>
                         <notebook>
                             <page string="Additional Resources">
-                                <field name="resource_ids"
-                                       >
-                                    <tree>
+                                <field name="resource_ids">
+                                    <tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
                                         <field name="name"/>
                                         <field name="resource_type" widget="badge"
                                                decoration-success="resource_type == 'image'"

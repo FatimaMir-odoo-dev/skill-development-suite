@@ -369,9 +369,17 @@ class TaskResource(models.Model):
 
     _name = 'skill_development.task_resource'
     _description = 'Resource for Tasks'
+    _rec_name = 'name'
+    _order = 'sequence'
 
     name = fields.Char('Name', required=True)
     description = fields.Text('Description')
+
+    sequence = fields.Integer(
+        string="Sequence",
+        default=10,
+        help="Controls the display order of resources."
+    )
 
     resource_type = fields.Selection([
         ('document', 'Document'),
@@ -453,7 +461,7 @@ class LessonBank(models.Model):
     skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
 
-    goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
+    goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Related Skill")
     lesson_title = fields.Char('Title')
     tag_ids = fields.Many2many('skill_development.tag',
                                relation='tag_lesson_rel',
@@ -462,10 +470,10 @@ class LessonBank(models.Model):
                                string="Tags"
                                )
 
-    lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
-    lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
-    lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
-    extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
+    lesson_worked = fields.Html(string='What Worked')
+    lesson_change = fields.Html(string='What to Change')
+    lesson_learned = fields.Html(string='What Was Learned')
+    extra_thoughts = fields.Html(string='Extra Thoughts')
 
     sequence = fields.Integer(string="Sequence", default=10)
     priority = fields.Selection([
