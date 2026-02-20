@@ -41,7 +41,6 @@ class CreateInitialPlan(models.TransientModel):
 #             res['skill_id'] = skill_id  # Set the default value for skill_name
 #         return res
 
-    # create a new record in model skill_plan.record with all the data from the wizard
     def button_create_plan(self):
         """
         Transfers the entered values to a skill growth tracker record
@@ -55,4 +54,14 @@ class CreateInitialPlan(models.TransientModel):
             'endpoint': self.endpoint,
             'msg_2self': self.msg_2self,
         })
-        return {'type': 'ir.actions.act_window_close'}
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Plan Created!',
+                'message': 'Your growth plan has been added to your Skill Growth tracker.',
+                'type': 'success',
+                'sticky': False,
+                'next': {'type': 'ir.actions.act_window_close'},
+            }
+        }
