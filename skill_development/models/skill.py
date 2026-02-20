@@ -199,15 +199,6 @@ class SkillCareer(models.Model):
                                     column2='industry_id',
                                     string="Industries")
 
-    def unlink(self):
-        """
-        Delete career records after clearing related industries.
-        Ensures many-to-many relationships are removed before deletion.
-        """
-        for record in self:
-            record.industry_ids = [(5, 0, 0)]  # Clear the many2many links
-        return super(SkillCareer, self).unlink()
-
 
 class CareerIndustry(models.Model):
     """
@@ -223,7 +214,7 @@ class CareerIndustry(models.Model):
         ('tag_name_unique', 'unique(name)', 'An industry with this name already exists.')
     ]
 
-    name = fields.Char('Industry Name', required=True, unique=True)  # Unique name field
+    name = fields.Char('Industry Name', required=True)  # Unique name field
     color = fields.Integer(
         string='Color',
         default=lambda self: randint(1, 11),

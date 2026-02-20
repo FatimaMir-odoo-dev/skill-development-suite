@@ -386,7 +386,7 @@ class TaskResource(models.Model):
     file = fields.Binary('Upload File', attachment=True)
     url = fields.Char('External URL')
 
-    task_id = fields.Many2one('skill_development.task', string='Related Task', ondelete="cascade")
+    task_id = fields.Many2one('skill_development.task', string='Related Task', required=True, ondelete="cascade")
     # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_id.is_acquired",
     #                              string="Skill Acquired" , store=False)
 
@@ -415,9 +415,9 @@ class GoalResult(models.Model):
 
     _name = 'skill_development.goal_result'
     _description = 'Goal Results'
-    _auto = True
+    _rec_name = 'result'
 
-    goal_id = fields.Many2one('skill_development.goal', 'Goal')
+    goal_id = fields.Many2one('skill_development.goal', 'Goal', ondelete='cascade')
     result = fields.Text(string="Expected Results")
     is_done = fields.Boolean(string="Achieved")
 
@@ -456,8 +456,8 @@ class LessonBank(models.Model):
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Skill")
     lesson_title = fields.Char('Title')
     tag_ids = fields.Many2many('skill_development.tag',
-                               relation='goal_tag_rel',
-                               column1='goal_id',
+                               relation='tag_lesson_rel',
+                               column1='lesson_id',
                                column2='tag_id',
                                string="Tags"
                                )
@@ -515,10 +515,10 @@ class Tag(models.Model):
 
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Goals')
     task_ids = fields.Many2many('skill_development.task', string='Tasks')
-    tag_ids = fields.Many2many(
+    lesson_ids = fields.Many2many(
         'skill_development.lesson_bank',
         relation='tag_lesson_rel',
         column1='tag_id',
         column2='lesson_id',
-        string='Lesson'
+        string='Lessons'
     )

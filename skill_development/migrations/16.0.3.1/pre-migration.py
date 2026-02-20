@@ -8,7 +8,25 @@ This file exists solely for the development stage.
 
 
 def migrate(cr, version):
-    pass
+    cr.execute("SELECT to_regclass('public.goal_tag_rel')")
+    if not cr.fetchone()[0]:
+        return
+
+    cr.execute("""
+        CREATE TABLE IF NOT EXISTS tag_lesson_rel (
+            tag_id INTEGER NOT NULL,
+            lesson_id INTEGER NOT NULL,
+            PRIMARY KEY (tag_id, lesson_id)
+        )
+    """)
+    cr.execute("""
+        INSERT INTO tag_lesson_rel (tag_id, lesson_id)
+        SELECT tag_id, goal_id
+        FROM goal_tag_rel
+        ON CONFLICT DO NOTHING
+    """)
+
+    # pass
     # old_table = 'skill_development_lesson_bank_wizard'
     # new_table = 'skill_development_log_goal_lesson'
     # old_model = 'skill_development.lesson_bank_wizard'
