@@ -298,9 +298,10 @@ class Task(models.Model):
     _name = "skill_development.task"
     _description = 'Task'
     _inherit = 'count.mixin'
+    _rec_name = 'name'
 
-    name = fields.Char('Task')
-    description = fields.Html(string='Description', sanitize_attributes=False)
+    name = fields.Char('Task', required=True)
+    description = fields.Html(string='Description')
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
@@ -317,7 +318,13 @@ class Task(models.Model):
                                domain="[('learner_id', '=', learner_id)]",
                                ondelete='restrict',
                                required=True)
-    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
+    tag_ids = fields.Many2many(
+        'skill_development.tag',
+        relation='task_tag_rel',
+        column1='task_id',
+        column2='tag_id',
+        string="Tags"
+    )
     is_goal_complete = fields.Boolean(string="Goal Completed", related="goal_id.is_complete")
     resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
 
@@ -522,7 +529,13 @@ class Tag(models.Model):
         help="Color used in Kanban or labels.")
 
     goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Goals')
-    task_ids = fields.Many2many('skill_development.task', string='Tasks')
+    task_ids = fields.Many2many(
+        'skill_development.task',
+        relation='task_tag_rel',
+        column1='tag_id',
+        column2='task_id',
+        string="Tasks"
+    )
     lesson_ids = fields.Many2many(
         'skill_development.lesson_bank',
         relation='tag_lesson_rel',

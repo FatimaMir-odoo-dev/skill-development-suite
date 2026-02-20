@@ -4,7 +4,7 @@
 # pylint: disable=pointless-statement,missing-module-docstring
 {
     'name': 'Skill Development',
-    'version': '16.0.3.1',
+    'version': '16.0.3.2',
     'summary': 'Personalized learning plans for skill development.',
     'description': """
         It's the core of the Skill Development Suite.
