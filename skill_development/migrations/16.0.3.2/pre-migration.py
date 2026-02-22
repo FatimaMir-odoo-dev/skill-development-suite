@@ -8,27 +8,27 @@ This file exists solely for the development stage.
 
 
 def migrate(cr, version):
-    cr.execute("""
-            SELECT to_regclass(
-                'public.skill_development_task_skill_development_tag_rel'
-            )
-        """)
-    if not cr.fetchone()[0]:
-        return
+    pass
+    # cr.execute("""
+    #         SELECT to_regclass(
+    #             'public.skill_development_task_skill_development_tag_rel'
+    #         )
+    #     """)
+    # if not cr.fetchone()[0]:
+    #     return
+    #
+    # # new table exists? (created by ORM during upgrade)
+    # cr.execute("SELECT to_regclass('public.task_tag_rel')")
+    # if not cr.fetchone()[0]:
+    #     return
+    #
+    # cr.execute("""
+    #         INSERT INTO task_tag_rel (task_id, tag_id)
+    #         SELECT skill_development_task_id, skill_development_tag_id
+    #         FROM skill_development_task_skill_development_tag_rel
+    #         ON CONFLICT DO NOTHING
+    #     """)
 
-    # new table exists? (created by ORM during upgrade)
-    cr.execute("SELECT to_regclass('public.task_tag_rel')")
-    if not cr.fetchone()[0]:
-        return
-
-    cr.execute("""
-            INSERT INTO task_tag_rel (task_id, tag_id)
-            SELECT skill_development_task_id, skill_development_tag_id
-            FROM skill_development_task_skill_development_tag_rel
-            ON CONFLICT DO NOTHING
-        """)
-
-    # pass
     # old_table = 'skill_development_lesson_bank_wizard'
     # new_table = 'skill_development_log_goal_lesson'
     # old_model = 'skill_development.lesson_bank_wizard'

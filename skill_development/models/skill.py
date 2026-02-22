@@ -236,6 +236,7 @@ class SkillRating(models.Model):
 
     _name = "skill_development.skill_rating"
     _description = "Skill Rating"
+    _rec_name = 'skill_id'
 
     skill_id = fields.Many2one('skill_development.skill',
                                string="Skill",

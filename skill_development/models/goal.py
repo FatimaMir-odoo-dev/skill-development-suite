@@ -13,7 +13,6 @@ Main features:
     - Customizable stages and tags
 """
 
-
 from random import randint
 
 from odoo import api, fields, models
@@ -32,15 +31,15 @@ class Goal(models.Model):
 
     # 1. RELATIONAL FIELDS
     # ________________________________________
-    # Connects to the learner profile for security and filter? (why do we need it?)
+    # Used for the "Learner can only see own goals" record rule
     learner_id = fields.Many2one('res.users', string="Created by", required=True)
 
-    # Connect to the learner's growth records to get all their skills (why do we need to connect it?)
+    # Needed to scope goals to a plan.
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
                                       string="Plan",
                                       ondelete='cascade')
 
-    # why do we need to connect with the original skill??
+    #  Needed to pass skill context to wizards and compute progress per skill.
     skill_id = fields.Many2one('skill_development.skill',
                                string="Main Skill",
                                readonly=True)
@@ -53,9 +52,9 @@ class Goal(models.Model):
                                'goal_id',
                                string='Tasks')
 
-    lesson_id = fields.One2many('skill_development.lesson_bank',
-                                'goal_id',
-                                string=" ")
+    lesson_ids = fields.One2many('skill_development.lesson_bank',
+                                 'goal_id',
+                                 string=" ")
 
     tag_ids = fields.Many2many('skill_development.tag', string="Tags")
     # ________________________________________
@@ -76,13 +75,6 @@ class Goal(models.Model):
         default='draft',
         string='Status',
         readonly=True)
-
-    kanban_state = fields.Selection([
-        ('normal', 'On Hold'),
-        ('done', 'In Progress'),
-        ('blocked', 'Canceled')],
-        string='Status',
-        default='normal')
 
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True, tracking=True)
@@ -108,12 +100,12 @@ class Goal(models.Model):
         ('practice', 'Practice'),
         ('creation', 'Creation & Contribution')],
         required=True)
-    specific_goal = fields.Text('Specific: [What exactly do you want to achieve?]')
-    measurable_goal = fields.Text("Measurable: [How do you know if your progress is good?]")
-    achievable_goal = fields.Text('Achievable: [What makes you sure you can do it?]')
-    relevant_goal = fields.Text('Relevant: [Why is it important to you?]')
-    timed_goal = fields.Text('Time-Bound: [What is your timeline?]')
-    goal_name = fields.Text('Complete Goal Statement')
+    specific_goal = fields.Text('Specific goal category')
+    measurable_goal = fields.Text("Measurable goal category'")
+    achievable_goal = fields.Text('Achievable goal category')
+    relevant_goal = fields.Text('Relevant goal category')
+    timed_goal = fields.Text('Time-Bound goal category')
+    goal_name = fields.Char('Complete Goal Statement')
     # ________________________________________
 
     # 5. FLAGS
@@ -128,7 +120,7 @@ class Goal(models.Model):
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
                  'relevant_goal', 'timed_goal',
-                 'lesson_id.lesson_worked', 'lesson_id.lesson_change', 'lesson_id.lesson_learned')
+                 'lesson_ids.lesson_worked', 'lesson_ids.lesson_change', 'lesson_ids.lesson_learned')
     def _compute_goal_progress(self):
         """
         Calculate the goal's percentage within its skill category.
@@ -151,7 +143,7 @@ class Goal(models.Model):
             related_field='goal_id'
         )
 
-    @api.depends('lesson_id')
+    @api.depends('lesson_ids')
     def _compute_lesson_count(self):
         """Using the count_mixin to count lessons associated with each goal."""
         self._compute_count(
@@ -176,8 +168,11 @@ class Goal(models.Model):
 
     def action_create_goal_draft(self):
         """Set goal status to draft if planning on it is incomplete."""
-        for rec in self:
-            rec.goal_status = 'draft'
+
+        def action_create_goal_draft(self):
+            for rec in self:
+                if rec.goal_status != 'complete':
+                    rec.goal_status = 'draft'
 
     def action_finalize_goal(self):
         """Finalize the goal plan when completed."""
@@ -189,11 +184,11 @@ class Goal(models.Model):
         Set goal status to 'complete' and mark as complete.
         And returns an action to open the reflection wizard.
         """
+        self.ensure_one()
 
-        for rec in self:
-            rec.goal_status = 'complete'
-            rec.is_complete = True
-            # rec._compute_goal_progress()
+        self.goal_status = 'complete'
+        self.is_complete = True
+        # rec._compute_goal_progress()
 
         return {
             'type': 'ir.actions.act_window',
@@ -245,6 +240,7 @@ class Goal(models.Model):
     def action_view_lesson(self):
         """ Opens a view of all lessons associated with this goal """
 
+        self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': 'Lesson',

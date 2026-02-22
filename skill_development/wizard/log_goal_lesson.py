@@ -29,10 +29,10 @@ class LogGoalLesson(models.TransientModel):
         default='0', string="Priority")
 
     lesson_title = fields.Char('Lesson', required=True)
-    lesson_worked = fields.Html(string='What Worked', sanitize_attributes=False)
-    lesson_change = fields.Html(string='What to Change', sanitize_attributes=False)
-    lesson_learned = fields.Html(string='What Was Learned', sanitize_attributes=False)
-    extra_thoughts = fields.Html(string='Extra Thoughts', sanitize_attributes=False)
+    lesson_worked = fields.Html(string='What Worked')
+    lesson_change = fields.Html(string='What to Change')
+    lesson_learned = fields.Html(string='What Was Learned')
+    extra_thoughts = fields.Html(string='Extra Thoughts')
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):

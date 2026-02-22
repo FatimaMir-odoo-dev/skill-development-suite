@@ -62,7 +62,7 @@ class ProgressLogicHelper:
         """Awards a bonus if at least one linked lesson contains
         all required reflection fields."""
 
-        for lesson in goal.lesson_id:
+        for lesson in goal.lesson_ids:
             if lesson.lesson_worked and lesson.lesson_change and lesson.lesson_learned:
                 return 5  # Bonus applied if at least one complete reflection exists
         return 0
