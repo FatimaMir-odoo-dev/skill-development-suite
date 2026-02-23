@@ -23,14 +23,14 @@ class GrowthTracker(models.Model):
     _rec_name = 'skill_name'
 
     # Record content
-    plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True)
-    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal', ondelete='cascade')
+    plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True, required=True)
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal')
 
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
     sequence = fields.Integer(string="Sequence", default=10)
 
     # PLAN CONTENTS
-    skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True)
+    skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True, required=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
     motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short",
@@ -183,14 +183,15 @@ class GrowthTracker(models.Model):
                 )
 
     # Ensures plan_owner_id is automatically set to the current user
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """
         Automatically assign the current user as the plan owner when creating a new skill plan.
         """
 
-        vals.setdefault('plan_owner_id', self.env.user.id)
-        return super(GrowthTracker, self).create(vals)
+        for vals in vals_list:
+            vals.setdefault('plan_owner_id', self.env.user.id)
+            return super().create(vals_list)
 
     def goals_button(self):
         """
@@ -205,7 +206,10 @@ class GrowthTracker(models.Model):
             'res_model': 'skill_development.goal',
             'view_mode': 'kanban,form',
             'target': 'self',
-            'domain': [('skill_id', '=', self.skill_id.id)],
+            'domain': [
+                ('learner_plan_id', '=', self.id),
+                ('skill_id', '=', self.skill_id.id),
+            ],
             'context': {'default_skill_id': self.skill_id.id,
                         'default_learner_plan_id': self.id,
                         'create': not self.is_acquired, },
@@ -261,10 +265,10 @@ class GrowthTracker(models.Model):
     def action_delete_plan(self):
         """ Opens a confirmation wizard before permanently deleting the skill plan. """
 
-        skill = self.browse(self.id)
-        if not skill.exists():
-            raise UserError(_("The skill you're trying to delete does not exist."))
         self.ensure_one()
+        if not self.exists():
+            raise UserError(_("The skill you're trying to delete does not exist."))
+
         return {
             'type': 'ir.actions.act_window',
             'name': _('Confirm Deletion'),

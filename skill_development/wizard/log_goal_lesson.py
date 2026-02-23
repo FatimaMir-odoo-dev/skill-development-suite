@@ -16,7 +16,7 @@ class LogGoalLesson(models.TransientModel):
     _description = 'Lesson Bank Pop-up Form'
 
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True, required=True,)
-    skill_id = fields.Many2one('skill_development.skill', string="Skill", readonly=True)
+    skill_id = fields.Many2one(related='goal_id.skill_id', string='Skill', readonly=True)
     tag_ids = fields.Many2many('skill_development.tag',
                                relation='wizard_tag_lesson_rel',
                                column1='tag_id',
@@ -34,11 +34,6 @@ class LogGoalLesson(models.TransientModel):
     lesson_learned = fields.Html(string='What Was Learned')
     extra_thoughts = fields.Html(string='Extra Thoughts')
 
-    @api.onchange('goal_id')
-    def _onchange_goal_id(self):
-        if self.goal_id:
-            self.skill_id = self.goal_id.skill_id
-
     def button_save_lesson(self):
         """
         Create a lesson bank record from the wizard input.
@@ -47,6 +42,7 @@ class LogGoalLesson(models.TransientModel):
         then closes the wizard window.
         """
 
+        self.ensure_one()
         self.env['skill_development.lesson_bank'].create({
             'lesson_title': self.lesson_title,
             'lesson_worked': self.lesson_worked,
