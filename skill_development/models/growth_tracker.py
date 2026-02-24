@@ -2,6 +2,8 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 
+import re
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
@@ -76,8 +78,8 @@ class GrowthTracker(models.Model):
         """
 
         for record in self:
-            record.motivation_short = (record.motivation[:120] + '...') if record.motivation and len(
-                record.motivation) > 50 else record.motivation
+            plain = re.sub(r'<[^>]+>', '', record.motivation or '')
+            record.motivation_short = (plain[:50] + '...') if len(plain) > 50 else plain
 
     @api.depends('is_acquired')
     def _compute_skill_status(self):

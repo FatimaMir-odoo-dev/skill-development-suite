@@ -13,6 +13,7 @@ Main features:
     - Customizable stages and tags
 """
 
+import re
 from random import randint
 
 from odoo import api, fields, models
@@ -488,13 +489,11 @@ class LessonBank(models.Model):
         default='0', index=True, string="Priority")
     lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
 
-    @api.depends('lesson_worked')
     def _compute_lesson_short(self):
         """Generate a preview of the lesson by truncating the 'What Worked' field."""
-
         for record in self:
-            record.lesson_short = (record.lesson_worked[:50] + '...') if record.lesson_worked and len(
-                record.lesson_worked) > 50 else record.lesson_worked
+            plain = re.sub(r'<[^>]+>', '', record.lesson_worked or '')
+            record.lesson_short = (plain[:50] + '...') if len(plain) > 50 else plain
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
