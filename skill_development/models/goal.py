@@ -56,7 +56,13 @@ class Goal(models.Model):
                                  'goal_id',
                                  string=" ")
 
-    tag_ids = fields.Many2many('skill_development.tag', string="Tags")
+    tag_ids = fields.Many2many(
+        'skill_development.tag',
+        relation='goal_tag_rel',
+        column1='goal_id',
+        column2='tag_id',
+        string='Tags',
+    )
     # ________________________________________
 
     # 2. STATUS FIELDS
@@ -523,19 +529,3 @@ class Tag(models.Model):
         string='Color',
         default=lambda self: randint(1, 11),
         help="Color used in Kanban or labels.")
-
-    goal_ids = fields.Many2many('skill_development.goal', 'goal_project_tags_rel', string='Goals')
-    task_ids = fields.Many2many(
-        'skill_development.task',
-        relation='task_tag_rel',
-        column1='tag_id',
-        column2='task_id',
-        string="Tasks"
-    )
-    lesson_ids = fields.Many2many(
-        'skill_development.lesson_bank',
-        relation='tag_lesson_rel',
-        column1='tag_id',
-        column2='lesson_id',
-        string='Lessons'
-    )

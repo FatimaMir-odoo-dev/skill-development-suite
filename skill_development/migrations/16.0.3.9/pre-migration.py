@@ -9,6 +9,60 @@ This file exists solely for the development stage.
 
 def migrate(cr, version):
     pass
+    # """Clear old relation tables before ORM upgrade to prevent FK violations."""
+    #
+    # cr.execute("SELECT to_regclass('public.skill_development_goal_skill_development_tag_rel')")
+    # if cr.fetchone()[0]:
+    #     # Back up first
+    #     cr.execute("""
+    #         CREATE TABLE _goal_tag_migration_backup AS
+    #         SELECT * FROM skill_development_goal_skill_development_tag_rel
+    #         WHERE EXISTS (
+    #             SELECT 1 FROM skill_development_goal g
+    #             WHERE g.id = skill_development_goal_id
+    #         )
+    #         AND EXISTS (
+    #             SELECT 1 FROM skill_development_tag t
+    #             WHERE t.id = skill_development_tag_id
+    #         )
+    #     """)
+    #     # Then empty the old table so ORM doesn't touch it
+    #     cr.execute("TRUNCATE skill_development_goal_skill_development_tag_rel")
+    #
+    # cr.execute("SELECT to_regclass('public.skill_development_tag_skill_development_task_rel')")
+    # if cr.fetchone()[0]:
+    #     cr.execute("""
+    #         CREATE TABLE _task_tag_migration_backup AS
+    #         SELECT * FROM skill_development_tag_skill_development_task_rel
+    #         WHERE EXISTS (
+    #             SELECT 1 FROM skill_development_task t
+    #             WHERE t.id = skill_development_task_id
+    #         )
+    #         AND EXISTS (
+    #             SELECT 1 FROM skill_development_tag tg
+    #             WHERE tg.id = skill_development_tag_id
+    #         )
+    #     """)
+    #     cr.execute("TRUNCATE skill_development_tag_skill_development_task_rel")
+    # """Backup existing goal-tag and task-tag links before relation table rename."""
+    #
+    # # Goal-tag backup
+    # cr.execute("SELECT to_regclass('public.skill_development_tag_skill_development_goal_rel')")
+    # if cr.fetchone()[0]:
+    #     cr.execute("""
+    #                 CREATE TABLE _goal_tag_migration_backup AS
+    #                 SELECT *
+    #                 FROM skill_development_tag_skill_development_goal_rel
+    #             """)
+    #
+    # # Task-tag backup
+    # cr.execute("SELECT to_regclass('public.skill_development_task_skill_development_tag_rel')")
+    # if cr.fetchone()[0]:
+    #     cr.execute("""
+    #                 CREATE TABLE _task_tag_migration_backup AS
+    #                 SELECT *
+    #                 FROM skill_development_task_skill_development_tag_rel
+    #             """)
     # cr.execute("""
     #         SELECT to_regclass(
     #             'public.skill_development_task_skill_development_tag_rel'
