@@ -308,7 +308,7 @@ class Task(models.Model):
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority", tracking=True)
-    date_end = fields.Datetime(string='Ending Date', index=True, copy=False)
+    date_end = fields.Date(string='Ending Date', index=True, copy=False)
 
     learner_id = fields.Many2one('res.users', string='Owner', required=True,
                                  default=lambda self: self.env.user,
@@ -344,19 +344,16 @@ class Task(models.Model):
             related_field='task_id'
         )
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """Prevent creating tasks for completed goals."""
-
-        goal_id = vals.get('goal_id') or self.env.context.get('default_goal_id')
-
-        if goal_id:
-            goal = self.env['skill_development.goal'].browse(goal_id)
-
-            if goal.exists() and goal.is_complete:
-                raise ValidationError("Cannot add a task to a completed goal.")
-
-        return super().create(vals)
+        for vals in vals_list:
+            goal_id = vals.get('goal_id') or self.env.context.get('default_goal_id')
+            if goal_id:
+                goal = self.env['skill_development.goal'].browse(goal_id)
+                if goal.exists() and goal.is_complete:
+                    raise ValidationError("Cannot add a task to a completed goal.")
+        return super().create(vals_list)
 
     # @api.model
     # def create(self, vals):
