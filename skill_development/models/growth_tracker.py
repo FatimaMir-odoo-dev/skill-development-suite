@@ -2,10 +2,9 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 
 
-import re
-
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import ValidationError
+from odoo.tools import html2plaintext
 
 
 class GrowthTracker(models.Model):
@@ -13,20 +12,20 @@ class GrowthTracker(models.Model):
     Skill Growth Tracker.
 
     Represents a learner’s plan lifecycle for acquiring a specific skill.
-    It keeps holds their motivations, tracks their goals, learning progress, and overall mastery leve.
-    Plams can be acquired, archived, and deleted.
+    It contains their motivations, tracks their goals, learning progress, and overall mastery level.
+    Plans can be acquired, archived, and deleted.
 
     Each user can have only one plan per skill.
     """
 
     _name = 'skill_development.growth_tracker'
-    _description = 'A Record For The Learner Skill Plan'
+    _description = 'Skill Growth Plan'
     _inherit = 'count.mixin'
     _rec_name = 'skill_name'
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True, required=True)
-    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goal')
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goals')
 
     goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
     sequence = fields.Integer(string="Sequence", default=10)
@@ -35,11 +34,10 @@ class GrowthTracker(models.Model):
     skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True, required=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
-    motivation_short = fields.Char(string="Motivation Preview", compute="_compute_motivation_short",
-                                   sanitize_attributes=False)
+    motivation_short = fields.Char(string="Motivation Preview", compute="_compute_motivation_short")
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")
-    scribble_note = fields.Html(string='Scribbles', sanitize_attributes=False)
+    scribble_note = fields.Html(string='Scribbles')
 
     # PROGRESS FIELDS
     progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
@@ -67,7 +65,7 @@ class GrowthTracker(models.Model):
 
     # FLAGS
     is_acquired = fields.Boolean(string="Skill Acquired", store=True)
-    skill_status = fields.Char(string="Status", compute='_compute_skill_status', store=False)
+    skill_status = fields.Char(string="Status", compute='_compute_skill_status')
     active = fields.Boolean(default=True)
 
     @api.depends('motivation')
@@ -78,7 +76,7 @@ class GrowthTracker(models.Model):
         """
 
         for record in self:
-            plain = re.sub(r'<[^>]+>', '', record.motivation or '')
+            plain = html2plaintext(record.motivation or '').strip()
             record.motivation_short = (plain[:50] + '...') if len(plain) > 50 else plain
 
     @api.depends('is_acquired')
@@ -193,7 +191,7 @@ class GrowthTracker(models.Model):
 
         for vals in vals_list:
             vals.setdefault('plan_owner_id', self.env.user.id)
-            return super().create(vals_list)
+        return super().create(vals_list)
 
     def goals_button(self):
         """
@@ -202,6 +200,8 @@ class GrowthTracker(models.Model):
         Displays them in kanban and form views, and disables
         goal creation if the skill is already acquired.
         """
+
+        self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             'name': 'My Goals',
@@ -234,8 +234,8 @@ class GrowthTracker(models.Model):
     def skill_acquired_button(self):
         """ Marks the skill as acquired and opens the skill rating wizard. """
 
-        for rec in self:
-            rec.is_acquired = True
+        self.ensure_one()
+        self.is_acquired = True
 
         return {
             'type': 'ir.actions.act_window',
@@ -250,6 +250,7 @@ class GrowthTracker(models.Model):
     def action_archive_plan(self):
         """ Archive this skill plan and display confirmation notification. """
 
+        self.ensure_one()
         self.active = False
         return {
             'type': 'ir.actions.client',
@@ -258,7 +259,7 @@ class GrowthTracker(models.Model):
                 'title': _('Plan Archived'),
                 'message': _(
                     'The skill "%s" has been archived, '
-                    'view by filtering with (Active is No).' % self.skill_id.skill_name),
+                    'view by filtering with (Active is No).') % self.skill_id.skill_name,
                 'type': 'warning',
                 'sticky': False,
             }
@@ -268,9 +269,6 @@ class GrowthTracker(models.Model):
         """ Opens a confirmation wizard before permanently deleting the skill plan. """
 
         self.ensure_one()
-        if not self.exists():
-            raise UserError(_("The skill you're trying to delete does not exist."))
-
         return {
             'type': 'ir.actions.act_window',
             'name': _('Confirm Deletion'),
@@ -286,8 +284,8 @@ class GrowthTracker(models.Model):
     # skills saved in this record to connect the goal to
 
 
-class LearnerProfile(models.Model):
-    _inherit = "res.users"
+# class LearnerProfile(models.Model):
+#     _inherit = "res.users"
 
     # plan_skill_ids: object = fields.One2many('skill_development.growth_tracker',
     #                          'plan_owner_id', string='Skill Plans')

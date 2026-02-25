@@ -13,11 +13,12 @@ Main features:
     - Customizable stages and tags
 """
 
-import re
+
 from random import randint
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.tools import html2plaintext
 
 from ..services.progress_logic_helper import ProgressLogicHelper
 
@@ -492,7 +493,7 @@ class LessonBank(models.Model):
     def _compute_lesson_short(self):
         """Generate a preview of the lesson by truncating the 'What Worked' field."""
         for record in self:
-            plain = re.sub(r'<[^>]+>', '', record.lesson_worked or '')
+            plain = html2plaintext(record.lesson_worked or '').strip()
             record.lesson_short = (plain[:50] + '...') if len(plain) > 50 else plain
 
     @api.onchange('goal_id')
