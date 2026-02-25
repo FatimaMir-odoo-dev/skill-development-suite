@@ -35,7 +35,7 @@ class GrowthTracker(models.Model):
     skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True, required=True)
     skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
     motivation = fields.Text(string="My Motivation to Learn")
-    motivation_short = fields.Html(string="Motivation Preview", compute="_compute_motivation_short",
+    motivation_short = fields.Char(string="Motivation Preview", compute="_compute_motivation_short",
                                    sanitize_attributes=False)
     endpoint = fields.Date(string="Learning Endpoint")
     msg_2self = fields.Text(string="Message to Myself")

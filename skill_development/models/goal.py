@@ -463,13 +463,12 @@ class LessonBank(models.Model):
                                  index=True)
     learner_plan_id = fields.Many2one(
         'skill_development.growth_tracker',
-        string="Plan",
+        string="Growth Plan",
         ondelete='cascade')
-    skill_id = fields.Many2one('skill_development.skill', string="Skill")
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
 
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Related Skill")
-    lesson_title = fields.Char('Title')
+    lesson_title = fields.Char('Title', required=True)
     tag_ids = fields.Many2many('skill_development.tag',
                                relation='tag_lesson_rel',
                                column1='lesson_id',
@@ -487,8 +486,9 @@ class LessonBank(models.Model):
         ('0', 'Low'),
         ('1', 'High')],
         default='0', index=True, string="Priority")
-    lesson_short = fields.Html(string="Lesson Preview", compute="_compute_lesson_short", sanitize_attributes=False)
+    lesson_short = fields.Char(string="Lesson Preview", compute="_compute_lesson_short")
 
+    @api.depends('lesson_worked')
     def _compute_lesson_short(self):
         """Generate a preview of the lesson by truncating the 'What Worked' field."""
         for record in self:
@@ -497,7 +497,7 @@ class LessonBank(models.Model):
 
     @api.onchange('goal_id')
     def _onchange_goal_id(self):
-        """Auto-fills the skill related to the goal (referred to as learner_plan_id) when a goal is selected."""
+        """Auto-fills the plan when a goal is selected."""
 
         if self.goal_id and self.goal_id.learner_plan_id:
             self.learner_plan_id = self.goal_id.learner_plan_id

@@ -553,7 +553,7 @@
                                 <field name="goal_skill" readonly="1" style="font-weight: bold"
                                        attrs="{'invisible': [('goal_id', '=', False)]}"/>
 
-                                <field name="skill_id" class="oe_inline" options="{'no_open': True}"
+                                <field name="learner_plan_id" class="oe_inline" options="{'no_open': True}"
                                        style="font-weight: bold"
                                        attrs="{'invisible': [('goal_id', '!=', False)], 'readonly': [('id', '!=', False)]}"/>
                                 <field name="tag_ids" widget="many2many_tags" class="oe_inline"
