@@ -19,14 +19,14 @@ class Skill(models.Model):
     _description = 'Skill'
     _rec_name = 'skill_name'
 
-    # 1. BASIC FIELDS (IDENTITY + DESCRIPTION)
+    # BASIC FIELDS (IDENTITY + DESCRIPTION)
     # ________________________________________
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     pre_requisites = fields.Text(string="Pre-Requisites")
     # ________________________________________
 
-    # 2. RELATIONAL FIELDS
+    # RELATIONAL FIELDS
     # ________________________________________
     rating_ids = fields.One2many('skill_development.skill_rating',
                                  'skill_id',
@@ -51,22 +51,8 @@ class Skill(models.Model):
                                         column2='rprereq_id',
                                         string='Consider Learning First',
                                         domain="[('id', '!=', id)]")
-    # ________________________________________
 
-    # 3. COMPUTED METRICS
-    # ________________________________________
-    avg_overall_rating = fields.Float(
-        'Overall Rating Calculation',
-        compute='_compute_avg_ratings',
-        store=True)
-
-    avg_difficulty = fields.Float(
-        "Average Difficulty",
-        compute='_compute_avg_ratings',
-        store=True)
-    # ________________________________________
-
-    # 4. STAR RATING FIELDS (READONLY OUTPUTS)
+    # STAR RATING FIELDS (READONLY OUTPUTS)
     # ________________________________________
     star_avg_rating = fields.Selection([
         ('0', 'Not Recommended'),
@@ -77,7 +63,8 @@ class Skill(models.Model):
         ('5', 'Excellent'), ],
         store=True,
         string="Overall Rating",
-        readonly=True)
+        readonly=True,
+        compute='_compute_avg_ratings')
 
     star_avg_difficulty = fields.Selection([
         ('0', 'Impossible'),
@@ -88,10 +75,11 @@ class Skill(models.Model):
         ('5', 'Effortless'), ],
         store=True,
         string="Overall Difficulty Rating",
-        readonly=True)
+        readonly=True,
+        compute='_compute_avg_ratings')
     # ________________________________________
 
-    # 5. FLAGS
+    # FLAGS
     # ________________________________________
     is_transferable = fields.Boolean(string="This Skill is Transferable")
 
@@ -102,7 +90,16 @@ class Skill(models.Model):
          'A skill with the same name already exists. Please refer back to it or use a different name.')
     ]
 
-    @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
+    @staticmethod
+    def _to_star(value):
+        thresholds = [5, 4, 3, 2, 1]
+        for threshold in thresholds:
+            if value >= threshold:
+                return str(threshold)
+        return '0'
+
+    @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty',
+                 'star_avg_difficulty', 'star_avg_rating')
     def _compute_avg_ratings(self):
         """
             Compute average rating and difficulty for the skill.
@@ -110,25 +107,22 @@ class Skill(models.Model):
             Aggregates valid user ratings to calculate:
             - Overall rating (based on usefulness and fun)
             - Average difficulty
-            - Star-based values used for UI display
+            - Star-based values used for UI display on the skill card
             """
         for skill in self:
             total_usefulness = total_fun = total_difficulty = count = 0
 
             for rating in skill.rating_ids:
-                try:
-                    usefulness = int(rating.usefulness or 0)
-                    fun = int(rating.fun2learn or 0)
-                    difficulty = int(rating.difficulty or 0)
+                usefulness = int(rating.usefulness)
+                fun = int(rating.fun2learn)
+                difficulty = int(rating.difficulty)
 
-                    # Only count if usefulness, fun, and difficulty are rated above 0
-                    if usefulness > 0 and fun > 0 and difficulty > 0:
-                        total_usefulness += usefulness
-                        total_fun += fun
-                        total_difficulty += difficulty
-                        count += 1
-                except (ValueError, TypeError):
-                    continue  # skip invalid entries
+                # Only count if usefulness, fun, and difficulty are rated above 0
+                if usefulness > 0 and fun > 0 and difficulty > 0:
+                    total_usefulness += usefulness
+                    total_fun += fun
+                    total_difficulty += difficulty
+                    count += 1
 
             if count:
                 avg_rating = round((total_usefulness + total_fun) / (2 * count), 2)
@@ -137,25 +131,8 @@ class Skill(models.Model):
                 avg_rating = 0.0
                 avg_difficulty = 0.0
 
-            skill.avg_overall_rating = avg_rating
-            skill.avg_difficulty = avg_difficulty
-
-            def to_star(value):
-                if 1 <= value < 2:
-                    return '1'
-                elif 2 <= value < 3:
-                    return '2'
-                elif 3 <= value < 4:
-                    return '3'
-                elif 4 <= value < 5:
-                    return '4'
-                elif value >= 5:
-                    return '5'
-                else:
-                    return '0'  # Not rated
-
-            skill.star_avg_rating = to_star(avg_rating)
-            skill.star_avg_difficulty = to_star(avg_difficulty)
+            skill.star_avg_rating = self._to_star(avg_rating)
+            skill.star_avg_difficulty = self._to_star(avg_difficulty)
 
     # def unlink(self):
     #     for record in self:
@@ -263,10 +240,10 @@ class SkillRating(models.Model):
         default='0', index=True, string="Fun", tracking=True)
 
     difficulty = fields.Selection([
-        ('0', 'Impossible'),
-        ('1', 'Demanding'),
-        ('2', 'Challenging'),
-        ('3', 'Manageable'),
-        ('4', 'Easy'),
-        ('5', 'Effortless'), ],
+        ('0', 'Effortless'),
+        ('1', 'Easy'),
+        ('2', 'Manageable'),
+        ('3', 'Challenging'),
+        ('4', 'Demanding'),
+        ('5', 'Impossible'), ],
         default='0', index=True, string="Difficulty", tracking=True)
