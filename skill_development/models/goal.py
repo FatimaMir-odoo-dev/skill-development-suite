@@ -34,7 +34,7 @@ class Goal(models.Model):
     # 1. RELATIONAL FIELDS
     # ________________________________________
     # Used for the "Learner can only see own goals" record rule
-    learner_id = fields.Many2one('res.users', string="Created by", required=True)
+    learner_id = fields.Many2one('res.users', string="Plan Owner", required=True)
 
     # Needed to scope goals to a plan.
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
