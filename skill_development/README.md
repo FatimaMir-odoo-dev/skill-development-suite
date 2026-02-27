@@ -1,5 +1,5 @@
 📦 Module Name: `skill_development`
-## Description 
+## Description
 The **Skill Development** module is the core of the Skill Development Suite. It allows individuals to **create personal skill growth plans** using SMART goals, structured tasks and activities, and adding relevant resources to enhance their learning.
 It was originally designed for the IEEE Student Branch at Al-Neelain University, but is fully adaptable to any organization fostering continuous learning and self-motivated development.
 
@@ -70,7 +70,3 @@ SMART Goal template (pic)
 
 
 Task Breakdown (gif)
-
-
-
-

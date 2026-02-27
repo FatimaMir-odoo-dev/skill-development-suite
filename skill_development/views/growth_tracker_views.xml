@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--Copyright (C) 2024 FatimaMir-odoo-dev-->
 <!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
 
 <odoo>
-    <data>
-
-        <record id="skill_growth_view_tree" model="ir.ui.view">
-            <field name="name">My Skill Growth</field>
-            <field name="model">skill_development.initial_plan_record</field>
+        <record id="growth_tracker_view_tree" model="ir.ui.view">
+            <field name="name">growth.tracker.view.tree</field>
+            <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
-                <tree string="My Skill Growth" create="false">
+                <tree create="false">
                     <field name="is_acquired" invisible="1"/>
                     <field name="sequence" widget="handle"/>
                     <field name="skill_name"/>
@@ -17,22 +15,22 @@
                     <field name="motivation_short"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
-                    <field name="skill_status" widget="badge" decoration-success="is_acquired"/>
-                    <button name="action_archive_plan" type="object" icon="fa-bookmark"/>
-                    <button name="action_delete_plan" type="object" icon="fa-trash"/>
+                    <field name="skill_status" widget="badge" decoration-success="is_acquired == True"/>
+                    <button name="action_archive_plan" type="object" icon="fa-bookmark" title="Archive Plan"/>
+                    <button name="action_delete_plan" type="object" icon="fa-trash" title="Delete Plan"/>
                 </tree>
             </field>
         </record>
 
-        <record id="skill_growth_view_form" model="ir.ui.view">
-            <field name="name">My Skill Growth</field>
-            <field name="model">skill_development.initial_plan_record</field>
+        <record id="growth_tracker_view_form" model="ir.ui.view">
+            <field name="name">growth.tracker.view.form</field>
+            <field name="model">skill_development.growth_tracker</field>
             <field name="arch" type="xml">
                 <form create="false">
                     <sheet>
                         <field name="is_acquired" invisible="1"/>
                         <div attrs="{'invisible': [('is_acquired', '!=', True)]}"
-     style="
+                             style="
         position: absolute;
         top: 0;
         right: 0;
@@ -42,7 +40,7 @@
         pointer-events: none;
         z-index: 10;">
 
-    <div style="
+                            <div style="
         position: absolute;
         top: 90px;
         right: -80px;
@@ -59,11 +57,11 @@
         font-size: 16px;
         padding: 10px 0;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);">
-        Skill Acquired
-    </div>
-</div>
+                                Skill Acquired
+                            </div>
+                        </div>
 
-                        <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
+                        <div class="oe_button_box" name="button_box" style="'position: relative;'">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
                                 <field name="title"/>
@@ -93,7 +91,7 @@
                                     </button>
                                 </div>
                                 <group style="width: 66%; display: inline-block; vertical-align: top;">
-                                    <field name="skill_name" required="1"/>
+                                    <field name="skill_name"/>
                                     <field name="motivation"
                                            attrs="{'readonly': [('is_acquired', '=', True)]}"/>
                                     <field name="endpoint"
@@ -114,7 +112,6 @@
 
                         </group>
                         <group string="Progress Categories" col="3">
-                            <!--                            <div class="row">-->
                             <group>
                                 <field name="progress_knowledge" widget="percentpie"/>
                             </group>
@@ -124,13 +121,11 @@
                             <group>
                                 <field name="progress_contribute" widget="percentpie"/>
                             </group>
-                            <!--                            </div>-->
                         </group>
                         <notebook>
                             <page string="Scribbles">
                                 <group>
                                     <field name="scribble_note"
-                                           type="html"
                                            class="o_field_text_block"
                                            style="height: 200px;"
                                            placeholder="Use this to quickly note your ideas before you lose them..."
@@ -154,53 +149,4 @@
                 </form>
             </field>
         </record>
-
-        <record id="help_view_form_popup" model="ir.ui.view">
-            <field name="name">skill.help.popup</field>
-            <field name="model">skill_development.help_popup</field>
-            <field name="arch" type="xml">
-                <form string="Skill Progress Help" create="false" edit="false">
-                    <sheet>
-                        <field name="step" invisible="1"/>
-                        <group>
-                            <group style="width: 66%; display: inline-block; vertical-align: top;">
-                                <field name="message" widget="html" readonly="1" nolable="1"/>
-                            </group>
-                            <group style="width: 33%; display: inline-block; " col="1">
-                                <field name="maximum_progress" invisible="1"/>
-                                <field name="overall_progress"
-                                       style="font-size: 30px; font-weight: bold"
-                                       widget="gauge"
-                                       options="{'max_field': 'maximum_progress'}"
-                                       nolabel="1"
-                                       attrs="{'invisible':[('step', '=', 'page2')]}"/>
-                            </group>
-                        </group>
-                        <group>
-                            <group>
-                                <field name="tips" widget="html" readonly="1" nolable="1"/>
-                            </group>
-                            <group attrs="{'invisible':[('step', '=', 'page1')]}">
-                                <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
-                                    <field name="title"/>
-                                </h1>
-                            </group>
-                        </group>
-
-
-                        <footer>
-                            <button name="go_to_page1" string="Back" type="object"
-                                    class="btn-secondary"
-                                    attrs="{'invisible': [('step', '=', 'page1')]}"/>
-                            <button name="go_to_page2" string="Next" type="object"
-                                    class="btn-primary"
-                                    attrs="{'invisible': [('step', '=', 'page2')]}"/>
-                            <button string="Close" class="btn-secondary" special="cancel"/>
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-    </data>
 </odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="delete_progress_wizard_view_form" model="ir.ui.view">
+        <field name="name">delete.progress.wizard.view.form</field>
+        <field name="model">skill_development.delete_progress</field>
+        <field name="arch" type="xml">
+            <form string="Confirm Deletion">
+                <p>Are you sure you want to delete this skill?</p>
+                <p>This action is <strong>permanent</strong> and will remove all associated data (goals, tasks,
+                    lessons learned).
+                </p>
+                <p>Consider <em>archiving</em> instead to preserve your data.
+                </p>
+                <footer>
+                    <button string="Delete Permanently" type="object" name="confirm_delete" class="btn btn-danger"/>
+
+                    <button string="Cancel" special="cancel" class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

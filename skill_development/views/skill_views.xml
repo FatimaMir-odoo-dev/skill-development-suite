@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright (C) 2024 FatimaMir-odoo-dev-->
+<!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
+
+<odoo>
+    <record id="skill_view_kanban" model="ir.ui.view">
+        <field name="name">skill.view.kanban</field>
+        <field name="model">skill_development.skill</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click"
+                             style="background-color: white; padding: 16px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+
+                            <!-- Hidden field -->
+                            <field name="is_transferable" invisible="1"/>
+
+                            <!-- Top Right Badge -->
+                            <t t-if="record.is_transferable.raw_value">
+                                <div style="position: absolute; top: 0; right: 0; background: #87CEEB; color: white; padding: 4px 10px; font-size: 12px; font-weight: 600; border-bottom-left-radius: 8px;">
+                                    Useful
+                                </div>
+                            </t>
+
+                            <!-- Skill Info -->
+                            <div>
+                                <!-- Skill Name -->
+                                <h2 style="font-size: 18px; font-weight: 700; color: #1e3a8a; margin-bottom: 6px;">
+                                    <field name="skill_name"/>
+                                </h2>
+
+                                <!-- Star Rating -->
+                                <div style="margin-bottom: 12px;">
+                                    <field name="star_avg_rating" widget="priority"/>
+                                </div>
+                            </div>
+
+                            <!-- Action Button -->
+                            <div style="margin-top: auto; text-align: right;">
+                                <button type="object"
+                                        name="action_open_initial_plan_wizard"
+                                        class="btn btn-sm btn-primary"
+                                        style="font-size: 13px; padding: 6px 12px; border-radius: 6px;">
+                                    Start Learning
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="skill_view_form" model="ir.ui.view">
+        <field name="name">skill.view.form</field>
+        <field name="model">skill_development.skill</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object"
+                            name="action_open_initial_plan_wizard"
+                            class="btn btn-primary"
+                            style="font-size: 25px; padding: 12px 24px; border-radius: 8px;">
+                        Start Learning
+                    </button>
+                </header>
+                <sheet>
+                    <!-- Add some padding to make the form more spacious -->
+                    <div class="oe_form_container" style="padding: 15px;">
+                        <!-- Organize the fields -->
+                        <group string="General Information" colspan="1">
+                            <h2>
+                                <field name="skill_name" placeholder="Enter skill name here"/>
+                            </h2>
+                            <group string="Core Details" colspan="2">
+                                <field name="description" widget="text" placeholder="Enter description..."/>
+                                <field name="is_transferable" widget="boolean_toggle"/>
+                                <field name="star_avg_rating" widget="priority"/>
+                                <field name="star_avg_difficulty" widget="priority"/>
+                            </group>
+
+                            <group string="Requirements">
+                                <field name="pre_requisites"/>
+                                <field name="prereq_skill_ids" widget="many2many_tags"/>
+                            </group>
+                            <group string="Skill Trajectory">
+                                <field name="career_path_ids" widget="many2many_tags"
+                                       options="{'color_field': 'color'}"/>
+                                <field name="related_skill_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="skill_rating_view_form" model="ir.ui.view">
+        <field name="name">skill.rating.view.form</field>
+        <field name="model">skill_development.skill_rating</field>
+        <field name="arch" type="xml">
+            <form string="Skill Evaluation">
+                <sheet>
+                    <div class="oe_title">
+                        <h2 style="color: #5b84d7; margin-bottom: 12px;">
+                            Please evaluate your experience with this skill
+                        </h2>
+                        <h3>
+                            <field name="skill_id"/>
+                        </h3>
+                    </div>
+
+                    <group string="Skill Reflection">
+                        <field name="usefulness" widget="priority" string="How Useful Was This Skill To You?"/>
+                        <field name="fun2learn" widget="priority" string="How Fun Was This Skill To Learn?"/>
+                        <field name="difficulty" widget="priority" string="How Difficult Was This Skill To Acquire?"/>
+                    </group>
+                </sheet>
+            </form>
+
+        </field>
+    </record>
+</odoo>

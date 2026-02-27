@@ -1,0 +1,279 @@
+# Copyright (C) 2024 FatimaMir-odoo-dev
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
+
+
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
+from odoo.tools import html2plaintext
+
+
+class GrowthTracker(models.Model):
+    """
+    Skill Growth Tracker.
+
+    Represents a learner’s plan lifecycle for acquiring a specific skill.
+    It contains their motivations, tracks their goals, learning progress, and overall mastery level.
+    Plans can be acquired, archived, and deleted.
+
+    Each user can have only one plan per skill.
+    """
+
+    _name = 'skill_development.growth_tracker'
+    _description = 'Skill Growth Plan'
+    _inherit = 'count.mixin'
+    _rec_name = 'skill_name'
+
+    # Record content
+    plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True, required=True)
+    goal_ids = fields.One2many('skill_development.goal', 'learner_plan_id', string='Goals')
+
+    goal_count = fields.Integer(string='View My Goals', compute='_compute_goal_count')
+    sequence = fields.Integer(string="Sequence", default=10)
+
+    # PLAN CONTENTS
+    skill_id = fields.Many2one('skill_development.skill', 'Skill', readonly=True, required=True)
+    skill_name = fields.Char(related='skill_id.skill_name', string="Skill Name", store=True, readonly=True)
+    motivation = fields.Text(string="My Motivation to Learn")
+    motivation_short = fields.Char(string="Motivation Preview", compute="_compute_motivation_short")
+    endpoint = fields.Date(string="Learning Endpoint")
+    msg_2self = fields.Text(string="Message to Myself")
+    scribble_note = fields.Html(string='Scribbles')
+
+    # PROGRESS FIELDS
+    progress_knowledge = fields.Float('Knowledge', compute="_compute_category_progress", store=True,
+                                      help='''Knowledge category is about increasing your understanding of the skill,
+                                           with reading articles, watching videos, taking courses,
+                                            and studying relevant materials.''')
+    progress_practice = fields.Float('Practice', compute="_compute_category_progress", store=True,
+                                     help='''The Practice category involves applying the skill through hands-on
+                                           activities, such as exercises, personal projects, simulations,
+                                           and practical application.''')
+    progress_contribute = fields.Float('Creation & Contribution', compute="_compute_category_progress", store=True,
+                                       help='''Creation & Contribution involves sharing and benefiting from your
+                                            knowledge: teaching, mentoring,
+                                            working for return and publishing projects.''')
+    overall_progress = fields.Float(string="Overall Progress (%)", compute="_compute_overall_progress", store=True,
+                                    digits=(6, 2))
+    maximum_progress = fields.Integer(string="maximum rate", default=100, store=True)
+    title = fields.Selection([
+        ('seeker', 'Seeker'),
+        ('learner', 'Learner'),
+        ('skilled', 'Skilled'),
+        ('proficient', 'Proficient'),
+        ('master', 'Master')
+    ], default='seeker', string='Title', compute='_compute_title', store=True, readonly=True)
+
+    # FLAGS
+    is_acquired = fields.Boolean(string="Skill Acquired", store=True)
+    skill_status = fields.Char(string="Status", compute='_compute_skill_status')
+    active = fields.Boolean(default=True)
+
+    @api.depends('motivation')
+    def _compute_motivation_short(self):
+        """
+        Creates a truncated version of the motivation behind learning a skill
+        to be displayed in list view as a summary.
+        """
+
+        for record in self:
+            plain = html2plaintext(record.motivation or '').strip()
+            record.motivation_short = (plain[:50] + '...') if len(plain) > 50 else plain
+
+    @api.depends('is_acquired')
+    def _compute_skill_status(self):
+        """
+        Sets the skill status to 'Acquired' when it has been marked as completed.
+        to be displayed as a badge on the growth tracker interface.
+        """
+
+        for rec in self:
+            rec.skill_status = 'Acquired' if rec.is_acquired else ''
+
+    @api.depends('goal_ids.goal_progress', 'goal_ids.category')
+    def _compute_category_progress(self):
+        """
+        Calculate the learner’s progress in each of the three skill categories.
+
+        Progress is determined by adding up the percentages of all the
+        goals associated with each category, limiting each category's progress to max 100%.
+        """
+
+        for learner in self:
+            knowledge = practice = create_contrib = 0.0
+            for goal in learner.goal_ids:
+                if goal.category == 'knowledge':
+                    knowledge += goal.goal_progress
+                elif goal.category == 'practice':
+                    practice += goal.goal_progress
+                elif goal.category == 'creation':
+                    create_contrib += goal.goal_progress
+
+            learner.progress_knowledge = min(knowledge, 100)
+            learner.progress_practice = min(practice, 100)
+            learner.progress_contribute = min(create_contrib, 100)
+
+    @api.depends('progress_knowledge', 'progress_practice', 'progress_contribute')
+    def _compute_overall_progress(self):
+        """Compute overall progress in a skill across all its mastery categories.
+
+        Calculates the progress using weighted average for each category:
+        - Knowledge: 15%
+        - Practice: 35%
+        - Creation & Contribution: 50%
+        """
+
+        for learner in self:
+            learner.overall_progress = (
+                    learner.progress_knowledge * 0.15 +
+                    learner.progress_practice * 0.35 +
+                    learner.progress_contribute * 0.50
+            )
+
+    @api.depends('overall_progress')
+    def _compute_title(self):
+        """ Compute mastery title based on overall skill progress percentage.
+
+        Assigns title according to progress thresholds:
+        - 80%+: master
+        - 60-79%: proficient
+        - 40-59%: skilled
+        - 5-39%: learner
+        - <5%: seeker
+        """
+
+        for rec in self:
+            if rec.overall_progress >= 80:
+                rec.title = 'master'
+            elif rec.overall_progress >= 60:
+                rec.title = 'proficient'
+            elif rec.overall_progress >= 40:
+                rec.title = 'skilled'
+            elif rec.overall_progress >= 5:
+                rec.title = 'learner'
+            else:
+                rec.title = 'seeker'
+
+    @api.depends('goal_ids')
+    def _compute_goal_count(self):
+        """Using the count_mixin to count goals associated with each skill growth tracker."""
+
+        self._compute_count(
+            count_field='goal_count',
+            counted_model='skill_development.goal',
+            related_field='learner_plan_id'
+        )
+
+    @api.constrains('skill_id')
+    def _check_unique_skill_id(self):
+        """
+        Enforce uniqueness of skill plans per user.
+        Prevents a user from creating more than one learning plan
+        for the same skill.
+        """
+
+        for record in self:
+            if self.search_count([
+                ('skill_id', '=', record.skill_id.id),
+                ('plan_owner_id', '=', record.plan_owner_id.id)
+            ]) > 1:
+                raise ValidationError(
+                    f"The skill '{record.skill_name}' already exists for this user.\n"
+                    f"You can update it by going to skill growth and editing the skill plan from there."
+                )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """
+        Automatically assign the current user as the plan owner when creating a new skill plan.
+        """
+
+        for vals in vals_list:
+            vals.setdefault('plan_owner_id', self.env.user.id)
+        return super().create(vals_list)
+
+    def goals_button(self):
+        """
+        Open the goals linked to this skill plan.
+
+        Displays them in kanban and form views, and disables
+        goal creation if the skill is already acquired.
+        """
+
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'My Goals',
+            'res_model': 'skill_development.goal',
+            'view_mode': 'kanban,form',
+            'target': 'self',
+            'domain': [
+                ('learner_plan_id', '=', self.id),
+                ('skill_id', '=', self.skill_id.id),
+            ],
+            'context': {'default_skill_id': self.skill_id.id,
+                        'default_learner_plan_id': self.id,
+                        'create': not self.is_acquired, },
+        }
+
+    def popup_help_button(self):
+        """ Opens the help guide for the skill progress in a pop-up window. """
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Help',
+            'res_model': 'skill_development.progress_guide',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_skill_plan_id': self.id,
+                        'default_overall_progress': self.overall_progress,
+                        'default_title': self.title, },
+        }
+
+    def skill_acquired_button(self):
+        """ Marks the skill as acquired and opens the skill rating wizard. """
+
+        self.ensure_one()
+        self.is_acquired = True
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Skill Rating',
+            'res_model': 'skill_development.skill_rating',
+            'view_mode': 'form',
+            'target': 'new',
+            'domain': [('learner_plan_record_ids', '=', self.id)],
+            'context': {'default_skill_id': self.skill_id.id},
+        }
+
+    def action_archive_plan(self):
+        """ Archive this skill plan and display confirmation notification. """
+
+        self.ensure_one()
+        self.active = False
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Plan Archived'),
+                'message': _(
+                    'The skill "%s" has been archived, '
+                    'view by filtering with (Active is No).') % self.skill_id.skill_name,
+                'type': 'warning',
+                'sticky': False,
+            }
+        }
+
+    def action_delete_plan(self):
+        """ Opens a confirmation wizard before permanently deleting the skill plan. """
+
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Confirm Deletion'),
+            'res_model': 'skill_development.delete_progress',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_plan_id': self.id,
+            },
+        }

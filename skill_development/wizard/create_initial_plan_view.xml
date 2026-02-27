@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright (C) 2024 FatimaMir-odoo-dev-->
+<!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
+
+<odoo>
+    <record id="create_initial_plan_wizard_view_form" model="ir.ui.view">
+        <field name="name">create.initial.plan.wizard.view.form</field>
+        <field name="model">skill_development.create_initial_plan</field>
+        <field name="arch" type="xml">
+            <form string="Skill Plan">
+
+                <!--form content-->
+                <sheet>
+                    <group string="Create your own success story, one step at a time!"
+                           style="color: #5b84d7; text-transform: none;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <h2 style="font-size: 24px; font-weight: bold;">
+                                <field name="skill_id"/>
+                            </h2>
+                        </div>
+                    </group>
+
+                    <group>
+                        <field name="motivation" string="My Motivation: "/>
+                        <field name="endpoint" string="Preferred Endpoint: "/>
+                        <field name="msg_2self" string="Message to My Self: "/>
+                    </group>
+                </sheet>
+
+                <!--                form buttons-->
+                <footer>
+                    <button name="button_create_plan"
+                            string="Create Learning Plan"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
