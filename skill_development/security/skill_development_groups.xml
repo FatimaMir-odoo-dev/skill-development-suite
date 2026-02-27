@@ -9,12 +9,10 @@
     <record id="skill_development_group_general_admin" model="res.groups">
         <field name="name">General Admin</field>
         <field name="category_id" ref="skill_development_access"/>
-<!--        <field name="implied_ids" eval="[(4, ref('base.group_users'))]"/>-->
     </record>
 
     <record id="skill_development_group_learner" model="res.groups">
         <field name="name">Learner</field>
         <field name="category_id" ref="skill_development_access"/>
-<!--        <field name="implied_ids" eval="[(4, ref('base.group_users'))]"/>-->
     </record>
 </odoo>

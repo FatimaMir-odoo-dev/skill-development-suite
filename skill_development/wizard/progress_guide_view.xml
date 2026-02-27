@@ -24,13 +24,15 @@
                                         Welcome to Your Skill Growth Journey!
                                     </h1>
                                     <p class="text-lg text-gray-700 mb-8">
-                                        This guide will help you understand how your skill progress is calculated and how to grow effectively.
+                                        This guide will help you understand how your skill progress is calculated and
+                                        how to grow effectively.
                                     </p>
                                     <h2 class="text-3xl font-semibold text-gray-800 mb-4">
                                         What is Overall Progress?
                                     </h2>
                                     <p class="text-gray-700 mb-4">
-                                        Your overall progress shows how much you've developed a skill. It's based on three key areas:
+                                        Your overall progress shows how much you've developed a skill. It's based on
+                                        three key areas:
                                     </p>
                                     <ul class="list-disc ml-6 mb-6 text-gray-700">
                                         <li>
@@ -47,16 +49,19 @@
                                         </li>
                                     </ul>
                                     <p class="text-gray-700 mb-4">
-                                        Each area has a score out of 100%. Your overall progress is calculated like this:
+                                        Each area has a score out of 100%. Your overall progress is calculated like
+                                        this:
                                     </p>
                                     <div class="calculation-box bg-gray-200 p-4 rounded-lg mb-6">
                                         <code class="text-gray-800">
-                                            Overall Progress = (Knowledge % x 0.15) + (Practice % x 0.35) + (Connect &amp; Contribute % x 0.50)
+                                            Overall Progress = (Knowledge % x 0.15) + (Practice % x 0.35) + (Connect
+                                            &amp; Contribute % x 0.50)
                                         </code>
                                     </div>
                                     <p class="text-gray-700">
                                         As you can see, <strong class="highlight">Practice</strong> and
-                                        <strong class="highlight">Connect &amp; Contribute</strong> are worth more,
+                                        <strong class="highlight">Connect &amp; Contribute</strong>
+                                        are worth more,
                                         because applying and sharing your skills is the best way to learn!
                                     </p>
                                 </div>
@@ -65,7 +70,8 @@
                                 <div class="container">
                                     <p class="text-lg text-gray-700 mb-8">
                                         As you can see, <strong class="highlight">Practice</strong> and
-                                        <strong class="highlight">Connect &amp; Contribute</strong> are worth more,
+                                        <strong class="highlight">Connect &amp; Contribute</strong>
+                                        are worth more,
                                         because applying and sharing your skills is the best way to learn!
                                     </p>
                                     <h2 class="text-3xl font-semibold text-gray-800 mb-4">
@@ -77,7 +83,8 @@
                                     <ul class="list-disc ml-6 mb-6 text-gray-700">
                                         <li>
                                             <strong class="highlight">Start Strong:</strong>
-                                            Aim to complete your first goal in each category. The first goal gives you the biggest boost.
+                                            Aim to complete your first goal in each category. The first goal gives you
+                                            the biggest boost.
                                         </li>
                                         <li>
                                             <strong class="highlight">Set SMART Goals:</strong>
@@ -91,12 +98,14 @@
                                         </li>
                                         <li>
                                             <strong class="highlight">Reflect on What You Learn:</strong>
-                                            When you complete a goal, take the time to fill out the reflection questions.
+                                            When you complete a goal, take the time to fill out the reflection
+                                            questions.
                                             Reflecting earns you extra progress!
                                         </li>
                                         <li>
                                             <strong class="highlight">Mix It Up:</strong>
-                                            Diversify your goals. Try different goals in each category to develop a well-rounded skillset.
+                                            Diversify your goals. Try different goals in each category to develop a
+                                            well-rounded skillset.
                                         </li>
                                         <li>
                                             <strong class="highlight">Help Others:</strong>
@@ -137,7 +146,8 @@
                                     Progress by Category
                                 </h2>
                                 <p class="text-gray-700 mb-4">
-                                    Each time you complete a goal, you earn progress in that category. Here's how it works:
+                                    Each time you complete a goal, you earn progress in that category. Here's how it
+                                    works:
                                 </p>
                                 <ul class="list-disc ml-6 mb-6 text-gray-700">
                                     <li>
@@ -156,7 +166,8 @@
                                     </li>
                                     <li>
                                         <strong class="highlight">Reflection Bonus:</strong>
-                                        Get +5% extra progress if you answer all 3 reflection questions when you complete a goal.
+                                        Get +5% extra progress if you answer all 3 reflection questions when you
+                                        complete a goal.
                                     </li>
                                     <li>
                                         <strong class="highlight">"Done" Requirement Penalty:</strong>
@@ -166,7 +177,8 @@
                                         <strong class="highlight">Category Limit:</strong>
                                         You can earn a maximum of 100% progress in each of the
                                         <strong>Knowledge</strong>, <strong>Practice</strong>, and
-                                        <strong>Connect &amp; Contribute</strong> categories.
+                                        <strong>Connect &amp; Contribute</strong>
+                                        categories.
                                     </li>
                                 </ul>
                             </div>
@@ -187,11 +199,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr><td>0 – 4%</td><td>Seeker</td></tr>
-                                        <tr><td>5 – 39%</td><td>Learner</td></tr>
-                                        <tr><td>40 – 59%</td><td>Skilled</td></tr>
-                                        <tr><td>60 – 79%</td><td>Proficient</td></tr>
-                                        <tr><td>80 – 100%</td><td>Master</td></tr>
+                                        <tr>
+                                            <td>0 – 4%</td>
+                                            <td>Seeker</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5 – 39%</td>
+                                            <td>Learner</td>
+                                        </tr>
+                                        <tr>
+                                            <td>40 – 59%</td>
+                                            <td>Skilled</td>
+                                        </tr>
+                                        <tr>
+                                            <td>60 – 79%</td>
+                                            <td>Proficient</td>
+                                        </tr>
+                                        <tr>
+                                            <td>80 – 100%</td>
+                                            <td>Master</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                                 <div class="bonus-box">
