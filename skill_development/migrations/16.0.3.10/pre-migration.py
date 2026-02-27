@@ -9,6 +9,12 @@ This file exists solely for the development stage.
 
 def migrate(cr, version):
     pass
+    # cr.execute("SELECT to_regclass('public.skill_prereq_rel')")
+    # if cr.fetchone()[0]:
+    #     cr.execute("""
+    #         ALTER TABLE skill_prereq_rel
+    #         RENAME COLUMN rprereq_id TO prereq_id
+    #     """)
     # """Clear old relation tables before ORM upgrade to prevent FK violations."""
     #
     # cr.execute("SELECT to_regclass('public.skill_development_goal_skill_development_tag_rel')")

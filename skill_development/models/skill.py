@@ -48,7 +48,7 @@ class Skill(models.Model):
     prereq_skill_ids = fields.Many2many('skill_development.skill',
                                         relation='skill_prereq_rel',
                                         column1='skill_id',
-                                        column2='rprereq_id',
+                                        column2='prereq_id',
                                         string='Consider Learning First',
                                         domain="[('id', '!=', id)]")
 
@@ -67,12 +67,12 @@ class Skill(models.Model):
         compute='_compute_avg_ratings')
 
     star_avg_difficulty = fields.Selection([
-        ('0', 'Impossible'),
-        ('1', 'Demanding'),
-        ('2', 'Challenging'),
-        ('3', 'Manageable'),
-        ('4', 'Easy'),
-        ('5', 'Effortless'), ],
+        ('0', 'Effortless'),
+        ('1', 'Easy'),
+        ('2', 'Manageable'),
+        ('3', 'Challenging'),
+        ('4', 'Demanding'),
+        ('5', 'Impossible'), ],
         store=True,
         string="Overall Difficulty Rating",
         readonly=True,
@@ -98,8 +98,7 @@ class Skill(models.Model):
                 return str(threshold)
         return '0'
 
-    @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty',
-                 'star_avg_difficulty', 'star_avg_rating')
+    @api.depends('rating_ids.usefulness', 'rating_ids.fun2learn', 'rating_ids.difficulty')
     def _compute_avg_ratings(self):
         """
             Compute average rating and difficulty for the skill.
@@ -144,6 +143,8 @@ class Skill(models.Model):
 
     def action_open_initial_plan_wizard(self):
         """Opens a pop-up window to create an initial development plan for a new skill."""
+
+        self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
             # this refers to the wizard form
@@ -152,8 +153,8 @@ class Skill(models.Model):
             'name': 'My Skill Plan',
             'target': 'new',
             'context': {
-                'default_learner_id': self.env.user.id,  # Pass the learner ID to the wizard form
-                'default_skill_id': self.id, },  # Pass the skill name to the wizard form
+                'default_learner_id': self.env.user.id,
+                'default_skill_id': self.id, },
         }
 
 

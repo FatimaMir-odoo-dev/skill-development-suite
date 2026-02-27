@@ -116,7 +116,7 @@
                         <group string="Skill Reflection">
                             <field name="usefulness" widget="priority" string="How Useful Was This Skill To You?"/>
                             <field name="fun2learn" widget="priority" string="How Fun Was This Skill To Learn?"/>
-                            <field name="difficulty" widget="priority" string="How Easy Was This Skill To Acquire?"/>
+                            <field name="difficulty" widget="priority" string="How Difficult Was This Skill To Acquire?"/>
                         </group>
                     </sheet>
                 </form>
