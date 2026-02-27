@@ -103,7 +103,7 @@ class Goal(models.Model):
     achievable_goal = fields.Text('Achievable goal category')
     relevant_goal = fields.Text('Relevant goal category')
     timed_goal = fields.Text('Time-Bound goal category')
-    goal_name = fields.Char('Complete Goal Statement')
+    goal_name = fields.Char('Complete Goal Statement', required=True)
 
     # FLAGS
     # For locking goals, tasks, and resources

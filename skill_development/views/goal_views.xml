@@ -1,817 +1,814 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright (C) 2024 FatimaMir-odoo-dev-->
+<!--License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).-->
 <odoo>
-        <record id="goal_view_kanban" model="ir.ui.view">
-            <field name="name">goal.view.kanban</field>
-            <field name="model">skill_development.goal</field>
-            <field name="arch" type="xml">
-                <kanban on_create="skill_development.new_goal_action">
-                    <field name="goal_status" invisible="1"/>
-                    <field name="is_acquired" invisible="1" readonly="1"/>
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click d-flex flex-column h-100"
-                                 style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
-                                <t t-if="record.goal_status.raw_value == 'draft'">
-                                    <div style="position: absolute; top: 0; right: 0;
+    <record id="goal_view_kanban" model="ir.ui.view">
+        <field name="name">goal.view.kanban</field>
+        <field name="model">skill_development.goal</field>
+        <field name="arch" type="xml">
+            <kanban on_create="skill_development.new_goal_action">
+                <field name="goal_status" invisible="1"/>
+                <field name="is_acquired" invisible="1" readonly="1"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click d-flex flex-column h-100"
+                             style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
+                            <t t-if="record.goal_status.raw_value == 'draft'">
+                                <div style="position: absolute; top: 0; right: 0;
                 background: #ffb31a; color: white; padding: 2px 8px;
                 font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
                 box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
-                                        Draft
-                                    </div>
-                                </t>
+                                    Draft
+                                </div>
+                            </t>
 
-                                <t t-if="record.goal_status.raw_value == 'complete'">
-                                    <div style="position: absolute; top: 0; right: 0;
+                            <t t-if="record.goal_status.raw_value == 'complete'">
+                                <div style="position: absolute; top: 0; right: 0;
                 background: #00cc00; color: white; padding: 2px 8px;
                 font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
                 box-shadow: -4px 0 6px rgba(200, 200, 200, 0.5), 0 4px 6px rgba(200, 200, 200, 0.5);">
-                                        Done
-                                    </div>
-                                </t>
-
-
-                                <!-- Title -->
-                                <header>
-                                    <div class="oe_title"
-                                         style="overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word;">
-                                        <span style="text-align: left; margin-bottom: 8px; font-weight: bold; font-size: 15px;">
-                                            <field name="goal_name"/>
-                                        </span>
-                                    </div>
-                                </header>
-
-                                <!-- Skill Info -->
-                                <div style="margin-top: 12px; color: #555; display: flex; flex-direction: column; gap: 4px;">
-                                    <!-- Skill -->
-                                    <div>
-                                        <span style="color: #ac00e6; font-size: 13px; font-weight: bold">
-                                            <field name="skill_id"/>
-                                        </span>
-                                    </div>
-
-                                    <!-- Category -->
-                                    <div>
-                                        <span style="color: #333;">
-                                            <field name="category"/>
-                                        </span>
-                                    </div>
+                                    Done
                                 </div>
+                            </t>
 
-                                <field name="tag_ids"/>
-                                <div class="o_kanban_primary_right">
-                                    <div class="o_primary">
-                                        <div class="text-muted o_row">
-                                            <t t-if="record.date_start.raw_value">
-                                                <span class="fa fa-clock-o me-2" title="Dates"/>
-                                                <field name="date_start" widget="date"/>
-                                                <i class="fa fa-long-arrow-right mx-2 oe_read_only"
-                                                   aria-label="Arrow icon"
-                                                   title="Arrow"/>
-                                            </t>
-                                            <t t-else="">
-                                                <span class="fa fa-clock-o me-2 invisible" title="Dates"/>
-                                                <field name="date_start" widget="date"/>
-                                                <i class="fa fa-long-arrow-right mx-2 invisible oe_read_only"
-                                                   aria-label="Arrow icon"
-                                                   title="Arrow"/>
-                                            </t>
-                                            <field name="date" widget="date"/>
-                                        </div>
-                                    </div>
+
+                            <!-- Title -->
+                            <header>
+                                <div class="oe_title"
+                                     style="overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word;">
+                                    <span style="text-align: left; margin-bottom: 8px; font-weight: bold; font-size: 15px;">
+                                        <field name="goal_name"/>
+                                    </span>
                                 </div>
-
-                                <!-- Tasks Button -->
-                                <a name="action_view_tasks" type="object"
-                                   style="text-decoration: none;" class="mt-auto">
-                                    <div class="o_kanban_record_bottom"
-                                         style="margin-top: 20px; padding: 10px; background-color: #F5F5F5; border-radius: 4px; text-align: right;"
-                                         attrs="{'invisible':[('goal_status', '=', 'draft')]}">
-                                        <span style="color: #505050; font-weight: bold; display: inline-flex; align-items: center;">
-                                            <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
-                                            Tasks
-                                            <field name="task_count" style="margin-left: 5px;" widget="statinfo" nolabel="1"/>
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
-
-        <record id="goal_view_form" model="ir.ui.view">
-            <field name="name">goal.view.form</field>
-            <field name="model">skill_development.goal</field>
-            <field name="arch" type="xml">
-                <form>
-                    <header>
-                        <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_view_lesson"
-                                    string="Lessons"
-                                    type="object"
-                                    icon="fa-paperclip"
-                                    class="oe_stat_button"
-                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}"
-                                    t-att-style="'font-weight:bold'"
-                                    help="Quickly access and manage all lessons learned attached to this specific goal.">
-                                <field name="lesson_count" widget="statinfo" nolabel="1"/>Lessons
-                            </button>
-
-
-                            <button name="action_view_tasks"
-                                    icon="fa-tasks"
-                                    class="oe_stat_button"
-                                    type="object"
-                                    attrs="{'invisible': [('goal_status', '=', 'draft')]}"
-                                    help="Tasks are the actionable steps you take to achieve your goal.">
-                                <field name="task_count" widget="statinfo" nolabel="1"/>Tasks
-                            </button>
-
-                            <button name="action_finalize_goal"
-                                    type="object"
-                                    icon="fa-check"
-                                    class="oe_stat_button"
-                                    t-att-style="'background-color: #71639c; color:white; font-weight:bold'"
-                                    attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}">
-                                Finalize
-                            </button>
-                        </div>
-                        <h2>
-                            <field name="goal_name"
-                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                        </h2>
-                        <group col="2">
-                            <span>Skill:</span>
-                            <field name="skill_id" style="font-size: 15px; font-weight: bold" nolabel="1"/>
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
-                                   class="oe_inline"
-                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
-                        </group>
-                        <div style="display: flex; align-items: center; color: #555; margin-down: 0;">
-                            <span style="font-weight: bold; margin-right: 5px;">Start Date:</span>
-                            <field name="date_start" widget="daterange" nolabel="1" class="oe_inline"
-                                   options="{'related_end_date': 'date'}"
-                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
-                            <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
-                            <span style="font-weight: bold; margin-right: 5px;">End Date:</span>
-                            <field name="date" widget="daterange" nolabel="1" class="oe_inline"
-                                   options="{'related_start_date': 'date_start'}"
-                                   attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
-                        </div>
-
-
-                        <notebook>
-                            <page string="Expected Results">
-                                    <field name="result_ids" nolabel="1"
-                                           attrs="{'readonly': [('goal_status', '=', 'complete')]}">
-                                        <tree editable="bottom">
-                                            <field name="result" width="300"/>
-                                            <field name="is_done" width="20" widget="boolean_toggle"/>
-                                        </tree>
-                                    </field>
-                            </page>
-                            <page string="SMART Criteria">
-                                <div class="o_form_sheet border p-3">
-                                    <h3 class=" text-center mb-3" style="color: color: #71639c;">SMART
-                                        Criteria
-                                    </h3>
-
-                                    <!-- Specific Goal -->
-                                    <div class="mb-3">
-                                        <label class="fw-bold" for="specific_goal">Specific: [What exactly do
-                                            you
-                                            want to
-                                            achieve?]
-                                        </label>
-                                        <div class="input-group">
-                                            <field name="specific_goal" class="o_field_char form-control"
-                                                   id="specific_goal"
-                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                        </div>
-                                    </div>
-
-                                    <!-- Measurable Goal -->
-                                    <div class="mb-3">
-                                        <label class="fw-bold" for="measurable_goal" style="text-weight: bold">
-                                            Measurable:
-                                        </label>
-                                        <field name="measurable_goal" class="o_field_char form-control"
-                                               id="measurable_goal"
-                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                    </div>
-
-                                    <!-- Achievable Goal -->
-                                    <div class="mb-3">
-                                        <label class="fw-bold" for="achievable_goal">Achievable: [what makes you
-                                            sure you can do
-                                            it?]
-                                        </label>
-                                        <div class="input-group">
-                                            <field name="achievable_goal" class="o_field_char form-control"
-                                                   id="achievable_goal"
-                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                        </div>
-                                    </div>
-
-                                    <!-- Relevant Goal -->
-                                    <div class="mb-3">
-                                        <label class="fw-bold" for="relevant_goal">Relevant: [Why is it
-                                            important to
-                                            you? (think
-                                            of your motivation)]
-                                        </label>
-                                        <div class="input-group">
-                                            <field name="relevant_goal" class="o_field_char form-control"
-                                                   id="relevant_goal"
-                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                        </div>
-                                    </div>
-
-                                    <!-- Time-Bound Goal -->
-                                    <div class="mb-3">
-                                        <label class="fw-bold" for="timed_goal">Time-Bound: [What is your
-                                            timeline?]
-                                        </label>
-                                        <div class="input-group">
-                                            <field name="timed_goal" class="o_field_char form-control"
-                                                   id="timed_goal"
-                                                   attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </page>
-                        </notebook>
-                        <div class="d-flex justify-content-center mt-2">
-                            <button name="action_complete_goal"
-                                    string="Mark Goal As Complete"
-                                    type="object"
-                                    class="btn btn-success w-25"
-                                    icon="fa-check-square-o"
-                                    attrs="{'invisible': ['|', ('goal_status', '=', 'complete'), ('goal_status', '=', 'draft')]}"
-                                    help="Once a goal is complete, it's finalized.  You can't add more tasks or modify anything on it, but you can record your lessons learned"/>
-                        </div>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="goal_form_action" model="ir.actions.act_window">
-            <field name="name">Goal</field>
-            <field name="res_model">skill_development.goal</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="goal_view_form"/>
-            <field name="context">{}</field>
-        </record>
-<!--DOCUMENT HERE: The fact that you use the same view and why-->
-        <record id="goal_view_form_popup" model="ir.ui.view">
-            <field name="name">goal.view.form.popup</field>
-            <field name="model">skill_development.goal</field>
-            <field name="arch" type="xml">
-                <form>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <!-- Skill Selection -->
-                        <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
-                            <label for="skill_id"
-                                   string="The skill you will develop with this goal."
-                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
-                            <field name="skill_id"
-                                   style="margin-bottom: 10px; color: #444444; font-size: 20px"
-                                   options="{'no_create': True, 'no_open': True}"/>
-                            <label for="category"
-                                   string="Which category?"
-                                   style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
-                            <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 15px; margin-top: 10px;">
-                                <field name="category"
-                                       widget="radio"
-                                       options="{'horizontal' : 'True'}"
-                                />
-                            </div>
-                        </div>
-
-                        <!-- SMART Goals Section -->
-                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
-                            <div style="display: flex; flex-direction: column; gap: 15px;">
-
-                                <!-- Each SMART field -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Specific:
-                                        </span>
-                                        <span style="color: #888888;">[What exactly do you want to
-                                            achieve?]
-                                        </span>
-                                    </div>
-                                    <field name="specific_goal"
-                                           placeholder="e.g. learning to program with python"
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
-
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Measurable:
-                                        </span>
-                                        <span style="color: #888888;">[How do you know your progress is
-                                            good?]
-                                        </span>
-                                    </div>
-                                    <field name="measurable_goal"
-                                           placeholder="e.g. Add two features per week."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Achievable -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Achievable:
-                                        </span>
-                                        <span style="color: #888888;">[What makes you sure you can do
-                                            it?]
-                                        </span>
-                                    </div>
-                                    <field name="achievable_goal"
-                                           placeholder="e.g. I have a study group."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Relevant -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Relevant:
-                                        </span>
-                                        <span style="color: #888888;">[Why is it important to you?]
-                                        </span>
-                                    </div>
-                                    <field name="relevant_goal"
-                                           placeholder="e.g. Important for my portfolio."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                                <!-- Time-Bound -->
-                                <div style="flex: 1;">
-                                    <div style="font-size: 13px; font-weight: 500;">
-                                        <span style="color: #71639c; font-weight: bold; font-size: 15px;">
-                                            Time-Bound:
-                                        </span>
-                                        <span style="color: #888888;">[What is your timeline?]</span>
-                                    </div>
-                                    <field name="timed_goal" placeholder="e.g. Finish by October."
-                                           style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <h1 style="font-size: 18px; font-weight: 600; text-align: center;">Complete Goal
-                            Statement
-                        </h1>
-                        <field name="goal_name"
-                               placeholder="e.g. Learn Python and build an app."
-                               style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; margin-bottom: 25px;"
-                               required="True"
-                        />
-                    </div>
-                    <footer class="d-flex justify-content-between">
-                        <button name="action_create_goal_draft" string="Create Draft" type="object"
-                                class="btn btn-light"/>
-                        <button name="action_finalize_goal" string="Finalize Goal" type="object"
-                                class="btn btn-primary"/>
-                        <button string="Cancel"
-                                class="btn-secondary"
-                                special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <record id="new_goal_action" model="ir.actions.act_window">
-            <field name="name">Create a Goal</field>
-            <field name="res_model">skill_development.goal</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="goal_view_form_popup"/>
-            <field name="target">new</field>
-            <field name="context">{"default_allow_billable": 1}</field>
-        </record>
-
-        <record id="lesson_bank_view_tree" model="ir.ui.view">
-            <field name="name">lesson.bank.view.tree</field>
-            <field name="model">skill_development.lesson_bank</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="sequence" widget="handle"/>
-                    <field name="priority" widget="priority" class="me-3"/>
-                    <field name="lesson_title"/>
-                    <field name="lesson_short"/>
-                    <field name="goal_id" widget="badge"/>
-                </tree>
-            </field>
-        </record>
-
-        <record id="lesson_bank_view_form" model="ir.ui.view">
-            <field name="name">lesson.bank.view.form</field>
-            <field name="model">skill_development.lesson_bank</field>
-            <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                        <!-- Skill & Goal Card -->
-                        <div class="o_form_card mb-4 p-4"
-                             style="border: 2px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
-
-                            <!-- Header with Goal -->
-                            <header class="mb-3">
-                                <div class="fw-bold" style="font-size: 1.1em;">
-                                    <span>Goal</span>
-                                    <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"
-                                       attrs="{'invisible': [('goal_id', '=', False)]}"/>
-                                    <field name="goal_id"
-                                           attrs="{'readonly': [('id', '!=', False)]}"/>
-                                </div>
-                                <field name="priority" widget="priority" nolable="1"/>
                             </header>
 
-                            <!-- Skill and Priority -->
-                            <group>
-                                <field name="goal_skill" readonly="1" style="font-weight: bold"
-                                       attrs="{'invisible': [('goal_id', '=', False)]}"/>
+                            <!-- Skill Info -->
+                            <div style="margin-top: 12px; color: #555; display: flex; flex-direction: column; gap: 4px;">
+                                <!-- Skill -->
+                                <div>
+                                    <span style="color: #ac00e6; font-size: 13px; font-weight: bold">
+                                        <field name="skill_id"/>
+                                    </span>
+                                </div>
 
-                                <field name="learner_plan_id" class="oe_inline" options="{'no_open': True}"
-                                       style="font-weight: bold"
-                                       attrs="{'invisible': [('goal_id', '!=', False)], 'readonly': [('id', '!=', False)]}"/>
-                                <field name="tag_ids" widget="many2many_tags" class="oe_inline"
-                                       options="{'color_field': 'color'}"/>
-                            </group>
-
-                            <!-- Lesson Title -->
-                            <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
-                            <div class="oe_title mb-3"
-                                 style="max-width: 600px; font-weight: bold;">
-                                <h1 class="mt-0 text-break">
-                                    <field name="lesson_title"/>
-                                </h1>
+                                <!-- Category -->
+                                <div>
+                                    <span style="color: #333;">
+                                        <field name="category"/>
+                                    </span>
+                                </div>
                             </div>
 
-                            <!-- Lesson Body -->
-                            <div class="mt-4 px-3 pt-3 pb-1" style="border-top: 1px solid #ddd;">
-                                <label for="lesson_worked" class="form-label fw-bold">What Worked Well For You This
-                                    Time?
-                                </label>
-                                <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
+                            <field name="tag_ids"/>
+                            <div class="o_kanban_primary_right">
+                                <div class="o_primary">
+                                    <div class="text-muted o_row">
+                                        <t t-if="record.date_start.raw_value">
+                                            <span class="fa fa-clock-o me-2" title="Dates"/>
+                                            <field name="date_start" widget="date"/>
+                                            <i class="fa fa-long-arrow-right mx-2 oe_read_only"
+                                               aria-label="Arrow icon"
+                                               title="Arrow"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="fa fa-clock-o me-2 invisible" title="Dates"/>
+                                            <field name="date_start" widget="date"/>
+                                            <i class="fa fa-long-arrow-right mx-2 invisible oe_read_only"
+                                               aria-label="Arrow icon"
+                                               title="Arrow"/>
+                                        </t>
+                                        <field name="date" widget="date"/>
+                                    </div>
+                                </div>
+                            </div>
 
-                                <label for="lesson_change" class="form-label fw-bold mt-3">What Would You Do Differently
-                                    Next Time?
-                                </label>
-                                <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
+                            <!-- Tasks Button -->
+                            <a name="action_view_tasks" type="object"
+                               style="text-decoration: none;" class="mt-auto">
+                                <div class="o_kanban_record_bottom"
+                                     style="margin-top: 20px; padding: 10px; background-color: #F5F5F5; border-radius: 4px; text-align: right;"
+                                     attrs="{'invisible':[('goal_status', '=', 'draft')]}">
+                                    <span style="color: #505050; font-weight: bold; display: inline-flex; align-items: center;">
+                                        <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
+                                        Tasks
+                                        <field name="task_count" style="margin-left: 5px;" widget="statinfo" nolabel="1"
+                                               title="Task Count"/>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
-                                <label for="lesson_learned" class="form-label fw-bold mt-3">What's Something New You've
-                                    Learned?
-                                </label>
-                                <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
+    <record id="goal_view_form" model="ir.ui.view">
+        <field name="name">goal.view.form</field>
+        <field name="model">skill_development.goal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lesson"
+                                string="Lessons"
+                                type="object"
+                                icon="fa-paperclip"
+                                class="oe_stat_button"
+                                attrs="{'invisible': [('goal_status', '=', 'draft')]}"
+                                t-att-style="'font-weight:bold'"
+                                help="Quickly access and manage all lessons learned attached to this specific goal.">
+                            <field name="lesson_count" widget="statinfo" nolabel="1"/>Lessons
+                        </button>
 
-                                <label for="extra_thoughts" class="form-label fw-bold mt-3">Anything Else on Your Mind?
-                                    (Optional)
-                                </label>
-                                <field name="extra_thoughts"
-                                       class="o_field_text_block"
-                                       style="height: 200px;"
-                                       colspan="2"/>
+
+                        <button name="action_view_tasks"
+                                icon="fa-tasks"
+                                class="oe_stat_button"
+                                type="object"
+                                attrs="{'invisible': [('goal_status', '=', 'draft')]}"
+                                help="Tasks are the actionable steps you take to achieve your goal.">
+                            <field name="task_count" widget="statinfo" nolabel="1"/>Tasks
+                        </button>
+
+                        <button name="action_finalize_goal"
+                                type="object"
+                                icon="fa-check"
+                                class="oe_stat_button"
+                                t-att-style="'background-color: #71639c; color:white; font-weight:bold'"
+                                attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}">
+                            Finalize
+                        </button>
+                    </div>
+                    <h2>
+                        <field name="goal_name"
+                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                    </h2>
+                    <group col="2">
+                        <span>Skill:</span>
+                        <field name="skill_id" style="font-size: 15px; font-weight: bold" nolabel="1"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
+                               class="oe_inline"
+                               attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
+                    </group>
+                    <div style="display: flex; align-items: center; color: #555; margin-down: 0;">
+                        <span style="font-weight: bold; margin-right: 5px;">Start Date:</span>
+                        <field name="date_start" widget="daterange" nolabel="1" class="oe_inline"
+                               options="{'related_end_date': 'date'}"
+                               attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
+                        <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/>
+                        <span style="font-weight: bold; margin-right: 5px;">End Date:</span>
+                        <field name="date" widget="daterange" nolabel="1" class="oe_inline"
+                               options="{'related_start_date': 'date_start'}"
+                               attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
+                    </div>
+
+
+                    <notebook>
+                        <page string="Expected Results">
+                            <field name="result_ids" nolabel="1"
+                                   attrs="{'readonly': [('goal_status', '=', 'complete')]}">
+                                <tree editable="bottom">
+                                    <field name="result" width="300"/>
+                                    <field name="is_done" width="20" widget="boolean_toggle"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="SMART Criteria">
+                            <div class="o_form_sheet border p-3">
+                                <h3 class=" text-center mb-3" style="color: #71639c;">SMART
+                                    Criteria
+                                </h3>
+
+                                <!-- Specific Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="specific_goal">Specific: [What exactly do
+                                        you
+                                        want to
+                                        achieve?]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="specific_goal" class="o_field_char form-control"
+                                               id="specific_goal"
+                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                                    </div>
+                                </div>
+
+                                <!-- Measurable Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="measurable_goal" style="text-weight: bold">
+                                        Measurable:
+                                    </label>
+                                    <field name="measurable_goal" class="o_field_char form-control"
+                                           id="measurable_goal"
+                                           attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                                </div>
+
+                                <!-- Achievable Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="achievable_goal">Achievable: [what makes you
+                                        sure you can do
+                                        it?]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="achievable_goal" class="o_field_char form-control"
+                                               id="achievable_goal"
+                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                                    </div>
+                                </div>
+
+                                <!-- Relevant Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="relevant_goal">Relevant: [Why is it
+                                        important to
+                                        you? (think
+                                        of your motivation)]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="relevant_goal" class="o_field_char form-control"
+                                               id="relevant_goal"
+                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                                    </div>
+                                </div>
+
+                                <!-- Time-Bound Goal -->
+                                <div class="mb-3">
+                                    <label class="fw-bold" for="timed_goal">Time-Bound: [What is your
+                                        timeline?]
+                                    </label>
+                                    <div class="input-group">
+                                        <field name="timed_goal" class="o_field_char form-control"
+                                               id="timed_goal"
+                                               attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                    </notebook>
+                    <div class="d-flex justify-content-center mt-2">
+                        <button name="action_complete_goal"
+                                string="Mark Goal As Complete"
+                                type="object"
+                                class="btn btn-success w-25"
+                                icon="fa-check-square-o"
+                                attrs="{'invisible': ['|', ('goal_status', '=', 'complete'), ('goal_status', '=', 'draft')]}"
+                                help="Once a goal is complete, it's finalized.  You can't add more tasks or modify anything on it, but you can record your lessons learned"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="goal_form_action" model="ir.actions.act_window">
+        <field name="name">Goal</field>
+        <field name="res_model">skill_development.goal</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="goal_view_form"/>
+        <field name="context">{}</field>
+    </record>
+    <!--DOCUMENT HERE: The fact that you use the same view and why-->
+    <record id="goal_view_form_popup" model="ir.ui.view">
+        <field name="name">goal.view.form.popup</field>
+        <field name="model">skill_development.goal</field>
+        <field name="arch" type="xml">
+            <form>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <!-- Skill Selection -->
+                    <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 25px;">
+                        <label for="skill_id"
+                               string="The skill you will develop with this goal."
+                               style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                        <field name="skill_id"
+                               style="margin-bottom: 10px; color: #444444; font-size: 20px"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <label for="category"
+                               string="Which category?"
+                               style="font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #444444;"/>
+                        <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 15px; margin-top: 10px;">
+                            <field name="category"
+                                   widget="radio"
+                                   options="{'horizontal' : 'True'}"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- SMART Goals Section -->
+                    <div style="border: 1px solid #eeeeee; border-radius: 10px; padding: 25px; margin-bottom: 25px;">
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+
+                            <!-- Each SMART field -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                        Specific:
+                                    </span>
+                                    <span style="color: #888888;">[What exactly do you want to
+                                        achieve?]
+                                    </span>
+                                </div>
+                                <field name="specific_goal"
+                                       placeholder="e.g. learning to program with python"
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
+
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                        Measurable:
+                                    </span>
+                                    <span style="color: #888888;">[How do you know your progress is
+                                        good?]
+                                    </span>
+                                </div>
+                                <field name="measurable_goal"
+                                       placeholder="e.g. Add two features per week."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Achievable -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                        Achievable:
+                                    </span>
+                                    <span style="color: #888888;">[What makes you sure you can do
+                                        it?]
+                                    </span>
+                                </div>
+                                <field name="achievable_goal"
+                                       placeholder="e.g. I have a study group."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Relevant -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                        Relevant:
+                                    </span>
+                                    <span style="color: #888888;">[Why is it important to you?]
+                                    </span>
+                                </div>
+                                <field name="relevant_goal"
+                                       placeholder="e.g. Important for my portfolio."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                            </div>
+
+                            <!-- Time-Bound -->
+                            <div style="flex: 1;">
+                                <div style="font-size: 13px; font-weight: 500;">
+                                    <span style="color: #71639c; font-weight: bold; font-size: 15px;">
+                                        Time-Bound:
+                                    </span>
+                                    <span style="color: #888888;">[What is your timeline?]</span>
+                                </div>
+                                <field name="timed_goal" placeholder="e.g. Finish by October."
+                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                         </div>
-                    </sheet>
-                </form>
+                    </div>
 
+                    <h1 style="font-size: 18px; font-weight: 600; text-align: center;">Complete Goal
+                        Statement
+                    </h1>
+                    <field name="goal_name"
+                           placeholder="e.g. Learn Python and build an app."
+                           style="width: 100%; padding: 15px; border: 1px solid #dddddd; border-radius: 5px; margin-bottom: 25px;"
+                    />
+                </div>
+                <footer class="d-flex justify-content-between">
+                    <button name="action_create_goal_draft" string="Create Draft" type="object"
+                            class="btn btn-light"/>
+                    <button name="action_finalize_goal" string="Finalize Goal" type="object"
+                            class="btn btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-            </field>
-        </record>
-<!--DOCUMENT HERE ALSO-->
-        <record id="lesson_bank_view_form_popup" model="ir.ui.view">
-            <field name="name">lesson.bank.view.form.popup</field>
-            <field name="model">skill_development.lesson_bank</field>
-            <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                        <!-- Skill & Goal Card -->
-                        <div class="o_form_card mb-4 p-4"
-                             style="border: 1px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+    <record id="new_goal_action" model="ir.actions.act_window">
+        <field name="name">Create a Goal</field>
+        <field name="res_model">skill_development.goal</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="goal_view_form_popup"/>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
 
+    <record id="lesson_bank_view_tree" model="ir.ui.view">
+        <field name="name">lesson.bank.view.tree</field>
+        <field name="model">skill_development.lesson_bank</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="priority" widget="priority" class="me-3"/>
+                <field name="lesson_title"/>
+                <field name="lesson_short"/>
+                <field name="goal_id" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="lesson_bank_view_form" model="ir.ui.view">
+        <field name="name">lesson.bank.view.form</field>
+        <field name="model">skill_development.lesson_bank</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <!-- Skill & Goal Card -->
+                    <div class="o_form_card mb-4 p-4"
+                         style="border: 2px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+
+                        <!-- Header with Goal -->
+                        <header class="mb-3">
                             <div class="fw-bold" style="font-size: 1.1em;">
-                                <span>Goal:</span>
-                                <field name="goal_id"/>
+                                <span>Goal</span>
+                                <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"
+                                   attrs="{'invisible': [('goal_id', '=', False)]}"/>
+                                <field name="goal_id"
+                                       attrs="{'readonly': [('id', '!=', False)]}"/>
                             </div>
+                            <field name="priority" widget="priority" nolabel="1"/>
+                        </header>
 
-                            <!-- Skill and Priority -->
-                            <div class="d-flex align-items-center justify-content-between mb-3">
-                                <div class="fw-bold" style="font-size: 1em;">
-                                    <span>Skill:</span>
-                                    <field name="learner_plan_id" widget="badge" class="ms-2"/>
-                                </div>
-                                <field name="priority" widget="priority" class="me-3"/>
-                            </div>
-                            <span>Tags:</span>
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-
-
-                            <!-- Lesson Title -->
-                            <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
-                            <div class="oe_title mb-3"
-                                 style="font-weight: bold;">
-                                <h1>
-                                    <field name="lesson_title" placeholder="Lesson Title..."/>
-                                </h1>
-                            </div>
-
-                            <!-- Lesson Body -->
-                            <div>
-                                <label for="lesson_worked" class="form-label fw-bold">What Worked Will For You This
-                                    Time?
-                                </label>
-                                <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
-
-                                <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next
-                                    Time?
-                                </label>
-                                <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
-
-                                <label for="lesson_learned" class="form-label fw-bold">What's Something New You've
-                                    Learned?
-                                </label>
-                                <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
-
-                                <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind?
-                                    (Optional)
-                                </label>
-                                <field name="extra_thoughts"
-                                       class="o_field_text_block"
-                                       style="height: 200px;"
-                                       colspan="2"/>
-                            </div>
-
-                        </div>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-<!--DOCUMENT HERE-->
-        <record id="task_view_kanban_unlocked" model="ir.ui.view">
-            <field name="name">task.view.kanban.unlocked</field>
-            <field name="model">skill_development.task</field>
-            <field name="arch" type="xml">
-                <kanban default_group_by="stage_id">
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click oe_kanban_card"
-                                 style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
-
-                                <!-- Header Section -->
-                                <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <!-- Left: Priority -->
-                                    <field name="priority" widget="priority"/>
-                                </header>
-
-                                <!-- Title -->
-                                <div class="oe_kanban_title" style="margin-bottom: 8px;">
-                                    <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
-                                        <field name="name"/>
-                                    </h6>
-                                </div>
-
-                                <!-- Tags -->
-                                <div style="margin-bottom: 6px;">
-                                    <field name="tag_ids" widget="many2many_tags"/>
-                                </div>
-
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                                    <!-- Left: Deadline -->
-                                    <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
-                                        <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
-                                           title="Deadline"/>
-                                        <field name="date_end" widget="remaining_days"/>
-                                    </div>
-
-                                    <!-- Right: Resource Count -->
-                                    <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
-                                        <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
-                                           title="Resources Involved"/>
-                                        <field name="resource_count" widget="stateinfo"/>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-
-            </field>
-        </record>
-<!--AND DOCUMENT HERE-->
-        <record id="task_view_kanban_locked" model="ir.ui.view">
-            <field name="name">task.view.kanban.locked</field>
-            <field name="model">skill_development.task</field>
-            <field name="arch" type="xml">
-                <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
-                        records_draggable="False" group_create="False">
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click oe_kanban_card"
-                                 style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
-
-                                <!-- Header Section -->
-                                <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <field name="priority" widget="priority"/>
-
-                                </header>
-
-                                <!-- Title -->
-                                <div class="oe_kanban_title" style="margin-bottom: 8px;">
-                                    <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
-                                        <field name="name"/>
-                                    </h6>
-                                </div>
-
-                                <!-- Tags -->
-                                <div style="margin-bottom: 6px;">
-                                    <field name="tag_ids" widget="many2many_tags"/>
-                                </div>
-
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                                    <!-- Left: Deadline -->
-                                    <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
-                                        <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
-                                           title="Deadline"/>
-                                        <field name="date_end" widget="remaining_days"/>
-                                    </div>
-
-                                    <!-- Right: Resource Count -->
-                                    <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
-                                        <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
-                                           title="Resources Involved"/>
-                                        <field name="resource_count" widget="stateinfo"/>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-
-            </field>
-        </record>
-<!--DOCUMENT HERE-->
-        <record id="task_view_form_unlocked" model="ir.ui.view">
-            <field name="name">task.view.form.unlocked</field>
-            <field name="model">skill_development.task</field>
-            <field name="arch" type="xml">
-                <form>
-                    <sheet>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="priority" widget="priority" class="me-3"
-                                          />
-                                    <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                           placeholder="Task Title..."
-                                           />
-                                </div>
-                            </h1>
-                        </div>
-                        <group style="width: 500px;">
-                            <field name="goal_id" readonly="1"
-                                   style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                            <field name="date_end"/>
-                            <field name="resource_url" widget="url"/>
-                        </group>
-                        <notebook>
-                            <page string="Additional Resources">
-                                <field name="resource_ids" nolabel="1">
-                                    <tree>
-                                        <field name="sequence" widget="handle"/>
-                                        <field name="name"/>
-                                        <field name="resource_type" widget="badge"
-                                               decoration-success="resource_type == 'image'"
-                                               decoration-primary="resource_type == 'tool'"
-                                               decoration-info="resource_type == 'link'"
-                                               decoration-danger="resource_type == 'video'"
-                                               decoration-warning="resource_type == 'document'"/>
-                                        <field name="description"/>
-                                        <field name="url" widget="url" string="External URLs"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Task Notes">
-                                <field name="description" widget="html"
-                                       placeholder="Write notes to help you with the task (tracking, important details...)"/>
-                            </page>
-
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-<!--DOCUMENT HERE ALSO-->
-        <record id="task_view_form_locked" model="ir.ui.view">
-            <field name="name">task.view.form.locked</field>
-            <field name="model">skill_development.task</field>
-            <field name="arch" type="xml">
-                <form edit="0">
-                    <sheet>
-                        <div class="oe_title pe-0">
-                            <h1 class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex w-100">
-                                    <field name="priority" widget="priority" class="me-3"
-                                           />
-                                    <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                           placeholder="Task Title..."
-                                           />
-                                </div>
-                            </h1>
-                        </div>
-                        <group style="width: 500px;">
-                            <field name="goal_id" readonly="1"
-                                   style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
-                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                            <field name="date_end"/>
-                            <field name="resource_url" widget="url"/>
-                        </group>
-                        <notebook>
-                            <page string="Additional Resources">
-                                <field name="resource_ids"
-                                       >
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="resource_type" widget="badge"
-                                               decoration-success="resource_type == 'image'"
-                                               decoration-primary="resource_type == 'tool'"
-                                               decoration-info="resource_type == 'link'"
-                                               decoration-danger="resource_type == 'video'"
-                                               decoration-warning="resource_type == 'document'"/>
-                                        <field name="description"/>
-                                        <field name="url" widget="url" string="External URLs"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Task Notes">
-                                <field name="description" widget="html"
-                                       placeholder="Write notes to help you with the task (tracking, important details...)"/>
-                            </page>
-
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="task_resource_view_tree" model="ir.ui.view">
-            <field name="name">task.resource.view.tree</field>
-            <field name="model">skill_development.task_resource</field>
-            <field name="arch" type="xml">
-                <form string="Resource">
-                    <sheet>
+                        <!-- Skill and Priority -->
                         <group>
-                            <field name="name"/>
-                            <field name="description"/>
-                            <field name="resource_type"/>
-                            <field name="video" filename="video_filename" widget="binary"
-                                   attrs="{'invisible': [('resource_type', '!=', 'video')]}"/>
-                            <field name="image" widget="image"
-                                   attrs="{'invisible': [('resource_type', '!=', 'image')]}"/>
-                            <field name="url" widget="url" attrs="{'invisible': [('resource_type', '!=', 'link')]}"/>
-                            <field name="file" widget="pdf_viewer"
-                                   attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
+                            <field name="goal_skill" readonly="1" style="font-weight: bold"
+                                   attrs="{'invisible': [('goal_id', '=', False)]}"/>
+
+                            <field name="learner_plan_id" class="oe_inline" options="{'no_open': True}"
+                                   style="font-weight: bold"
+                                   attrs="{'invisible': [('goal_id', '!=', False)], 'readonly': [('id', '!=', False)]}"/>
+                            <field name="tag_ids" widget="many2many_tags" class="oe_inline"
+                                   options="{'color_field': 'color'}"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-        <record id="task_lock_action" model="ir.actions.act_window">
-            <field name="name">Tasks (Complete Goal)</field>
-            <field name="res_model">skill_development.task</field>
-            <field name="view_mode">kanban,form</field>
-            <field name="view_ids" eval="[
+
+                        <!-- Lesson Title -->
+                        <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
+                        <div class="oe_title mb-3"
+                             style="max-width: 600px; font-weight: bold;">
+                            <h1 class="mt-0 text-break">
+                                <field name="lesson_title"/>
+                            </h1>
+                        </div>
+
+                        <!-- Lesson Body -->
+                        <div class="mt-4 px-3 pt-3 pb-1" style="border-top: 1px solid #ddd;">
+                            <label for="lesson_worked" class="form-label fw-bold">What Worked Well For You This
+                                Time?
+                            </label>
+                            <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="lesson_change" class="form-label fw-bold mt-3">What Would You Do Differently
+                                Next Time?
+                            </label>
+                            <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="lesson_learned" class="form-label fw-bold mt-3">What's Something New You've
+                                Learned?
+                            </label>
+                            <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="extra_thoughts" class="form-label fw-bold mt-3">Anything Else on Your Mind?
+                                (Optional)
+                            </label>
+                            <field name="extra_thoughts"
+                                   class="o_field_text_block"
+                                   style="height: 200px;"
+                                   colspan="2"/>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
+
+
+        </field>
+    </record>
+    <!--DOCUMENT HERE ALSO-->
+    <record id="lesson_bank_view_form_popup" model="ir.ui.view">
+        <field name="name">lesson.bank.view.form.popup</field>
+        <field name="model">skill_development.lesson_bank</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <!-- Skill & Goal Card -->
+                    <div class="o_form_card mb-4 p-4"
+                         style="border: 1px solid #dcdcdc; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background-color: #fdfdfd;">
+
+                        <div class="fw-bold" style="font-size: 1.1em;">
+                            <span>Goal:</span>
+                            <field name="goal_id"/>
+                        </div>
+
+                        <!-- Skill and Priority -->
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="fw-bold" style="font-size: 1em;">
+                                <span>Skill:</span>
+                                <field name="learner_plan_id" widget="badge" class="ms-2"/>
+                            </div>
+                            <field name="priority" widget="priority" class="me-3"/>
+                        </div>
+                        <span>Tags:</span>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+
+
+                        <!-- Lesson Title -->
+                        <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
+                        <div class="oe_title mb-3"
+                             style="font-weight: bold;">
+                            <h1>
+                                <field name="lesson_title" placeholder="Lesson Title..."/>
+                            </h1>
+                        </div>
+
+                        <!-- Lesson Body -->
+                        <div>
+                            <label for="lesson_worked" class="form-label fw-bold">What Worked Well For You This
+                                Time?
+                            </label>
+                            <field name="lesson_worked" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="lesson_change" class="form-label fw-bold">What Would you Do Differently Next
+                                Time?
+                            </label>
+                            <field name="lesson_change" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="lesson_learned" class="form-label fw-bold">What's Something New You've
+                                Learned?
+                            </label>
+                            <field name="lesson_learned" placeholder="Write 'None' if Nothing Comes to Mind."/>
+
+                            <label for="extra_thoughts" class="form-label fw-bold">Anything Else on Your Mind?
+                                (Optional)
+                            </label>
+                            <field name="extra_thoughts"
+                                   class="o_field_text_block"
+                                   style="height: 200px;"
+                                   colspan="2"/>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--DOCUMENT HERE-->
+    <record id="task_view_kanban_unlocked" model="ir.ui.view">
+        <field name="name">task.view.kanban.unlocked</field>
+        <field name="model">skill_development.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click oe_kanban_card"
+                             style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
+
+                            <!-- Header Section -->
+                            <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <!-- Left: Priority -->
+                                <field name="priority" widget="priority"/>
+                            </header>
+
+                            <!-- Title -->
+                            <div class="oe_kanban_title" style="margin-bottom: 8px;">
+                                <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
+                                    <field name="name"/>
+                                </h6>
+                            </div>
+
+                            <!-- Tags -->
+                            <div style="margin-bottom: 6px;">
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <!-- Left: Deadline -->
+                                <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
+                                    <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
+                                       title="Deadline"/>
+                                    <field name="date_end" widget="remaining_days"/>
+                                </div>
+
+                                <!-- Right: Resource Count -->
+                                <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
+                                    <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
+                                       title="Resources Involved"/>
+                                    <field name="resource_count" widget="statinfo"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+
+        </field>
+    </record>
+    <!--AND DOCUMENT HERE-->
+    <record id="task_view_kanban_locked" model="ir.ui.view">
+        <field name="name">task.view.kanban.locked</field>
+        <field name="model">skill_development.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
+                    records_draggable="False" group_create="False">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click oe_kanban_card"
+                             style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
+
+                            <!-- Header Section -->
+                            <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                <field name="priority" widget="priority"/>
+
+                            </header>
+
+                            <!-- Title -->
+                            <div class="oe_kanban_title" style="margin-bottom: 8px;">
+                                <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
+                                    <field name="name"/>
+                                </h6>
+                            </div>
+
+                            <!-- Tags -->
+                            <div style="margin-bottom: 6px;">
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                                <!-- Left: Deadline -->
+                                <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
+                                    <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
+                                       title="Deadline"/>
+                                    <field name="date_end" widget="remaining_days"/>
+                                </div>
+
+                                <!-- Right: Resource Count -->
+                                <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
+                                    <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
+                                       title="Resources Involved"/>
+                                    <field name="resource_count" widget="stateinfo"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+
+        </field>
+    </record>
+    <!--DOCUMENT HERE-->
+    <record id="task_view_form_unlocked" model="ir.ui.view">
+        <field name="name">task.view.form.unlocked</field>
+        <field name="model">skill_development.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title pe-0">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="priority" widget="priority" class="me-3"
+                                />
+                                <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                       placeholder="Task Title..."
+                                />
+                            </div>
+                        </h1>
+                    </div>
+                    <group style="width: 500px;">
+                        <field name="goal_id" readonly="1"
+                               style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="date_end"/>
+                        <field name="resource_url" widget="url"/>
+                    </group>
+                    <notebook>
+                        <page string="Additional Resources">
+                            <field name="resource_ids" nolabel="1">
+                                <tree>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="resource_type" widget="badge"
+                                           decoration-success="resource_type == 'image'"
+                                           decoration-primary="resource_type == 'tool'"
+                                           decoration-info="resource_type == 'link'"
+                                           decoration-danger="resource_type == 'video'"
+                                           decoration-warning="resource_type == 'document'"/>
+                                    <field name="description"/>
+                                    <field name="url" widget="url" string="External URLs"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Task Notes">
+                            <field name="description" widget="html"
+                                   placeholder="Write notes to help you with the task (tracking, important details...)"/>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--DOCUMENT HERE ALSO-->
+    <record id="task_view_form_locked" model="ir.ui.view">
+        <field name="name">task.view.form.locked</field>
+        <field name="model">skill_development.task</field>
+        <field name="arch" type="xml">
+            <form edit="false">
+                <sheet>
+                    <div class="oe_title pe-0">
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex w-100">
+                                <field name="priority" widget="priority" class="me-3"
+                                />
+                                <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
+                                       placeholder="Task Title..."
+                                />
+                            </div>
+                        </h1>
+                    </div>
+                    <group style="width: 500px;">
+                        <field name="goal_id" readonly="1"
+                               style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="date_end"/>
+                        <field name="resource_url" widget="url"/>
+                    </group>
+                    <notebook>
+                        <page string="Additional Resources">
+                            <field name="resource_ids"
+                            >
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="resource_type" widget="badge"
+                                           decoration-success="resource_type == 'image'"
+                                           decoration-primary="resource_type == 'tool'"
+                                           decoration-info="resource_type == 'link'"
+                                           decoration-danger="resource_type == 'video'"
+                                           decoration-warning="resource_type == 'document'"/>
+                                    <field name="description"/>
+                                    <field name="url" widget="url" string="External URLs"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Task Notes">
+                            <field name="description" widget="html"
+                                   placeholder="Write notes to help you with the task (tracking, important details...)"/>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="task_resource_view_tree" model="ir.ui.view">
+        <field name="name">task.resource.view.tree</field>
+        <field name="model">skill_development.task_resource</field>
+        <field name="arch" type="xml">
+            <group>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="resource_type"/>
+                <field name="video" filename="video_filename" widget="binary"
+                       attrs="{'invisible': [('resource_type', '!=', 'video')]}"/>
+                <field name="image" widget="image"
+                       attrs="{'invisible': [('resource_type', '!=', 'image')]}"/>
+                <field name="url" widget="url" attrs="{'invisible': [('resource_type', '!=', 'link')]}"/>
+                <field name="file" widget="pdf_viewer"
+                       attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
+            </group>
+        </field>
+    </record>
+    <record id="task_lock_action" model="ir.actions.act_window">
+        <field name="name">Tasks (Complete Goal)</field>
+        <field name="res_model">skill_development.task</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_ids" eval="[
             (5, 0, 0),
         (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_locked')}),
         (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_locked')})
     ]"/>
-        </record>
+    </record>
 
-
-        <record id="task_unlock_action" model="ir.actions.act_window">
-            <field name="name">Tasks (Incomplete Goal)</field>
-            <field name="res_model">skill_development.task</field>
-            <field name="view_mode">kanban,form</field>
-            <field name="view_ids" eval="[
+    <record id="task_unlock_action" model="ir.actions.act_window">
+        <field name="name">Tasks (Incomplete Goal)</field>
+        <field name="res_model">skill_development.task</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_ids" eval="[
             (5, 0, 0),
         (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_unlocked')}),
         (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_unlocked')})
     ]"/>
-        </record>
+    </record>
 </odoo>
