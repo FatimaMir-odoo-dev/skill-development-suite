@@ -167,7 +167,6 @@ class GrowthTracker(models.Model):
     def _check_unique_skill_id(self):
         """
         Enforce uniqueness of skill plans per user.
-
         Prevents a user from creating more than one learning plan
         for the same skill.
         """
@@ -182,7 +181,6 @@ class GrowthTracker(models.Model):
                     f"You can update it by going to skill growth and editing the skill plan from there."
                 )
 
-    # Ensures plan_owner_id is automatically set to the current user
     @api.model_create_multi
     def create(self, vals_list):
         """
@@ -279,23 +277,3 @@ class GrowthTracker(models.Model):
                 'default_plan_id': self.id,
             },
         }
-
-    # For the Smart Goal wizard where a learner can select one of the
-    # skills saved in this record to connect the goal to
-
-
-# class LearnerProfile(models.Model):
-#     _inherit = "res.users"
-
-    # plan_skill_ids: object = fields.One2many('skill_development.growth_tracker',
-    #                          'plan_owner_id', string='Skill Plans')
-
-    # # Connect the learner to his volunteering record
-    #     volunteer_record_id = fields.Many2one('volunteer_request.record', string="Volunteering Record ID")
-    # Connect the learner to his skill plans record (used to save the data in Learner Profile)
-
-# Here the data from skill_plan_record are displayed in the Learner Profile
-# record_skill_name = fields.Char(related="plan_skill_ids.skill_name", string="Skill")
-# record_skill_motive = fields.Text(related="plan_skill_ids.motivation" ,string="Motivation to Learn")
-# record_learning_endpoint = fields.Date(related="plan_skill_ids.endpoint" ,string="Learning Endpoint")
-# record_msg_2self = fields.Text(related="plan_skill_ids.msg_2self" ,string="Message to Myself")

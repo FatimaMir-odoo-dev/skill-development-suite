@@ -28,8 +28,7 @@ class Goal(models.Model):
     _inherit = 'count.mixin'
     _rec_name = 'goal_name'
 
-    # 1. RELATIONAL FIELDS
-    # ________________________________________
+    # RELATIONAL FIELDS
     # Used for the "Learner can only see own goals" record rule
     learner_id = fields.Many2one('res.users', string="Plan Owner", required=True)
 
@@ -62,10 +61,8 @@ class Goal(models.Model):
         column2='tag_id',
         string='Tags',
     )
-    # ________________________________________
 
-    # 2. STATUS FIELDS
-    # ________________________________________
+    # STATUS FIELDS
     # for goal, task , result, resources lock
     is_acquired = fields.Boolean(
         string="Skill Acquired",
@@ -83,10 +80,8 @@ class Goal(models.Model):
 
     date_start = fields.Date(string='Start Date')
     date = fields.Date(string='Expiration Date', index=True)
-    # ________________________________________
 
-    # 3. METRICS (COMPUTED)
-    # ________________________________________
+    # METRICS (COMPUTED)
     goal_progress = fields.Float(
         string="Goal Contribution",
         compute='_compute_goal_progress',
@@ -96,10 +91,8 @@ class Goal(models.Model):
 
     lesson_count = fields.Integer(string="Lesson Count",
                                   compute='_compute_lesson_count')
-    # ________________________________________
 
-    # 4. SMART GOAL FIELDS
-    # ________________________________________
+    # SMART GOAL FIELDS
     category = fields.Selection([
         ('knowledge', 'Knowledge'),
         ('practice', 'Practice'),
@@ -111,14 +104,11 @@ class Goal(models.Model):
     relevant_goal = fields.Text('Relevant goal category')
     timed_goal = fields.Text('Time-Bound goal category')
     goal_name = fields.Char('Complete Goal Statement')
-    # ________________________________________
 
-    # 5. FLAGS
-    # ________________________________________
+    # FLAGS
     # For locking goals, tasks, and resources
     is_complete = fields.Boolean(string="Goal Complete", default=False)
 
-    # ====================================================================================================================
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
                  'relevant_goal', 'timed_goal',
