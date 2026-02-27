@@ -95,7 +95,7 @@
                                         <span style="color: #505050; font-weight: bold; display: inline-flex; align-items: center;">
                                             <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>
                                             Tasks
-                                            <field name="task_count" style="margin-left: 5px;" widget="statinfo"/>
+                                            <field name="task_count" style="margin-left: 5px;" widget="statinfo" nolabel="1"/>
                                         </span>
                                     </div>
                                 </a>
@@ -225,7 +225,7 @@
                                     type="object"
                                     attrs="{'invisible': [('goal_status', '=', 'draft')]}"
                                     help="Tasks are the actionable steps you take to achieve your goal.">
-                                <field name="task_count" widget="statinfo"/>Tasks
+                                <field name="task_count" widget="statinfo" nolabel="1"/>Tasks
                             </button>
 
                             <button name="action_finalize_goal"

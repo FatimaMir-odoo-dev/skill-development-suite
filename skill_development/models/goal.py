@@ -85,7 +85,7 @@ class Goal(models.Model):
         readonly=True)
 
     date_start = fields.Date(string='Start Date')
-    date = fields.Date(string='Expiration Date', index=True, tracking=True)
+    date = fields.Date(string='Expiration Date', index=True)
     # ________________________________________
 
     # 3. METRICS (COMPUTED)
@@ -95,7 +95,7 @@ class Goal(models.Model):
         compute='_compute_goal_progress',
         store=True)
 
-    task_count = fields.Integer(string=" ", compute='_compute_task_count')
+    task_count = fields.Integer(string="Task Count", compute='_compute_task_count')
 
     lesson_count = fields.Integer(string=" ",
                                   compute='_compute_lesson_count')
@@ -309,7 +309,7 @@ class Task(models.Model):
     priority = fields.Selection([
         ('0', 'Low'),
         ('1', 'High')],
-        default='0', index=True, string="Priority", tracking=True)
+        default='0', index=True, string="Priority")
     date_end = fields.Date(string='Ending Date', index=True, copy=False)
 
     learner_id = fields.Many2one('res.users', string='Owner', required=True,

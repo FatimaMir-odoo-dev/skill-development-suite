@@ -229,7 +229,7 @@ class SkillRating(models.Model):
         ('3', 'Moderate'),
         ('4', 'High'),
         ('5', 'Essential'), ],
-        default='0', index=True, string="Usefulness", tracking=True)
+        default='0', index=True, string="Usefulness")
 
     fun2learn = fields.Selection([
         ('0', 'Dreadful'),
@@ -238,7 +238,7 @@ class SkillRating(models.Model):
         ('3', 'Engaging'),
         ('4', 'Fun'),
         ('5', 'Exciting'), ],
-        default='0', index=True, string="Fun", tracking=True)
+        default='0', index=True, string="Fun")
 
     difficulty = fields.Selection([
         ('0', 'Effortless'),
@@ -247,4 +247,4 @@ class SkillRating(models.Model):
         ('3', 'Challenging'),
         ('4', 'Demanding'),
         ('5', 'Impossible'), ],
-        default='0', index=True, string="Difficulty", tracking=True)
+        default='0', index=True, string="Difficulty")
