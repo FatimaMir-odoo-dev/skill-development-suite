@@ -215,7 +215,7 @@
                                     attrs="{'invisible': [('goal_status', '=', 'draft')]}"
                                     t-att-style="'font-weight:bold'"
                                     help="Quickly access and manage all lessons learned attached to this specific goal.">
-                                <field name="lesson_count" widget="statinfo"/>Lessons
+                                <field name="lesson_count" widget="statinfo" nolabel="1"/>Lessons
                             </button>
 
 
@@ -269,8 +269,8 @@
 
                         <notebook>
                             <page string="Expected Results">
-                                <group>
-                                    <field name="result_ids"
+<!--                                <group>-->
+                                    <field name="result_ids" nolabel="1"
                                            attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                         <tree editable="bottom">
                                             <field name="result" width="300"/>
@@ -278,7 +278,7 @@
 <!--                                            <field name="is_not_done" width="30" widget="boolean_toggle"/>-->
                                         </tree>
                                     </field>
-                                </group>
+<!--                                </group>-->
                             </page>
                             <page string="SMART Criteria">
                                 <div class="o_form_sheet border p-3">
@@ -804,7 +804,7 @@
                         </group>
                         <notebook>
                             <page string="Additional Resources">
-                                <field name="resource_ids">
+                                <field name="resource_ids" nolabel="1">
                                     <tree>
                                         <field name="sequence" widget="handle"/>
                                         <field name="name"/>

@@ -56,7 +56,7 @@ class Goal(models.Model):
 
     lesson_ids = fields.One2many('skill_development.lesson_bank',
                                  'goal_id',
-                                 string=" ")
+                                 string="Lessons")
 
     tag_ids = fields.Many2many(
         'skill_development.tag',
@@ -97,7 +97,7 @@ class Goal(models.Model):
 
     task_count = fields.Integer(string="Task Count", compute='_compute_task_count')
 
-    lesson_count = fields.Integer(string=" ",
+    lesson_count = fields.Integer(string="Lesson Count",
                                   compute='_compute_lesson_count')
     # ________________________________________
 
