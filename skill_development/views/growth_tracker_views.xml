@@ -16,8 +16,8 @@
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
                     <field name="skill_status" widget="badge" decoration-success="is_acquired"/>
-                    <button name="action_archive_plan" type="object" icon="fa-bookmark"/>
-                    <button name="action_delete_plan" type="object" icon="fa-trash"/>
+                    <button name="action_archive_plan" type="object" icon="fa-bookmark" title="Archive Plan"/>
+                    <button name="action_delete_plan" type="object" icon="fa-trash" title="Delete Plan"/>
                 </tree>
             </field>
         </record>
