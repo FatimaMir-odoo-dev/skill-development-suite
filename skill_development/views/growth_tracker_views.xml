@@ -15,7 +15,7 @@
                     <field name="motivation_short"/>
                     <field name="endpoint" widget="remaining_days"/>
                     <button name="goals_button" type="object" string="Goals" icon="fa-arrow-right"/>
-                    <field name="skill_status" widget="badge" decoration-success="is_acquired"/>
+                    <field name="skill_status" widget="badge" decoration-success="is_acquired == True"/>
                     <button name="action_archive_plan" type="object" icon="fa-bookmark" title="Archive Plan"/>
                     <button name="action_delete_plan" type="object" icon="fa-trash" title="Delete Plan"/>
                 </tree>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="oe_button_box" name="button_box" t-att-style="'position: relative;'">
+                        <div class="oe_button_box" name="button_box" style="'position: relative;'">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
                                 <field name="title"/>
@@ -91,7 +91,7 @@
                                     </button>
                                 </div>
                                 <group style="width: 66%; display: inline-block; vertical-align: top;">
-                                    <field name="skill_name" required="1"/>
+                                    <field name="skill_name"/>
                                     <field name="motivation"
                                            attrs="{'readonly': [('is_acquired', '=', True)]}"/>
                                     <field name="endpoint"
@@ -126,7 +126,6 @@
                             <page string="Scribbles">
                                 <group>
                                     <field name="scribble_note"
-                                           type="html"
                                            class="o_field_text_block"
                                            style="height: 200px;"
                                            placeholder="Use this to quickly note your ideas before you lose them..."
