@@ -11,12 +11,6 @@
                         <t t-name="kanban-box">
                             <div class="oe_kanban_global_click d-flex flex-column h-100"
                                  style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">
-                                <!--                                <div style="position: absolute; top: 5px; right: 10px;">-->
-                                <!--                                    <field name="kanban_state" widget="state_selection" help="Indicate the current status of your goal.-->
-                                <!--In Progress: You are actively working on this goal.-->
-                                <!--Stopped: This goal is currently paused.-->
-                                <!--Didn't Start: You haven't begun working on this goal yet."/>-->
-                                <!--                                </div>-->
                                 <t t-if="record.goal_status.raw_value == 'draft'">
                                     <div style="position: absolute; top: 0; right: 0;
                 background: #ffb31a; color: white; padding: 2px 8px;
@@ -106,103 +100,12 @@
             </field>
         </record>
 
-        <!--        <record id="goal_project_view_kanban_no_create" model="ir.ui.view">-->
-        <!--            <field name="name">goal.project.kanban.disable.create</field>-->
-        <!--            <field name="model">skill_development.goal_project</field>-->
-        <!--            <field name="arch" type="xml">-->
-        <!--                <kanban create="false">-->
-        <!--                    <field name="goal_status" invisible="1"/>-->
-        <!--                    <templates>-->
-        <!--                        <t t-name="kanban-box">-->
-        <!--                            <div class="oe_kanban_global_click"-->
-        <!--                                 style="border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fff;">-->
-        <!--                                <div style="position: absolute; top: 5px; right: 10px;">-->
-        <!--                                    <field name="kanban_state" widget="state_selection"/>-->
-        <!--                                </div>-->
-        <!--                                <t t-if="record.goal_status.raw_value == 'draft'">-->
-        <!--                                    <div style="position: absolute; top: 0; right: 0; background: #ffb31a; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">-->
-        <!--                                        Draft-->
-        <!--                                    </div>-->
-        <!--                                </t>-->
-        <!--                                <t t-if="record.goal_status.raw_value == 'complete'">-->
-        <!--                                    <div style="position: absolute; top: 0; right: 0; background: #00cc00; color: white; padding: 2px 8px; font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">-->
-        <!--                                        Done-->
-        <!--                                    </div>-->
-        <!--                                </t>-->
-
-        <!--                                &lt;!&ndash; Title &ndash;&gt;-->
-        <!--                                <header>-->
-        <!--                                    <div class="oe_title"-->
-        <!--                                         style="overflow: hidden; text-overflow: ellipsis; white-space: normal; word-break: break-word;">-->
-        <!--                                        <span style="text-align: left; margin-bottom: 8px; font-weight: bold">-->
-        <!--                                            <field name="goal_name"/>-->
-        <!--                                        </span>-->
-        <!--                                    </div>-->
-        <!--                                </header>-->
-
-        <!--                                &lt;!&ndash; Skill Info &ndash;&gt;-->
-        <!--                                <div style="margin-top: 0; color: #555;">-->
-        <!--                                    Skill:-->
-        <!--                                    <span style="color: #ac00e6;">-->
-        <!--                                        <field name="skill_id"/>-->
-        <!--                                    </span>-->
-        <!--                                    Category:-->
-        <!--                                    <field name="category"/>-->
-        <!--                                </div>-->
-        <!--                                <field name="tag_ids"/>-->
-        <!--                                <div class="o_kanban_primary_right">-->
-        <!--                                    <div class="o_primary">-->
-        <!--                                        <div class="text-muted o_row">-->
-        <!--                                            <t t-if="record.date_start.raw_value">-->
-        <!--                                                <span class="fa fa-clock-o me-2" title="Dates"/>-->
-        <!--                                                <field name="date_start" widget="date"/>-->
-        <!--                                                <i class="fa fa-long-arrow-right mx-2 oe_read_only"-->
-        <!--                                                   aria-label="Arrow icon"-->
-        <!--                                                   title="Arrow"/>-->
-        <!--                                            </t>-->
-        <!--                                            <t t-else="">-->
-        <!--                                                <span class="fa fa-clock-o me-2 invisible" title="Dates"/>-->
-        <!--                                                <field name="date_start" widget="date"/>-->
-        <!--                                                <i class="fa fa-long-arrow-right mx-2 invisible oe_read_only"-->
-        <!--                                                   aria-label="Arrow icon"-->
-        <!--                                                   title="Arrow"/>-->
-        <!--                                            </t>-->
-        <!--                                            <field name="date" widget="date"/>-->
-        <!--                                        </div>-->
-        <!--                                    </div>-->
-        <!--                                </div>-->
-
-        <!--                                &lt;!&ndash; Tasks Button &ndash;&gt;-->
-        <!--                                <a name="action_view_tasks" type="object"-->
-        <!--                                   style="text-decoration: none;">-->
-        <!--                                    <div class="o_kanban_record_bottom"-->
-        <!--                                         style="margin-top: 20px; padding: 10px; background-color: #F5F5F5; border-radius: 4px; text-align: right;"-->
-        <!--                                         attrs="{'invisible':[('goal_status', '=', 'draft')]}">-->
-        <!--                                        <span style="color: #505050; font-weight: bold; display: inline-flex; align-items: center;">-->
-        <!--                                            <i class="fa fa-tasks" style="margin-right: 5px;" aria-hidden="true"/>-->
-        <!--                                            Tasks-->
-        <!--                                            <field name="task_count" style="margin-left: 5px;" widget="statinfo"/>-->
-        <!--                                        </span>-->
-        <!--                                    </div>-->
-        <!--                                </a>-->
-        <!--                            </div>-->
-        <!--                        </t>-->
-        <!--                    </templates>-->
-        <!--                </kanban>-->
-        <!--            </field>-->
-        <!--        </record>-->
-
         <record id="goal_view_form" model="ir.ui.view">
             <field name="name">goal.view.form</field>
             <field name="model">skill_development.goal</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
-
-                        <!--                            <button name="action_finalize_goal" string="Finalize" type="object"-->
-                        <!--                                    class="btn btn-primary"-->
-                        <!--                                    attrs="{'invisible': ['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>-->
-
                         <field name="goal_status" widget="statusbar" statusbar_visible="draft,finalized,complete"/>
                     </header>
                     <sheet>
@@ -238,12 +141,6 @@
                             </button>
                         </div>
                         <h2>
-                            <!--                            <div style="position: absolute; top: 10px; right: 15px;">-->
-                            <!--                                <field name="kanban_state" widget="state_selection" help="Indicate the current status of your goal.-->
-                            <!--In Progress: You are actively working on this goal.-->
-                            <!--Stopped: This goal is currently paused.-->
-                            <!--Didn't Start: You haven't begun working on this goal yet."/>-->
-                            <!--                            </div>-->
                             <field name="goal_name"
                                    attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                         </h2>
@@ -269,16 +166,13 @@
 
                         <notebook>
                             <page string="Expected Results">
-<!--                                <group>-->
                                     <field name="result_ids" nolabel="1"
                                            attrs="{'readonly': [('goal_status', '=', 'complete')]}">
                                         <tree editable="bottom">
                                             <field name="result" width="300"/>
                                             <field name="is_done" width="20" widget="boolean_toggle"/>
-<!--                                            <field name="is_not_done" width="30" widget="boolean_toggle"/>-->
                                         </tree>
                                     </field>
-<!--                                </group>-->
                             </page>
                             <page string="SMART Criteria">
                                 <div class="o_form_sheet border p-3">
@@ -305,11 +199,9 @@
                                         <label class="fw-bold" for="measurable_goal" style="text-weight: bold">
                                             Measurable:
                                         </label>
-                                        <!--                                <div class="input-group">-->
                                         <field name="measurable_goal" class="o_field_char form-control"
                                                id="measurable_goal"
                                                attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
-                                        <!--                                </div>-->
                                     </div>
 
                                     <!-- Achievable Goal -->
@@ -510,7 +402,6 @@
             <field name="context">{"default_allow_billable": 1}</field>
         </record>
 
-
         <record id="lesson_bank_view_tree" model="ir.ui.view">
             <field name="name">lesson.bank.view.tree</field>
             <field name="model">skill_development.lesson_bank</field>
@@ -524,7 +415,7 @@
                 </tree>
             </field>
         </record>
-        <!--        -->
+
         <record id="lesson_bank_view_form" model="ir.ui.view">
             <field name="name">lesson.bank.view.form</field>
             <field name="model">skill_development.lesson_bank</field>
@@ -543,7 +434,6 @@
                                        attrs="{'invisible': [('goal_id', '=', False)]}"/>
                                     <field name="goal_id"
                                            attrs="{'readonly': [('id', '!=', False)]}"/>
-                                    <!--                                    <field name="goal_id" attrs="{'readonly': [('id', '=', False)],'invisible': [('id', '!=', False)]}"/>-->
                                 </div>
                                 <field name="priority" widget="priority" nolable="1"/>
                             </header>
@@ -736,7 +626,6 @@
 
                                 <!-- Header Section -->
                                 <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                    <!-- Left: Priority -->
                                     <field name="priority" widget="priority"/>
 
                                 </header>
@@ -800,7 +689,6 @@
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="date_end"/>
                             <field name="resource_url" widget="url"/>
-                            <!--                        <button name="action_open_resource_form" type="object" string="Add Resource"/>-->
                         </group>
                         <notebook>
                             <page string="Additional Resources">
@@ -816,7 +704,6 @@
                                                decoration-warning="resource_type == 'document'"/>
                                         <field name="description"/>
                                         <field name="url" widget="url" string="External URLs"/>
-                                        <!--                                    <field name="person_id"/>-->
                                     </tree>
                                 </field>
                             </page>
@@ -854,7 +741,6 @@
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             <field name="date_end"/>
                             <field name="resource_url" widget="url"/>
-                            <!--                        <button name="action_open_resource_form" type="object" string="Add Resource"/>-->
                         </group>
                         <notebook>
                             <page string="Additional Resources">
@@ -870,7 +756,6 @@
                                                decoration-warning="resource_type == 'document'"/>
                                         <field name="description"/>
                                         <field name="url" widget="url" string="External URLs"/>
-                                        <!--                                    <field name="person_id"/>-->
                                     </tree>
                                 </field>
                             </page>
