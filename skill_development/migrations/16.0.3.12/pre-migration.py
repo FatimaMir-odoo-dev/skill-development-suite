@@ -9,6 +9,46 @@ This file exists solely for the development stage.
 
 def migrate(cr, version):
     pass
+    # Remove task stages with no goal assigned
+    # Find a fallback stage that has a goal_id
+    # cr.execute("""
+    #     SELECT id FROM skill_development_task_stage
+    #     WHERE goal_id IS NOT NULL
+    #     LIMIT 1
+    # """)
+    # fallback_stage = cr.fetchone()
+    #
+    # if fallback_stage:
+    #     # Reassign tasks to the fallback stage
+    #     cr.execute("""
+    #         UPDATE skill_development_task
+    #         SET stage_id = %s
+    #         WHERE stage_id IN (
+    #             SELECT id FROM skill_development_task_stage
+    #             WHERE goal_id IS NULL
+    #         )
+    #     """, [fallback_stage[0]])
+    # else:
+    #     # No valid stage exists, tasks must be deleted
+    #     cr.execute("""
+    #         DELETE FROM skill_development_task
+    #         WHERE stage_id IN (
+    #             SELECT id FROM skill_development_task_stage
+    #             WHERE goal_id IS NULL
+    #         )
+    #     """)
+    #
+    # # Now safe to delete the orphaned stages
+    # cr.execute("""
+    #     DELETE FROM skill_development_task_stage
+    #     WHERE goal_id IS NULL
+    # """)
+    #
+    # cr.execute("""
+    #     UPDATE skill_development_lesson_bank
+    #     SET lesson_title = 'Untitled Lesson'
+    #     WHERE lesson_title IS NULL OR lesson_title = ''
+    # """)
     # cr.execute("SELECT to_regclass('public.skill_prereq_rel')")
     # if cr.fetchone()[0]:
     #     cr.execute("""

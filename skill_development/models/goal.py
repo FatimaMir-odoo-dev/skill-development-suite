@@ -2,9 +2,7 @@
 # License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl-3.0.html).
 """
 Skill Development - Personalized learning plans with SMART goals.
-
 Enables learners to set goals, track progress, and reflect on their learning journey.
-
 Main features:
     - SMART goal framework
     - Task and resource management
@@ -12,7 +10,6 @@ Main features:
     - Lesson bank for reflections
     - Customizable stages and tags
 """
-
 
 from random import randint
 
@@ -122,9 +119,6 @@ class Goal(models.Model):
     is_complete = fields.Boolean(string="Goal Complete", default=False)
 
     # ====================================================================================================================
-    # is_smart = fields.Boolean(string='SMART Compliant')
-    # is_reflection_filled = fields.Boolean(string='Reflection Sheet Completed')
-
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
                  'relevant_goal', 'timed_goal',
@@ -177,10 +171,9 @@ class Goal(models.Model):
     def action_create_goal_draft(self):
         """Set goal status to draft if planning on it is incomplete."""
 
-        def action_create_goal_draft(self):
-            for rec in self:
-                if rec.goal_status != 'complete':
-                    rec.goal_status = 'draft'
+        for rec in self:
+            if rec.goal_status != 'complete':
+                rec.goal_status = 'draft'
 
     def action_finalize_goal(self):
         """Finalize the goal plan when completed."""
@@ -193,22 +186,19 @@ class Goal(models.Model):
         And returns an action to open the reflection wizard.
         """
         self.ensure_one()
-
         self.goal_status = 'complete'
         self.is_complete = True
-        # rec._compute_goal_progress()
 
         return {
             'type': 'ir.actions.act_window',
-            # this refers to the wizard form
             'res_model': 'skill_development.log_goal_lesson',
             'view_mode': 'form',
             'name': 'My Reflection',
             'target': 'new',
-            'context': {  # Pass the learner ID to the wizard form
+            'context': {
                 'default_goal_id': self.id,
                 'default_skill_id': self.skill_id.id,
-                'default_learner_plan_id': self.learner_plan_id.id},  # Pass the skill name to the wizard form
+                'default_learner_plan_id': self.learner_plan_id.id},
         }
 
     def action_view_tasks(self):
@@ -217,7 +207,6 @@ class Goal(models.Model):
         Locks tasks if goal is completed or skill is marked as acquired.
         """
         self.ensure_one()
-
         if self.is_complete or self.is_acquired:
             action_ref = 'skill_development.task_lock_action'
         else:
@@ -233,18 +222,6 @@ class Goal(models.Model):
 
         return action
 
-    # def action_view_tasks(self):
-    #     _logger.info("Record ID %s: is_complete = %s", self.id, self.is_complete)
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'name': 'Tasks',
-    #         'res_model': 'skill_development.goal_task',
-    #         'view_mode': 'kanban,form',
-    #         'domain': [('goal_id', '=', self.id)],
-    #         'context': {'default_goal_id': self.id,
-    #                     },
-    #     }
-
     def action_view_lesson(self):
         """ Opens a view of all lessons associated with this goal """
 
@@ -257,15 +234,6 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
-
-    # def action_open_goal_popup(self):
-    #     return {
-    #         'type': 'ir.actions.act_window',
-    #         'name': 'New Goal',
-    #         'res_model': 'skill_development.goal_project',
-    #         'view_mode': 'form',
-    #         'target': 'new',
-    #     }
 
 
 class TaskStage(models.Model):
@@ -281,15 +249,10 @@ class TaskStage(models.Model):
                                  default=lambda self: self.env.user,
                                  index=True)
     goal_id = fields.Many2one('skill_development.goal', required=True, ondelete='cascade')
-
     sequence = fields.Integer(string='Sequence', default=10)
     fold = fields.Boolean(string='Folded in Kanban',
                           help='If enabled, this stage will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
-
-    # legend_blocked = fields.Char('Blocked Label', default='Blocked', required=True)
-    # legend_done = fields.Char('Done Label', default='Ready', required=True)
-    # legend_normal = fields.Char('Normal Label', default='In Progress', required=True)
 
 
 class Task(models.Model):
@@ -315,7 +278,6 @@ class Task(models.Model):
     learner_id = fields.Many2one('res.users', string='Owner', required=True,
                                  default=lambda self: self.env.user,
                                  index=True)
-    # learner_skill_id = fields.Many2One('skill_development.growth_tracker', string="Skill", required=True,)
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
     stage_id = fields.Many2one('skill_development.task_stage',
                                string='Stage',
@@ -334,7 +296,8 @@ class Task(models.Model):
 
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
     resource_url = fields.Char(string="Quick Access URL",
-                               help="Enter a URL (web link) here for quick and easy access to external resources relevant to this task.")  # noqa: E501
+                               help="Enter a URL (web link) here for quick and easy access to external resources"
+                                    " relevant to this task.")
 
     @api.depends('resource_ids')
     def _compute_resource_count(self):
@@ -356,16 +319,6 @@ class Task(models.Model):
                 if goal.exists() and goal.is_complete:
                     raise ValidationError("Cannot add a task to a completed goal.")
         return super().create(vals_list)
-
-    # @api.model
-    # def create(self, vals):
-    #     if not vals.get('stage_id') and vals.get('goal_id'):
-    #         goal = self.env['skill_development.goal_project'].browse(vals['goal_id'])
-    #         first_stage = self.env['skill_development.goal_task_stage'].search([
-    #             ('goal_id', '=', goal.id)
-    #         ], order='sequence', limit=1)
-    #         vals['stage_id'] = first_stage.id if first_stage else False
-    #     return super(Task, self).create(vals)
 
 
 class TaskResource(models.Model):
@@ -403,23 +356,6 @@ class TaskResource(models.Model):
     url = fields.Char('External URL')
 
     task_id = fields.Many2one('skill_development.task', string='Related Task', required=True, ondelete="cascade")
-    # is_acquired = fields.Boolean(related="task_id.goal_id.learner_plan_id.is_acquired",
-    #                              string="Skill Acquired" , store=False)
-
-    # image_preview = fields.Binary(string='Image Preview')
-    # video_preview = fields.(
-    #     string='Video Preview',
-    #     compute='_compute_video_preview',
-    #     store=False,
-    # )
-
-    # @api.depends('video')
-    # def _compute_video_preview(self):
-    #     for rec in self:
-    #         rec.video_preview = (
-    #             video_utils.Video.from_binary(rec.video).preview_image()
-    #             if rec.video else False
-    #         )
 
 
 class GoalResult(models.Model):
@@ -436,17 +372,6 @@ class GoalResult(models.Model):
     goal_id = fields.Many2one('skill_development.goal', 'Goal', ondelete='cascade')
     result = fields.Text(string="Expected Results")
     is_done = fields.Boolean(string="Achieved")
-
-    # Computed flag, not stored, not editable
-    # is_not_done = fields.Boolean(
-    #     string="Not Achieved",
-    #     compute='_compute_is_not_done'
-    # )
-    #
-    # @api.depends('is_done')
-    # def _compute_is_not_done(self):
-    #     for rec in self:
-    #         rec.is_not_done = not rec.is_done
 
 
 class LessonBank(models.Model):
@@ -516,7 +441,6 @@ class Tag(models.Model):
     _name = "skill_development.tag"
     _description = "Goal Tags"
 
-    # Ensures no tag name is repeated for the user to avoid creating clutter
     _sql_constraints = [
         ('tag_name_unique', 'unique(name)', 'A tag with this name already exists.')
     ]
