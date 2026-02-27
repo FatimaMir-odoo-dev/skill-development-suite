@@ -24,7 +24,6 @@ class Skill(models.Model):
     skill_name = fields.Char(string='Skill Name', required=True)
     description = fields.Text(string='Skill Description', required=True)
     pre_requisites = fields.Text(string="Pre-Requisites")
-    # ________________________________________
 
     # RELATIONAL FIELDS
     # ________________________________________
@@ -77,14 +76,11 @@ class Skill(models.Model):
         string="Overall Difficulty Rating",
         readonly=True,
         compute='_compute_avg_ratings')
-    # ________________________________________
 
     # FLAGS
     # ________________________________________
     is_transferable = fields.Boolean(string="This Skill is Transferable")
 
-    # The constraint ensures no duplicate skills are added to the Skill Catalog.
-    # Triggered when creating or updating a new skill record.
     _sql_constraints = [
         ('unique_skill_name', 'unique(skill_name)',
          'A skill with the same name already exists. Please refer back to it or use a different name.')
@@ -133,14 +129,6 @@ class Skill(models.Model):
             skill.star_avg_rating = self._to_star(avg_rating)
             skill.star_avg_difficulty = self._to_star(avg_difficulty)
 
-    # def unlink(self):
-    #     for record in self:
-    #         record.career_path_ids = [(5, 0, 0)]  # Clear the many2many links
-    #     return super(Skill, self).unlink()
-
-    # Opens the wizard form for the skill's initial plan.
-    # Activated upon clicking the Button: Start Learning
-
     def action_open_initial_plan_wizard(self):
         """Opens a pop-up window to create an initial development plan for a new skill."""
 
@@ -187,7 +175,6 @@ class CareerIndustry(models.Model):
     _name = "skill_development.career_industry"
     _description = "Skill Career Paths Industries"
 
-    # Ensures no industry name is repeated in the Skill Catalog - section: Job Roles for this Skill
     _sql_constraints = [
         ('tag_name_unique', 'unique(name)', 'An industry with this name already exists.')
     ]
@@ -197,8 +184,6 @@ class CareerIndustry(models.Model):
         string='Color',
         default=lambda self: randint(1, 11),
         help="Color for the Industry tag")
-
-    # career_ids = fields.Many2many('skill_development.skill_career', string="")
 
 
 class SkillRating(models.Model):
