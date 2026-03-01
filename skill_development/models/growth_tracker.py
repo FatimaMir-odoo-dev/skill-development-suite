@@ -22,6 +22,7 @@ class GrowthTracker(models.Model):
     _description = 'Skill Growth Plan'
     _inherit = 'count.mixin'
     _rec_name = 'skill_name'
+    _order = 'is_acquired asc, sequence asc'
 
     # Record content
     plan_owner_id = fields.Many2one('res.users', string='Owner of the Plan', readonly=True, required=True)
@@ -67,6 +68,8 @@ class GrowthTracker(models.Model):
     is_acquired = fields.Boolean(string="Skill Acquired", store=True)
     skill_status = fields.Char(string="Status", compute='_compute_skill_status')
     active = fields.Boolean(default=True)
+
+    ACQUIRED_SEQUENCE = 9999
 
     @api.depends('motivation')
     def _compute_motivation_short(self):
@@ -234,6 +237,7 @@ class GrowthTracker(models.Model):
 
         self.ensure_one()
         self.is_acquired = True
+        self.sequence = self.ACQUIRED_SEQUENCE
 
         return {
             'type': 'ir.actions.act_window',
