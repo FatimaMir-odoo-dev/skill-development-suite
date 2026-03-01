@@ -143,7 +143,7 @@
                             Finalize
                         </button>
                     </div>
-                    <h2>
+                    <h2 class="text-break">
                         <field name="goal_name"
                                attrs="{'readonly':['|', ('goal_status', '=', 'finalized'), ('goal_status', '=', 'complete')]}"/>
                     </h2>
@@ -311,7 +311,7 @@
                                 </div>
                                 <field name="specific_goal"
                                        placeholder="e.g. learning to program with python"
-                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                       style="width: 100%; resize: vertical; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                             <!-- Repeat similar blocks for Measurable, Achievable, Relevant, Time-Bound -->
@@ -327,7 +327,7 @@
                                 </div>
                                 <field name="measurable_goal"
                                        placeholder="e.g. Add two features per week."
-                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                       style="width: 100%; resize: vertical; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                             <!-- Achievable -->
@@ -342,7 +342,7 @@
                                 </div>
                                 <field name="achievable_goal"
                                        placeholder="e.g. I have a study group."
-                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                       style="width: 100%; resize: vertical; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                             <!-- Relevant -->
@@ -356,7 +356,7 @@
                                 </div>
                                 <field name="relevant_goal"
                                        placeholder="e.g. Important for my portfolio."
-                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                       style="width: 100%; resize: vertical; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                             <!-- Time-Bound -->
@@ -368,7 +368,7 @@
                                     <span style="color: #888888;">[What is your timeline?]</span>
                                 </div>
                                 <field name="timed_goal" placeholder="e.g. Finish by October."
-                                       style="width: 100%; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
+                                       style="width: 100%; resize: vertical; padding: 10px; border: 1px solid #dddddd; border-radius: 5px; margin-top: 5px;"/>
                             </div>
 
                         </div>
@@ -677,21 +677,21 @@
                 <sheet>
                     <div class="oe_title pe-0">
                         <h1 class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex w-100">
-                                <field name="priority" widget="priority" class="me-3"
-                                />
-                                <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                       placeholder="Task Title..."
-                                />
+                            <div class="d-flex w-100" style="min-width: 0;">
+                                <field name="priority" widget="priority" class="me-3 flex-shrink-0"/>
+                                <field name="name"
+                                       class="o_task_name flex-grow-1 text-break"
+                                       style="min-width: 0; word-break: break-word; overflow-wrap: break-word;"
+                                       placeholder="Task Title..."/>
                             </div>
                         </h1>
                     </div>
+                    <field name="goal_id" readonly="1"
+                           style="font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
                     <group style="width: 500px;">
-                        <field name="goal_id" readonly="1"
-                               style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
                         <field name="stage_id"
-                           domain="[('goal_id', '=', goal_id)]"
-                           options="{'no_create': False, 'no_open': True}"/>
+                               domain="[('goal_id', '=', goal_id)]"
+                               options="{'no_create': False, 'no_open': True}"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="date_end"/>
                         <field name="resource_url" widget="url"/>
@@ -725,41 +725,41 @@
     </record>
 
     <record id="view_task_resource_form" model="ir.ui.view">
-    <field name="name">skill_development.task_resource.form</field>
-    <field name="model">skill_development.task_resource</field>
-    <field name="arch" type="xml">
-        <form>
-            <sheet>
-                <group>
-                    <field name="name"/>
-                    <field name="description"/>
-                </group>
+        <field name="name">skill_development.task_resource.form</field>
+        <field name="model">skill_development.task_resource</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
 
-                <group>
-                    <field name="resource_type"/>
-        <field name="video" attrs="{'invisible': [('resource_type','!=','video')]}"/>
-                    <field name="image" widget="image" attrs="{'invisible': [('resource_type','!=','image')]}"/>
-                    <field name="url" attrs="{'invisible': [('resource_type','!=','link')]}"/>
-                    <field name="file"
-       widget="pdf_viewer"
-       attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
+                    <group>
+                        <field name="resource_type"/>
+                        <field name="video" attrs="{'invisible': [('resource_type','!=','video')]}"/>
+                        <field name="image" widget="image" attrs="{'invisible': [('resource_type','!=','image')]}"/>
+                        <field name="url" attrs="{'invisible': [('resource_type','!=','link')]}"/>
+                        <field name="file"
+                               widget="pdf_viewer"
+                               attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <record id="task_resource_view_pdf_preview" model="ir.ui.view">
-    <field name="name">task.resource.view.pdf.preview</field>
-    <field name="model">skill_development.task_resource</field>
-    <field name="arch" type="xml">
-        <form edit="false" create="false">
-            <sheet>
-                <field name="file" widget="pdf_viewer"/>
-            </sheet>
-        </form>
-    </field>
-</record>
+        <field name="name">task.resource.view.pdf.preview</field>
+        <field name="model">skill_development.task_resource</field>
+        <field name="arch" type="xml">
+            <form edit="false" create="false">
+                <sheet>
+                    <field name="file" widget="pdf_viewer"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
 
     <!--DOCUMENT HERE ALSO-->
     <record id="task_view_form_locked" model="ir.ui.view">
