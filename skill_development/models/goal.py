@@ -30,7 +30,12 @@ class Goal(models.Model):
 
     # RELATIONAL FIELDS
     # Used for the "Learner can only see own goals" record rule
-    learner_id = fields.Many2one('res.users', string="Plan Owner", required=True)
+    learner_id = fields.Many2one(
+        related='learner_plan_id.plan_owner_id',
+        store=True,
+        readonly=True,
+        string="Plan Owner",
+    )
 
     # Needed to scope goals to a plan.
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
@@ -178,6 +183,7 @@ class Goal(models.Model):
         self.ensure_one()
         self.goal_status = 'complete'
         self.is_complete = True
+        self.task_ids.write({'priority': '0'})
 
         return {
             'type': 'ir.actions.act_window',
@@ -265,10 +271,12 @@ class Task(models.Model):
         default='0', index=True, string="Priority")
     date_end = fields.Date(string='Ending Date', index=True, copy=False)
 
-    learner_id = fields.Many2one('res.users', string='Owner', required=True,
-                                 default=lambda self: self.env.user,
-                                 index=True)
-    goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade')
+    learner_id = fields.Many2one(
+        related='goal_id.learner_id',
+        store=True,
+        readonly=True,
+    )
+    goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade', required=True)
     stage_id = fields.Many2one('skill_development.task_stage',
                                string='Stage',
                                domain="[('learner_id', '=', learner_id)]",
@@ -323,6 +331,7 @@ class TaskResource(models.Model):
     _rec_name = 'name'
     _order = 'sequence'
 
+    task_id = fields.Many2one('skill_development.task', string='Related Task', required=True, ondelete="cascade")
     name = fields.Char('Name', required=True)
     description = fields.Text('Description')
 
@@ -342,10 +351,12 @@ class TaskResource(models.Model):
 
     video = fields.Binary(string='Video', attachment=True)
     image = fields.Binary(string='Image', attachment=True)
-    file = fields.Binary('Upload File', attachment=True)
     url = fields.Char('External URL')
-
-    task_id = fields.Many2one('skill_development.task', string='Related Task', required=True, ondelete="cascade")
+    file = fields.Binary('Upload File', attachment=True)
+    attachment_ids = fields.Many2many(
+        'ir.attachment',
+        string="Attachments"
+    )
 
 
 class GoalResult(models.Model):
