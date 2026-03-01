@@ -562,6 +562,7 @@
             </form>
         </field>
     </record>
+
     <!--DOCUMENT HERE-->
     <record id="task_view_kanban_unlocked" model="ir.ui.view">
         <field name="name">task.view.kanban.unlocked</field>
@@ -688,6 +689,9 @@
                     <group style="width: 500px;">
                         <field name="goal_id" readonly="1"
                                style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
+                        <field name="stage_id"
+                           domain="[('goal_id', '=', goal_id)]"
+                           options="{'no_create': False, 'no_open': True}"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="date_end"/>
                         <field name="resource_url" widget="url"/>
@@ -719,6 +723,44 @@
             </form>
         </field>
     </record>
+
+    <record id="view_task_resource_form" model="ir.ui.view">
+    <field name="name">skill_development.task_resource.form</field>
+    <field name="model">skill_development.task_resource</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="description"/>
+                </group>
+
+                <group>
+                    <field name="resource_type"/>
+        <field name="video" attrs="{'invisible': [('resource_type','!=','video')]}"/>
+                    <field name="image" widget="image" attrs="{'invisible': [('resource_type','!=','image')]}"/>
+                    <field name="url" attrs="{'invisible': [('resource_type','!=','link')]}"/>
+                    <field name="file"
+       widget="pdf_viewer"
+       attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+    <record id="task_resource_view_pdf_preview" model="ir.ui.view">
+    <field name="name">task.resource.view.pdf.preview</field>
+    <field name="model">skill_development.task_resource</field>
+    <field name="arch" type="xml">
+        <form edit="false" create="false">
+            <sheet>
+                <field name="file" widget="pdf_viewer"/>
+            </sheet>
+        </form>
+    </field>
+</record>
+
     <!--DOCUMENT HERE ALSO-->
     <record id="task_view_form_locked" model="ir.ui.view">
         <field name="name">task.view.form.locked</field>

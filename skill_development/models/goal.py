@@ -183,6 +183,7 @@ class Goal(models.Model):
         self.ensure_one()
         self.goal_status = 'complete'
         self.is_complete = True
+        self.task_ids.write({'priority': '0'})
 
         return {
             'type': 'ir.actions.act_window',
@@ -352,6 +353,10 @@ class TaskResource(models.Model):
     image = fields.Binary(string='Image', attachment=True)
     url = fields.Char('External URL')
     file = fields.Binary('Upload File', attachment=True)
+    attachment_ids = fields.Many2many(
+        'ir.attachment',
+        string="Attachments"
+    )
 
 
 class GoalResult(models.Model):
