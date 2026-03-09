@@ -82,7 +82,7 @@ When opening a pull request, please describe:
 
 ## Development Guidelines
 
-**Supported Versions:** This module targets Odoo 16.0 and above. When opening a pull request, please specify which Odoo version you developed and tested against.
+**Supported Versions:** This module targets Odoo 16.0. When opening a pull request, please specify which Odoo version you developed and tested against.
 
 Any development environment is fine.
 > p.s: The maintainer develops primarily on Windows 10 using PyCharm
@@ -94,7 +94,7 @@ Any development environment is fine.
 
 Before submitting:
 
-- Rebase your branch on the target branch to minimize conflicts
+- Keep your branch up to date with the main branch before submitting
 - Resolve merge conflicts manually if necessary
 - Match the surrounding code style (whitespace, formatting, structure)
 
@@ -120,8 +120,9 @@ References (issue or PR).
 | Tag | Usage |
 |-----|-------|
 | `[FIX]` | Bug fixes |
-| `[ADD]` | New enhancements |
+| `[IMP]` | New enhancements |
 | `[REF]` | Refactors |
+| `[MEG]` | Migration scripts |
 
 ---
 
@@ -132,4 +133,3 @@ This project is licensed under **LGPL-3.0**. By contributing to this repository,
 ---
 
 Thank you for taking the time to contribute, your help is genuinely appreciated.
-```
