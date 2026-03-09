@@ -19,7 +19,7 @@ https://github.com/FatimaMir-odoo-dev/skill-development-suite/security/advisorie
 If you are unable to use GitHub Security Advisories, you may also
 contact the maintainer directly at:
 
-your.email@example.com
+fatimamirghani24@gmail.com
 
 When reporting, include:
 - A clear description of the issue
@@ -28,7 +28,8 @@ When reporting, include:
 
 ## Disclosure
 
-Vulnerabilities will be disclosed publicly after a fix is available,
+The maintainer aims to address critical vulnerabilities within 90 days of disclosure. 
+Vulnerabilities will be disclosed publicly once a fix is available, 
 following responsible disclosure practices used in the Odoo ecosystem.
 
 Thank you for helping keep this project secure!
