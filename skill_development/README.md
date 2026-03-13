@@ -1,72 +1,48 @@
-📦 Module Name: `skill_development`
+# Skill Development
 ## Description
-The **Skill Development** module is the core of the Skill Development Suite. It allows individuals to **create personal skill growth plans** using SMART goals, structured tasks and activities, and adding relevant resources to enhance their learning.
-It was originally designed for the IEEE Student Branch at Al-Neelain University, but is fully adaptable to any organization fostering continuous learning and self-motivated development.
+The **Skill Development** module is the core of the Skill Development Suite. It allows individuals to **create personal skill growth plans** using SMART goals, structured tasks, and relevant resources to enhance their learning and track their growth.
 
+## Key Features
+- Skill catalog managed by General Managers
+- Personal learning plans with motivation, tracking, and deadlines
+- Structured SMART goal template
+- Goal decomposition into tasks with priorities, stages, and deadlines
+- Progress tracking across three weighted categories:
+  - Knowledge (15%)
+  - Practice (35%)
+  - Creation & Contribution (50%)
+- Mastery titles: Seeker → Learner → Skilled → Proficient → Master
+- Lesson bank for capturing reflections after goal completion
+- Skill ratings submitted by learners after acquiring a skill
+- Private progress — each learner's data is only visible to them
 
-## Key Features 🚀
-✅ **Skill Library Management** – General Managers can define a curated list of skills relevant to the organization’s goals.
+## Example Workflow
+1. **General Manager** defines skills relevant to the organization (e.g. "Public Speaking", "Data Analysis").
+2. **Learner** selects a skill, states their motivation and personal deadline, and creates a growth plan.
+3. Learner builds a **SMART goal** — e.g. "Deliver a 10-minute speech at a community event by June 30."
+4. Goal is broken into **tasks** with priorities, stages, and deadlines.
+5. Learner attaches **resources** (videos, articles, links) to relevant tasks.
+6. On goal completion, learner marks the goal as "complete" and logs **lessons learned**.
+7. **Skill progress and mastery title** update automatically based on completed goals.
+8. When satisfied, learner **marks the skill as acquired** and submits a rating.
 
-✅ **Personal Learning Plans** – Learners choose a skill, describe their motivation, and set a personal deadline to achieve it.
-
-✅ **SMART Goal Template** – A dtructured template to help learners create Specific, Measurable, Achievable, Relevant, and Time-bound goals.
-
-✅ **Goal Decomposition** – Each goal can be broken into actionable tasks, and each task further divided into time-tracked activities.
-
-✅ **Resource Attachment** – Learners can attach resources (documents, links, videos, etc.) to help complete each task effectively.
-
-✅ **Collaboration Support** – Learners can share tasks with peers or mentors for feedback or joint work.
-
-✅ **Private Progress** – Each learner’s skills, development plans, and progress are kept private and accessible only to them, unless they choose to share tasks for collaborative learning.
-
-
-## Example Workflow ↗️
-1. General Manager defines "Public Speaking", "Data Analysis", or other key skills.
-
-2. Learner selects "Public Speaking", states why it's important to them, and sets a learning deadline and a message to motivate themselves.
-
-3. Learner builds a SMART Goal, e.g., “Deliver a 10-minute speech at a community event by June 30.”
-
-4. Goal is broken into tasks (e.g. "Research techniques", "Practice weekly", etc.) and then into timed activities.
-
-5. Learner adds YouTube videos and articles as resources to help complete the tasks.
-
-6. Tasks are shared with a mentor or peer for feedback and collaboration.
-
-
-## Dependencies 🧩
+## Dependencies
 This module depends on the following Odoo core modules:
 * `base`
-* `project`
 * `hr`
-Additionally, it uses the following third-party module for visual appearance:
-* `web-responsive`
+> **Optional UI Enhancement:**
+> For a more responsive user interface, install the [`web_responsive`](https://github.com/OCA/web/tree/16.0/web_responsive) 
+> module from OCA. It is not required for core functionality and can be safely omitted 
+> if your Odoo UI is already customized.
 
+## Installation
+See the [suite-level README](../README.md) for installation instructions.
 
-## Installation & Configuration ⚙️
-1. Clone or download the module into your Odoo addons directory.
-2. Restart the Odoo server.
-3. Activate Developer Mode.
-4. Go to **Apps**, search for **Skill Development**, and install.
-
-No additional configuration is required. General Managers can begin by defining skills from the Skill Library menu.
-
-
-## Access Control 👤
+## Access Control 
 |User Role          |Permissions                                                                          |
-|:------------------|:------------------------------------------------------------------------------------|
-|General Manager    |Define skills, view organizational insights      				                      |
-|Learner 	        |Create and manage personal plans, goals, and tasks. and View and support shared tasks|
+|:------------------|:--------------------------------------------------------------------|
+|General Manager    |Manage the skill catalog     				          |
+|Learner 	    |Create and manage personal plans, goals, and tasks, and add resources|
 
-
-## Screenshots 📷 (coming soon)
-Feature Screenshot
-skill Catalog (pic)
-
-Skill Plan Overview (pic)
-
-
-SMART Goal template (pic)
-
-
-Task Breakdown (gif)
+## Screenshots
+*Coming soon — Skill Catalog, Skill Growth Overview, SMART Goal Template, Task Breakdown.*
