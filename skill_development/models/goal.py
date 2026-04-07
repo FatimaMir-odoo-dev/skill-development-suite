@@ -39,7 +39,7 @@ class Goal(models.Model):
 
     # Needed to scope goals to a plan.
     learner_plan_id = fields.Many2one('skill_development.growth_tracker',
-                                      string="Plan",
+                                      string="Skill Development Plan",
                                       ondelete='cascade')
 
     #  Needed to pass skill context to wizards and compute progress per skill.
@@ -250,6 +250,11 @@ class TaskStage(models.Model):
                           help='If enabled, this stage will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
 
+    _sql_constraints = [
+        ('stage_name_goal_learner_unique', 'unique(name, goal_id, learner_id)',
+         'A stage with this name already exists for this learner and goal.')
+    ]
+
 
 class Task(models.Model):
     """Tasks for tracking progress within a goal.
@@ -279,7 +284,7 @@ class Task(models.Model):
     goal_id = fields.Many2one('skill_development.goal', string='Goal', ondelete='cascade', required=True)
     stage_id = fields.Many2one('skill_development.task_stage',
                                string='Stage',
-                               domain="[('learner_id', '=', learner_id)]",
+                               domain="[('learner_id', '=', learner_id), ('goal_id', '=', goal_id)]",
                                ondelete='restrict',
                                required=True)
     tag_ids = fields.Many2many(
@@ -393,7 +398,7 @@ class LessonBank(models.Model):
         string="Growth Plan",
         ondelete='cascade')
     goal_id = fields.Many2one('skill_development.goal', 'Goal', readonly=True)
-
+    skill_id = fields.Many2one('skill_development.skill', readonly=True)
     goal_skill = fields.Char(related='goal_id.skill_id.skill_name', string="Related Skill")
     lesson_title = fields.Char('Title', required=True)
     tag_ids = fields.Many2many('skill_development.tag',
