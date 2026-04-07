@@ -103,6 +103,17 @@
         </field>
     </record>
 
+    <record id="view_goal_kanban_no_create" model="ir.ui.view">
+    <field name="name">goal.kanban.no.create</field>
+    <field name="model">skill_development.goal</field>
+    <field name="inherit_id" ref="skill_development.goal_view_kanban"/>
+    <field name="arch" type="xml">
+        <xpath expr="//kanban" position="attributes">
+            <attribute name="create">0</attribute>
+        </xpath>
+    </field>
+    </record>
+
     <record id="goal_view_form" model="ir.ui.view">
         <field name="name">goal.view.form</field>
         <field name="model">skill_development.goal</field>

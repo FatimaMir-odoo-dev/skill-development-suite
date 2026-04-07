@@ -56,7 +56,6 @@
         <field name="name">My Goals</field>
         <field name="res_model">skill_development.goal</field>
         <field name="view_mode">kanban,form</field>
-        <field name="context">{'create': False}</field>
     </record>
 
     <menuitem id="growth_tracker_menu_goals"
