@@ -7,35 +7,38 @@ assignees: ''
 
 ---
 
-Description
+### Description
 A clear and concise description of the bug.
-Contact (optional)
+
+### Contact (optional)
 Preferred way to reach you outside GitHub (e.g. email, Discord). Leave blank if GitHub is fine.
-Steps to Reproduce
 
-Go to '...'
-Click on '...'
-See error
+### Steps to Reproduce
+- Go to '...'
+- Click on '...'
+- See error
 
-Expected Behavior
+### Expected Behavior
 What you expected to happen.
-Actual Behavior
+
+### Actual Behavior
 What actually happened.
-Severity and Impact
+
+### Severity and Impact
 How severe is this issue and who does it affect?
 
- Critical — system crash, data loss, or security risk
- High — major feature broken, no workaround
- Medium — feature partially broken, workaround exists
- Low — minor inconvenience or cosmetic issue
+- **Critical** — system crash, data loss, or security risk  
+- **High** — major feature broken, no workaround  
+- **Medium** — feature partially broken, workaround exists  
+- **Low** — minor inconvenience or cosmetic issue  
 
-Please describe the impact briefly:
+Please describe the impact briefly:  
 (e.g. "Affects all users trying to confirm a sale order")
-Environment
 
-Module(s) affected: (e.g. module: sales)
-Browser (if UI related):
-Installation type: Community / Enterprise
+### Environment
+- Module(s) affected: (e.g. module: sales)  
+- Browser (if UI related):  
+- Installation type: Community / Enterprise  
 
-Additional Context
+### Additional Context
 Screenshots, error logs, or any other information that might help.
