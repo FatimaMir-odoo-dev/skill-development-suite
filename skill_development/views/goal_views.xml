@@ -107,6 +107,8 @@
     <field name="name">goal.kanban.no.create</field>
     <field name="model">skill_development.goal</field>
     <field name="inherit_id" ref="skill_development.goal_view_kanban"/>
+    <field name="mode">primary</field>
+    <field name="priority">999</field>
     <field name="arch" type="xml">
         <xpath expr="//kanban" position="attributes">
             <attribute name="create">0</attribute>
