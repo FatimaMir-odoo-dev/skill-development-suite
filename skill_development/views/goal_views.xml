@@ -699,8 +699,10 @@
                         </h1>
                     </div>
                     <group style="width: 500px;">
+                        <field name="learner_id" invisible="1"/>
                         <field name="goal_id" readonly="1"
                                style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
+                        <field name="stage_id" options="{'no_create': True, 'no_open': True}"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="date_end"/>
                         <field name="resource_url" widget="url"/>

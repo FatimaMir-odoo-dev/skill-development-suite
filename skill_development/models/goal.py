@@ -297,7 +297,7 @@ class Task(models.Model):
     stage_id = fields.Many2one('skill_development.task_stage',
                                string='Stage',
                                domain="[('learner_id', '=', learner_id), ('goal_id', '=', goal_id)]",
-                               ondelete='restrict',
+                               ondelete='cascade',
                                required=True)
     tag_ids = fields.Many2many(
         'skill_development.tag',
