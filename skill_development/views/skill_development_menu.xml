@@ -39,11 +39,6 @@
             'group_create': False,
             'create': False}
         </field>
-            <field name="view_ids" eval="[
-        (5, 0, 0),
-        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_unlocked')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_unlocked')})
-        ]"/>
     </record>
 
     <menuitem id="growth_tracker_menu_priority_tasks"

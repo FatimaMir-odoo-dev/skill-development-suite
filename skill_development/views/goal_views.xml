@@ -628,58 +628,6 @@
         </field>
     </record>
     <!--AND DOCUMENT HERE-->
-    <record id="task_view_kanban_locked" model="ir.ui.view">
-        <field name="name">task.view.kanban.locked</field>
-        <field name="model">skill_development.task</field>
-        <field name="arch" type="xml">
-            <kanban default_group_by="stage_id" create="False" edit="false" delete="false"
-                    records_draggable="False" group_create="False">
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click oe_kanban_card"
-                             style="border: 1px solid #ddd; border-radius: 8px; padding: 12px; background-color: #ffffff;">
-
-                            <!-- Header Section -->
-                            <header style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
-                                <field name="priority" widget="priority"/>
-
-                            </header>
-
-                            <!-- Title -->
-                            <div class="oe_kanban_title" style="margin-bottom: 8px;">
-                                <h6 style="font-weight: 600; font-size: 15px; line-height: 1.4; color: #333; word-break: break-word;">
-                                    <field name="name"/>
-                                </h6>
-                            </div>
-
-                            <!-- Tags -->
-                            <div style="margin-bottom: 6px;">
-                                <field name="tag_ids" widget="many2many_tags"/>
-                            </div>
-
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-                                <!-- Left: Deadline -->
-                                <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
-                                    <i class="fa fa-calendar-times-o" aria-hidden="true" style="margin-right: 4px;"
-                                       title="Deadline"/>
-                                    <field name="date_end" widget="remaining_days"/>
-                                </div>
-
-                                <!-- Right: Resource Count -->
-                                <div style="position: absolute; bottom: 10px; right: 12px; font-size: 13px; color: #666;">
-                                    <i class="fa fa-book" aria-hidden="true" style="margin-right: 4px;"
-                                       title="Resources Involved"/>
-                                    <field name="resource_count" widget="stateinfo"/>
-                                </div>
-                            </div>
-
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-
-        </field>
-    </record>
     <!--DOCUMENT HERE-->
     <record id="task_view_form_unlocked" model="ir.ui.view">
         <field name="name">task.view.form.unlocked</field>
@@ -687,6 +635,7 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <field name="is_locked" invisible="1"/>
                     <div class="oe_title pe-0">
                         <h1 class="d-flex justify-content-between align-items-center">
                             <div class="d-flex w-100">
@@ -694,6 +643,7 @@
                                 />
                                 <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
                                        placeholder="Task Title..."
+                                       attrs="{'readonly': [('is_locked', '=', True)]}"
                                 />
                             </div>
                         </h1>
@@ -702,14 +652,15 @@
                         <field name="learner_id" invisible="1"/>
                         <field name="goal_id" readonly="1"
                                style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
-                        <field name="stage_id" options="{'no_create': True, 'no_open': True}"/>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="date_end"/>
-                        <field name="resource_url" widget="url"/>
+                        <field name="stage_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('is_locked', '=', True)]}"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" attrs="{'readonly': [('is_locked', '=', True)]}"/>
+                        <field name="date_end" attrs="{'readonly': [('is_locked', '=', True)]}"/>
+                        <field name="resource_url" widget="url" attrs="{'readonly': [('is_locked', '=', True)]}"/>
                     </group>
                     <notebook>
                         <page string="Additional Resources">
-                            <field name="resource_ids" nolabel="1">
+                            <field name="resource_ids" nolabel="1"
+                            attrs="{'readonly': [('is_locked', '=', True)]}">
                                 <tree>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
@@ -735,62 +686,13 @@
         </field>
     </record>
     <!--DOCUMENT HERE ALSO-->
-    <record id="task_view_form_locked" model="ir.ui.view">
-        <field name="name">task.view.form.locked</field>
-        <field name="model">skill_development.task</field>
-        <field name="arch" type="xml">
-            <form edit="false">
-                <sheet>
-                    <div class="oe_title pe-0">
-                        <h1 class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex w-100">
-                                <field name="priority" widget="priority" class="me-3"
-                                />
-                                <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
-                                       placeholder="Task Title..."
-                                />
-                            </div>
-                        </h1>
-                    </div>
-                    <group style="width: 500px;">
-                        <field name="goal_id" readonly="1"
-                               style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #1a1a1a;"/>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="date_end"/>
-                        <field name="resource_url" widget="url"/>
-                    </group>
-                    <notebook>
-                        <page string="Additional Resources">
-                            <field name="resource_ids"
-                            >
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="resource_type" widget="badge"
-                                           decoration-success="resource_type == 'image'"
-                                           decoration-primary="resource_type == 'tool'"
-                                           decoration-info="resource_type == 'link'"
-                                           decoration-danger="resource_type == 'video'"
-                                           decoration-warning="resource_type == 'document'"/>
-                                    <field name="description"/>
-                                    <field name="url" widget="url" string="External URLs"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Task Notes">
-                            <field name="description" widget="html"
-                                   placeholder="Write notes to help you with the task (tracking, important details...)"/>
-                        </page>
-
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
 
     <record id="task_resource_view_tree" model="ir.ui.view">
         <field name="name">task.resource.view.tree</field>
         <field name="model">skill_development.task_resource</field>
         <field name="arch" type="xml">
+            <form>
+                <sheet>
             <group>
                 <field name="name"/>
                 <field name="description"/>
@@ -803,27 +705,14 @@
                 <field name="file" widget="pdf_viewer"
                        attrs="{'invisible': [('resource_type', '!=', 'document')]}"/>
             </group>
+                </sheet>
+            </form>
         </field>
-    </record>
-    <record id="task_lock_action" model="ir.actions.act_window">
-        <field name="name">Tasks (Complete Goal)</field>
-        <field name="res_model">skill_development.task</field>
-        <field name="view_mode">kanban,form</field>
-        <field name="view_ids" eval="[
-            (5, 0, 0),
-        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_locked')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_locked')})
-    ]"/>
     </record>
 
     <record id="task_unlock_action" model="ir.actions.act_window">
         <field name="name">Tasks (Incomplete Goal)</field>
         <field name="res_model">skill_development.task</field>
         <field name="view_mode">kanban,form</field>
-        <field name="view_ids" eval="[
-            (5, 0, 0),
-        (0, 0, {'view_mode': 'kanban', 'view_id': ref('skill_development.task_view_kanban_unlocked')}),
-        (0, 0, {'view_mode': 'form', 'view_id': ref('skill_development.task_view_form_unlocked')})
-    ]"/>
     </record>
 </odoo>

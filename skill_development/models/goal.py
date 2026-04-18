@@ -113,6 +113,10 @@ class Goal(models.Model):
     # FLAGS
     # For locking goals, tasks, and resources
     is_complete = fields.Boolean(string="Goal Complete", default=False)
+    is_locked = fields.Boolean(
+        compute='_compute_is_locked',
+        store=False
+    )
 
     @api.depends('goal_status', 'result_ids.is_done',
                  'specific_goal', 'measurable_goal', 'achievable_goal',
@@ -175,6 +179,11 @@ class Goal(models.Model):
         for rec in self:
             rec.goal_status = 'finalized'
 
+    @api.depends('is_complete', 'learner_plan_id.is_acquired')
+    def _compute_is_locked(self):
+        for goal in self:
+            goal.is_locked = goal.is_complete or goal.learner_plan_id.is_acquired
+
     def action_complete_goal(self):
         """
         Set goal status to 'complete' and mark as complete.
@@ -203,20 +212,17 @@ class Goal(models.Model):
         Locks tasks if goal is completed or skill is marked as acquired.
         """
         self.ensure_one()
-        if self.is_complete or self.is_acquired:
-            action_ref = 'skill_development.task_lock_action'
-        else:
-            action_ref = 'skill_development.task_unlock_action'
-
-        action = self.env.ref(action_ref).sudo().read()[0]
-
-        # Inject domain and context dynamically
-        action.update({
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Tasks',
+            'res_model': 'skill_development.task',
+            'view_mode': 'kanban,form',
+            'target': 'self',
             'domain': [('goal_id', '=', self.id)],
-            'context': {'default_goal_id': self.id}
-        })
-
-        return action
+            'context': {'default_goal_id': self.id,
+                        'create': not self.is_locked,
+                        },
+        }
 
     def action_view_lesson(self):
         """ Opens a view of all lessons associated with this goal """
@@ -295,12 +301,21 @@ class Task(models.Model):
         string="Tags"
     )
     is_goal_complete = fields.Boolean(string="Goal Completed", related="goal_id.is_complete")
+    is_locked = fields.Boolean(
+        compute='_compute_is_locked',
+        store=False
+    )
     resource_ids = fields.One2many('skill_development.task_resource', 'task_id', string='Resources')
 
     resource_count = fields.Integer(string=' ', compute='_compute_resource_count')
     resource_url = fields.Char(string="Quick Access URL",
                                help="Enter a URL (web link) here for quick and easy access to external resources"
                                     " relevant to this task.")
+
+    @api.depends('goal_id.is_complete', 'goal_id.is_acquired')
+    def _compute_is_locked(self):
+        for task in self:
+            task.is_locked = task.goal_id.is_complete or task.goal_id.is_acquired
 
     @api.depends('resource_ids')
     def _compute_resource_count(self):
