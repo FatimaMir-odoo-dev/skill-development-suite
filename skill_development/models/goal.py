@@ -13,7 +13,6 @@ Main features:
 
 from random import randint
 
-from lxml import etree
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from odoo.tools import html2plaintext
@@ -231,17 +230,6 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
-
-    def fields_view_get(self, view_id=None, view_type='form', **kwargs):
-        res = super().fields_view_get(view_id=view_id, view_type=view_type, **kwargs)
-
-        if view_type == 'kanban' and self.env.context.get('from_goals_action'):
-            doc = etree.XML(res['arch'])
-            for node in doc.xpath("//kanban"):
-                node.set('create', '0')
-            res['arch'] = etree.tostring(doc, encoding='unicode')
-
-        return res
 
 
 class TaskStage(models.Model):
