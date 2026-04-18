@@ -37,7 +37,8 @@
         <field name="domain">[('priority', '=', 1)]</field>
         <field name="context">{'group_by': 'goal_id',
             'group_create': False,
-            'create': False}
+            'create': False,
+            'show_locked_banner': True}
         </field>
     </record>
 
