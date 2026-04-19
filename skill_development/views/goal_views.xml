@@ -178,8 +178,6 @@
                                options="{'related_start_date': 'date_start'}"
                                attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                     </div>
-
-
                     <notebook>
                         <page string="Expected Results">
                             <field name="result_ids" nolabel="1"
@@ -261,6 +259,7 @@
                             </div>
                         </page>
                     </notebook>
+
                     <div class="d-flex justify-content-center mt-2">
                         <button name="action_complete_goal"
                                 string="Mark Goal As Complete"
@@ -282,7 +281,7 @@
         <field name="view_id" ref="goal_view_form"/>
         <field name="context">{}</field>
     </record>
-    <!--DOCUMENT HERE: The fact that you use the same view and why-->
+
     <record id="goal_view_form_popup" model="ir.ui.view">
         <field name="name">goal.view.form.popup</field>
         <field name="model">skill_development.goal</field>
@@ -504,7 +503,6 @@
                 </sheet>
             </form>
 
-
         </field>
     </record>
     <!--DOCUMENT HERE ALSO-->
@@ -533,7 +531,6 @@
                         </div>
                         <span>Tags:</span>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-
 
                         <!-- Lesson Title -->
                         <label for="lesson_title" class="form-label fw-bold d-block">Lesson Title</label>
@@ -569,15 +566,14 @@
                                    style="height: 200px;"
                                    colspan="2"/>
                         </div>
-
                     </div>
                 </sheet>
             </form>
         </field>
     </record>
-    <!--DOCUMENT HERE-->
-    <record id="task_view_kanban_unlocked" model="ir.ui.view">
-        <field name="name">task.view.kanban.unlocked</field>
+
+    <record id="task_view_kanban" model="ir.ui.view">
+        <field name="name">task.view.kanban</field>
         <field name="model">skill_development.task</field>
         <field name="arch" type="xml">
             <kanban default_group_by="stage_id">
@@ -598,8 +594,7 @@
                                 <t t-if="record.is_locked.raw_value and context.show_locked_banner">
                                 <div style="position: absolute; top: 0; right: 0;
                 background: #cc0000; color: white; padding: 2px 8px;
-                font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;
-                ">
+                font-size: 12px; font-weight: bold; border-bottom-left-radius: 4px;">
                                     Locked
                                 </div>
                             </t>
@@ -612,7 +607,6 @@
                             <div style="margin-bottom: 6px;">
                                 <field name="tag_ids" widget="many2many_tags"/>
                             </div>
-
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                                 <!-- Left: Deadline -->
                                 <div class="oe_kanban_details" style="font-size: 13px; color: #666;">
@@ -628,18 +622,15 @@
                                     <field name="resource_count" widget="statinfo"/>
                                 </div>
                             </div>
-
                         </div>
                     </t>
                 </templates>
             </kanban>
-
         </field>
     </record>
-    <!--AND DOCUMENT HERE-->
-    <!--DOCUMENT HERE-->
-    <record id="task_view_form_unlocked" model="ir.ui.view">
-        <field name="name">task.view.form.unlocked</field>
+
+    <record id="task_view_form" model="ir.ui.view">
+        <field name="name">task.view.form</field>
         <field name="model">skill_development.task</field>
         <field name="arch" type="xml">
             <form>
@@ -679,12 +670,10 @@
                     <div class="oe_title pe-0">
                         <h1 class="d-flex justify-content-between align-items-center">
                             <div class="d-flex w-100">
-                                <field name="priority" widget="priority" class="me-3"
-                                />
+                                <field name="priority" widget="priority" class="me-3"/>
                                 <field name="name" class="o_task_name text-truncate w-100 w-md-75 pe-2"
                                        placeholder="Task Title..."
-                                       attrs="{'readonly': [('is_locked', '=', True)]}"
-                                />
+                                       attrs="{'readonly': [('is_locked', '=', True)]}"/>
                             </div>
                         </h1>
                     </div>
@@ -717,15 +706,14 @@
                         </page>
                         <page string="Task Notes">
                             <field name="description" widget="html"
-                                   placeholder="Write notes to help you with the task (tracking, important details...)"/>
+                                   placeholder="Write notes to help you with the task (tracking, important details...)"
+                                   attrs="{'readonly': [('is_locked', '=', True)]}"/>
                         </page>
-
                     </notebook>
                 </sheet>
             </form>
         </field>
     </record>
-    <!--DOCUMENT HERE ALSO-->
 
     <record id="task_resource_view_tree" model="ir.ui.view">
         <field name="name">task.resource.view.tree</field>
@@ -748,11 +736,5 @@
                 </sheet>
             </form>
         </field>
-    </record>
-
-    <record id="task_unlock_action" model="ir.actions.act_window">
-        <field name="name">Tasks (Incomplete Goal)</field>
-        <field name="res_model">skill_development.task</field>
-        <field name="view_mode">kanban,form</field>
     </record>
 </odoo>
