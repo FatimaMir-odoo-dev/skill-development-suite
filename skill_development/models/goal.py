@@ -340,8 +340,14 @@ class Task(models.Model):
    @api.model
    def _read_group_stage_ids(self, stages, domain, order):
         """ This ensures all stages are shown in Kanban even if empty. """
-        return self.env['skill_development.task_stage'].search([])
-        
+        #return self.env['skill_development.task_stage'].search([])
+        search_domain = [
+            ('learner_id', '=', self.env.user.id),
+            ('goal_id', '=', self.env.context.get('active_id'))
+        ]
+        return self.env['skill_development.task_stage'].search(search_domain, order=order)
+
+
 class TaskResource(models.Model):
     """Resources linked to tasks.
 
