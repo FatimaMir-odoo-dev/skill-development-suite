@@ -58,7 +58,7 @@ class Goal(models.Model):
     lesson_ids = fields.One2many('skill_development.lesson_bank',
                                  'goal_id',
                                  string="Lessons")
-
+    stage_ids = fields.Many2one('skill_development.task_stage')
     tag_ids = fields.Many2many(
         'skill_development.tag',
         relation='goal_tag_rel',
