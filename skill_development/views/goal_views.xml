@@ -163,6 +163,9 @@
                     <group col="2">
                         <span>Skill:</span>
                         <field name="skill_id" style="font-size: 15px; font-weight: bold" nolabel="1"/>
+                        <field name="phase_id" widget="many2many_tags" options="{'color_field': 'color'}"
+                               class="oe_inline"
+                               attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
                                class="oe_inline"
                                attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
@@ -281,6 +284,19 @@
         <field name="view_id" ref="goal_view_form"/>
         <field name="context">{}</field>
     </record>
+
+    <record id="view_goal_search" model="ir.ui.view">
+    <field name="name">skill_development.goal.search</field>
+    <field name="model">skill_development.goal</field>
+    <field name="arch" type="xml">
+        <search string="Goals">
+            <filter
+                string="Phase"
+                name="group_by_phase"
+                context="{'group_by': 'phase_id'}"/>
+        </search>
+    </field>
+</record>
 
     <record id="goal_view_form_popup" model="ir.ui.view">
         <field name="name">goal.view.form.popup</field>

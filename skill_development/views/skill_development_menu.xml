@@ -53,6 +53,8 @@
         <field name="res_model">skill_development.goal</field>
         <field name="view_mode">kanban,form</field>
         <field name="view_id" ref="view_goal_kanban_no_create"/>
+        <field name="search_view_id" ref="view_goal_search"/>
+    <field name="context">{'search_default_group_by_phase': 1}</field>
     </record>
 
     <menuitem id="growth_tracker_menu_goals"

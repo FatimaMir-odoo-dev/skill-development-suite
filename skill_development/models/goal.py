@@ -58,7 +58,10 @@ class Goal(models.Model):
     lesson_ids = fields.One2many('skill_development.lesson_bank',
                                  'goal_id',
                                  string="Lessons")
-    stage_ids = fields.Many2one('skill_development.task_stage')
+    phase_id = fields.Many2one("skill_development.goal_phase",
+                               default=lambda self: self.env["skill_development.goal_phase"].search(
+                                   [("is_default", "=", True)], limit=1)
+                               )
     tag_ids = fields.Many2many(
         'skill_development.tag',
         relation='goal_tag_rel',
@@ -236,6 +239,25 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
+
+
+class GoalPhase(models.Model):
+    """Task stages for organizing tasks in Kanban view within each goal."""
+
+    _name = 'skill_development.goal_phase'
+    _description = 'Goal Phase'
+    _order = 'sequence, id'
+
+    name = fields.Char(string='Phase Name', required=True)
+
+    learner_id = fields.Many2one('res.users', string='Owner',
+                                 default=lambda self: self.env.user,
+                                 index=True)
+    is_default = fields.Boolean(string="Default Phase")
+    sequence = fields.Integer(string='Sequence', default=10)
+    fold = fields.Boolean(string='Folded in Kanban',
+                          help='If enabled, this phase will be shown as folded in the Kanban view.')
+    active = fields.Boolean(string='Active', default=True)
 
 
 class TaskStage(models.Model):
