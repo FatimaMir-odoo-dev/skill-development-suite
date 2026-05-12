@@ -292,7 +292,8 @@ class Task(models.Model):
                                string='Stage',
                                domain="[('learner_id', '=', learner_id), ('goal_id', '=', goal_id)]",
                                ondelete='cascade',
-                               required=True)
+                               required=True,
+                               group_expand='_read_group_stage_ids')
     tag_ids = fields.Many2many(
         'skill_development.tag',
         relation='task_tag_rel',
@@ -337,6 +338,17 @@ class Task(models.Model):
                 if goal.exists() and goal.is_complete:
                     raise ValidationError("Cannot add a task to a completed goal.")
         return super().create(vals_list)
+
+   
+   @api.model
+   def _read_group_stage_ids(self, stages, domain, order):
+        """ This ensures all stages are shown in Kanban even if empty. """
+        #return self.env['skill_development.task_stage'].search([])
+        search_domain = [
+            ('learner_id', '=', self.env.user.id),
+            ('goal_id', '=', self.env.context.get('active_id'))
+        ]
+        return self.env['skill_development.task_stage'].search(search_domain, order=order)
 
 
 class TaskResource(models.Model):
