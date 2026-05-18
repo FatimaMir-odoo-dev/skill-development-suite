@@ -242,7 +242,7 @@ class Goal(models.Model):
 
 
 class GoalPhase(models.Model):
-    """Task stages for organizing tasks in Kanban view within each goal."""
+    """Phases for organizing goals in Kanban view."""
 
     _name = 'skill_development.goal_phase'
     _description = 'Goal Phase'
@@ -250,14 +250,49 @@ class GoalPhase(models.Model):
 
     name = fields.Char(string='Phase Name', required=True)
 
-    learner_id = fields.Many2one('res.users', string='Owner',
+    learner_id = fields.Many2one('res.users', string='Owner', required=True,
                                  default=lambda self: self.env.user,
                                  index=True)
-    is_default = fields.Boolean(string="Default Phase")
+    is_current = fields.Boolean(string="Current Phase")
     sequence = fields.Integer(string='Sequence', default=10)
     fold = fields.Boolean(string='Folded in Kanban',
                           help='If enabled, this phase will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
+    color = fields.Integer(string='Color', default=0)
+
+    _sql_constraints = [
+        ('phase_name_learner_unique', 'unique(name, learner_id)',
+         'A phase with this name already exists for this learner.')
+    ]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._ensure_single_current()
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'is_current' in vals and vals['is_current']:
+            self._ensure_single_current()
+        return res
+
+    def name_get(self):
+        result = []
+        for record in self:
+            name = f"📌 {record.name}" if record.is_current else record.name
+            result.append((record.id, name))
+        return result
+
+    def _ensure_single_current(self):
+        for record in self:
+            if record.is_current:
+                self.search([
+                    ('learner_id', '=', record.learner_id.id),
+                    ('is_current', '=', True),
+                    ('id', '!=', record.id)
+                ]).write({'is_current': False, 'color': 0})
+                record.sudo().write({'color': 10})
 
 
 class TaskStage(models.Model):
