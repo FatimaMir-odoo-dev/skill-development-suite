@@ -59,9 +59,7 @@ class Goal(models.Model):
                                  'goal_id',
                                  string="Lessons")
     phase_id = fields.Many2one("skill_development.goal_phase",
-                               default=lambda self: self.env["skill_development.goal_phase"].search(
-                                   [("is_default", "=", True)], limit=1)
-                               )
+                               group_expand='_read_group_phase_ids')
     tag_ids = fields.Many2many(
         'skill_development.tag',
         relation='goal_tag_rel',
@@ -155,6 +153,12 @@ class Goal(models.Model):
             counted_model='skill_development.lesson_bank',
             related_field='goal_id'
         )
+
+    @api.model
+    def _read_group_phase_ids(self, stages, domain, order):
+        """ This ensures all stages are shown in Kanban even if empty. """
+        search_domain = [('learner_id', '=', self.env.user.id), ]
+        return self.env['skill_development.goal_phase'].search(search_domain, order=order)
 
     @api.model_create_multi
     def create(self, vals_list):
