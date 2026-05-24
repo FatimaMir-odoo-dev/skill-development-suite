@@ -58,7 +58,8 @@ class Goal(models.Model):
     lesson_ids = fields.One2many('skill_development.lesson_bank',
                                  'goal_id',
                                  string="Lessons")
-
+    phase_id = fields.Many2one("skill_development.goal_phase",
+                               group_expand='_read_group_phase_ids')
     tag_ids = fields.Many2many(
         'skill_development.tag',
         relation='goal_tag_rel',
@@ -153,6 +154,12 @@ class Goal(models.Model):
             related_field='goal_id'
         )
 
+    @api.model
+    def _read_group_phase_ids(self, stages, domain, order):
+        """ This ensures all stages are shown in Kanban even if empty. """
+        search_domain = [('learner_id', '=', self.env.user.id), ]
+        return self.env['skill_development.goal_phase'].search(search_domain, order=order)
+
     @api.model_create_multi
     def create(self, vals_list):
         """Set default learner_id and learner_plan_id upon goal creation if missing."""
@@ -236,6 +243,73 @@ class Goal(models.Model):
             'domain': [('goal_id', '=', self.id)],
             'context': {'default_goal_id': self.id},
         }
+
+
+class GoalPhase(models.Model):
+    """Phases for organizing goals in Kanban view."""
+
+    _name = 'skill_development.goal_phase'
+    _description = 'Goal Phase'
+    _order = 'sequence, id'
+
+    name = fields.Char(string='Phase Name', required=True)
+
+    learner_id = fields.Many2one('res.users', string='Owner', required=True,
+                                 default=lambda self: self.env.user,
+                                 index=True)
+    is_current = fields.Boolean(string="Current Phase")
+    sequence = fields.Integer(string='Sequence', default=10)
+    fold = fields.Boolean(string='Folded in Kanban',
+                          help='If enabled, this phase will be shown as folded in the Kanban view.')
+    active = fields.Boolean(string='Active', default=True)
+
+    _sql_constraints = [
+        ('phase_name_learner_unique', 'unique(name, learner_id)',
+         'A phase with this name already exists for this learner.')
+    ]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        records._ensure_single_current()
+        return records
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'is_current' in vals and vals['is_current']:
+            self._ensure_single_current()
+        return res
+
+    def name_get(self):
+        result = []
+        # Cache ordered phase IDs per learner to avoid redundant searches
+        learner_phase_order = {}
+
+        for record in self:
+            learner_id = record.learner_id.id
+
+            if learner_id not in learner_phase_order:
+                ordered = self.search(
+                    [('learner_id', '=', learner_id)],
+                    order='sequence, id'
+                )
+                learner_phase_order[learner_id] = list(ordered.ids)
+
+            position = learner_phase_order[learner_id].index(record.id) + 1
+            prefix = "📌 " if record.is_current else ""
+            name = f"{prefix}{position}. {record.name}"
+            result.append((record.id, name))
+
+        return result
+
+    def _ensure_single_current(self):
+        for record in self:
+            if record.is_current:
+                self.search([
+                    ('learner_id', '=', record.learner_id.id),
+                    ('is_current', '=', True),
+                    ('id', '!=', record.id)
+                ]).write({'is_current': False})
 
 
 class TaskStage(models.Model):

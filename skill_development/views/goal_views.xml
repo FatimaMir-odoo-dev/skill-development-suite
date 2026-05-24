@@ -7,6 +7,7 @@
         <field name="model">skill_development.goal</field>
         <field name="arch" type="xml">
             <kanban on_create="skill_development.new_goal_action">
+                <field name="phase_id"/>
                 <field name="goal_status" invisible="1"/>
                 <field name="is_acquired" invisible="1" readonly="1"/>
                 <templates>
@@ -43,21 +44,32 @@
                             </header>
 
                             <!-- Skill Info -->
-                            <div style="margin-top: 12px; color: #555; display: flex; flex-direction: column; gap: 4px;">
-                                <!-- Skill -->
-                                <div>
-                                    <span style="color: #ac00e6; font-size: 13px; font-weight: bold">
-                                        <field name="skill_id"/>
-                                    </span>
-                                </div>
+                            <div style="margin-top:12px; color:#555;">
 
-                                <!-- Category -->
-                                <div>
-                                    <span style="color: #333;">
-                                        <field name="category"/>
-                                    </span>
-                                </div>
-                            </div>
+    <!-- Skill -->
+<div style="display:flex; justify-content:space-between; gap:16px;">
+    <div style="margin-bottom:8px;">
+        <span style="color:#ac00e6; font-size:13px; font-weight:bold;">
+            <field name="skill_id"/>
+        </span>
+    </div>
+     <!-- Right Column -->
+        <div style="flex:1; text-align:right;">
+            <span style="color:#333; font-weight:bold;">
+                <field name="phase_id" widget="badge"/>
+            </span>
+        </div>
+</div>
+
+    <!-- Two Columns -->
+
+        <!-- Left Column -->
+        <div style="flex:1;">
+            <span style="color:#333;">
+                <field name="category"/>
+            </span>
+        </div>
+</div>
 
                             <field name="tag_ids"/>
                             <div class="o_kanban_primary_right">
@@ -163,6 +175,9 @@
                     <group col="2">
                         <span>Skill:</span>
                         <field name="skill_id" style="font-size: 15px; font-weight: bold" nolabel="1"/>
+                        <field name="phase_id" widget="badge" options="{'color_field': 'color'}"
+                               class="oe_inline"
+                               attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
                                class="oe_inline"
                                attrs="{'readonly':[('goal_status', '=', 'complete')]}"/>
@@ -281,6 +296,19 @@
         <field name="view_id" ref="goal_view_form"/>
         <field name="context">{}</field>
     </record>
+
+    <record id="view_goal_search" model="ir.ui.view">
+    <field name="name">skill_development.goal.search</field>
+    <field name="model">skill_development.goal</field>
+    <field name="arch" type="xml">
+        <search string="Goals">
+            <filter
+                string="Phase"
+                name="group_by_phase"
+                context="{'group_by': 'phase_id'}"/>
+        </search>
+    </field>
+</record>
 
     <record id="goal_view_form_popup" model="ir.ui.view">
         <field name="name">goal.view.form.popup</field>
