@@ -262,7 +262,6 @@ class GoalPhase(models.Model):
     fold = fields.Boolean(string='Folded in Kanban',
                           help='If enabled, this phase will be shown as folded in the Kanban view.')
     active = fields.Boolean(string='Active', default=True)
-    color = fields.Integer(string='Color', default=0)
 
     _sql_constraints = [
         ('phase_name_learner_unique', 'unique(name, learner_id)',
@@ -283,9 +282,24 @@ class GoalPhase(models.Model):
 
     def name_get(self):
         result = []
+        # Cache ordered phase IDs per learner to avoid redundant searches
+        learner_phase_order = {}
+
         for record in self:
-            name = f"📌 {record.name}" if record.is_current else record.name
+            learner_id = record.learner_id.id
+
+            if learner_id not in learner_phase_order:
+                ordered = self.search(
+                    [('learner_id', '=', learner_id)],
+                    order='sequence, id'
+                )
+                learner_phase_order[learner_id] = list(ordered.ids)
+
+            position = learner_phase_order[learner_id].index(record.id) + 1
+            prefix = "📌 " if record.is_current else ""
+            name = f"{prefix}{position}. {record.name}"
             result.append((record.id, name))
+
         return result
 
     def _ensure_single_current(self):
@@ -295,8 +309,7 @@ class GoalPhase(models.Model):
                     ('learner_id', '=', record.learner_id.id),
                     ('is_current', '=', True),
                     ('id', '!=', record.id)
-                ]).write({'is_current': False, 'color': 0})
-                record.sudo().write({'color': 10})
+                ]).write({'is_current': False})
 
 
 class TaskStage(models.Model):
