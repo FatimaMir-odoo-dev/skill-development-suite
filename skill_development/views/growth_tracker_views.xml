@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="oe_button_box" name="button_box" style="'position: relative;'">
+                        <div class="oe_button_box" name="button_box">
                             <!-- Title as Badge -->
                             <h1 t-att-style="'position: absolute; background-color: #2980b9; color: white; padding: 4px 10px; border-radius: 0 0 12px 0; font-size: 25px; font-weight: bold;'">
                                 <field name="title"/>
