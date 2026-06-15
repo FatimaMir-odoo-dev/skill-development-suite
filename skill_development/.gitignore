@@ -60,3 +60,4 @@ Thumbs.db
 .gitignore
 .vs/
 .vs/
+.idea/\nmigrations/\n
